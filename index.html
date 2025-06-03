@@ -3,388 +3,325 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Comprehensive OnlyFans Creator Toolkit</title>
+    <title>Advanced Comprehensive OnlyFans Creator Toolkit</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style>
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #0D1B2A; /* Very Dark Blue */
-            color: #E0E1DD; /* Light Gray/Off-white */
-        }
-        .tool-container { /* Base container for each tool */
-            background-color: #1B263B; /* Primary Darker Blue */
-            border: 1px solid #3E6990; /* Steel Blue */
-            border-radius: 16px;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.2), 0 6px 6px rgba(0,0,0,0.15);
-        }
-        .tab-button {
-            padding: 0.75rem 1rem;
-            margin: 0 0.25rem;
-            border-radius: 8px 8px 0 0;
-            font-weight: 600;
-            color: #A2D2FF;
-            background-color: #1E407C; /* Medium Blue for inactive tabs */
-            border: 1px solid #3E6990;
-            border-bottom: none;
-            transition: background-color 0.3s ease, color 0.3s ease;
-            cursor: pointer;
-            font-size: 0.8rem; /* Smaller font for tabs */
-        }
-        .tab-button:hover {
-            background-color: #3E6990; /* Steel Blue on hover */
-        }
-        .tab-button.active {
-            background-color: #1B263B; /* Primary Darker Blue for active tab (matches tool container) */
-            color: #6ee7b7; /* Teal accent for active tab text */
-            border-color: #3E6990;
-        }
-        .tool-content {
-            display: none; /* Hidden by default */
-        }
-        .tool-content.active {
-            display: block;
-        }
+        body { font-family: 'Inter', sans-serif; background-color: #0D1B2A; color: #E0E1DD; }
+        .tool-container { background-color: #1B263B; border: 1px solid #3E6990; border-radius: 16px; box-shadow: 0 10px 20px rgba(0,0,0,0.2), 0 6px 6px rgba(0,0,0,0.15); }
+        .tab-button { padding: 0.6rem 0.8rem; margin: 0 0.15rem; border-radius: 8px 8px 0 0; font-weight: 600; color: #A2D2FF; background-color: #1E407C; border: 1px solid #3E6990; border-bottom: none; transition: background-color 0.3s ease, color 0.3s ease; cursor: pointer; font-size: 0.75rem; white-space: nowrap;}
+        .tab-button:hover { background-color: #3E6990; }
+        .tab-button.active { background-color: #1B263B; color: #6ee7b7; border-color: #3E6990; }
+        .tool-content { display: none; }
+        .tool-content.active { display: block; }
 
-        /* Tool-specific styles - prefixed or contained to avoid clashes */
-        /* Strategy Simulator specific styles */
-        #strategySimulator .control-panel, #strategySimulator .results-panel { background-color: transparent; border: none; box-shadow: none; }
-        #strategySimulator label { color: #A2D2FF; font-weight: 600; }
-        #strategySimulator select, #strategySimulator input[type="range"] { background-color: #102A43; border-color: #3E6990; color: #E0E1DD; border-radius: 8px; }
-        #strategySimulator button.sim-button { background-color: #6ee7b7; color: #0D1B2A; font-weight: 700; border-radius: 8px; transition: background-color 0.3s ease; }
-        #strategySimulator button.sim-button:hover { background-color: #5ce1a7; }
-        #strategySimulator .chart-container { max-width: 450px; height: 350px; max-height: 380px; margin-top: 1rem; }
-        #strategySimulator .ai-advice-container { margin-top: 1rem; padding: 0.75rem; background-color: rgba(30, 64, 124, 0.3); border-radius: 8px; border: 1px solid #3E6990; }
+        /* Common AI display styles */
+        .ai-output-container { margin-top: 1rem; padding: 0.75rem; background-color: rgba(30, 64, 124, 0.35); border-radius: 8px; border: 1px solid #3E6990; font-size: 0.8rem; }
+        .ai-output-container h4, .ai-output-container h5 { font-semibold: 600; color: #6ee7b7; margin-bottom: 0.25rem; }
+        .ai-output-container p, .ai-output-container ul { margin-bottom: 0.5rem; }
+        .ai-output-container ul { list-style-position: inside; padding-left: 0.5rem; }
+        .gemini-loading { font-style: italic; color: #A2D2FF; opacity: 0.8; }
+        button.ai-trigger-button { background-color: #2563eb; color: white; font-size: 0.8rem; padding: 0.4rem 0.8rem; margin-top: 0.75rem; border-radius: 6px; }
+        button.ai-trigger-button:hover { background-color: #1d4ed8; }
+        button:disabled { opacity: 0.6; cursor: not-allowed; }
 
-
-        /* Automation Pathfinder specific styles */
-        #automationPathfinder .question-card, #automationPathfinder .result-card { background-color: #1E407C; border-radius: 12px; border: 1px solid #3E6990;}
-        #automationPathfinder label.option-label { display: block; padding: 0.75rem 1rem; border: 1px solid #3E6990; border-radius: 8px; cursor: pointer; transition: background-color 0.2s ease, border-color 0.2s ease; color: #A2D2FF; }
-        #automationPathfinder label.option-label:hover { background-color: #3E6990; border-color: #A2D2FF; }
-        #automationPathfinder input[type="radio"]:checked + label.option-label { background-color: #6ee7b7; border-color: #6ee7b7; color: #0D1B2A; font-weight: 600; }
+        /* Tool-specific styles (inherited and some overrides) */
+        input, select, textarea { background-color: #102A43; border-color: #3E6990; color: #E0E1DD; border-radius: 8px; padding: 0.5rem; font-size: 0.875rem; border-width: 1px; }
+        label { color: #A2D2FF; font-weight: 600; font-size: 0.875rem; margin-bottom: 0.25rem; display: block; }
+        button.tool-action-button { background-color: #6ee7b7; color: #0D1B2A; font-weight: 700; border-radius: 8px; transition: background-color 0.3s ease; padding: 0.6rem 1.2rem; }
+        button.tool-action-button:hover { background-color: #5ce1a7; }
+        
+        #strategySimulator .chart-container { max-width: 450px; height: 330px; max-height: 360px; margin-top: 0.5rem; }
+        #automationPathfinder .option-label { display: block; padding: 0.6rem 0.8rem; border: 1px solid #3E6990; border-radius: 8px; cursor: pointer; color: #A2D2FF; font-size: 0.875rem;}
+        #automationPathfinder input[type="radio"]:checked + label.option-label { background-color: #6ee7b7; border-color: #6ee7b7; color: #0D1B2A; }
         #automationPathfinder input[type="radio"] { display: none; }
-        #automationPathfinder button.nav-button { background-color: #A2D2FF; color: #0D1B2A; }
-        #automationPathfinder button.nav-button:hover:not(:disabled) { background-color: #8cbbed; }
-        #automationPathfinder button.nav-button:disabled { background-color: #3E6990; cursor: not-allowed; }
-        #automationPathfinder .recommendation { color: #6ee7b7; }
-        #automationPathfinder .warning { color: #ff7b7b; }
-        #automationPathfinder .policy-note { color: #A2D2FF; font-size: 0.8rem; }
-        #automationPathfinder .ai-elaboration-button { background-color: #2563eb; color: white; font-size: 0.75rem; padding: 0.25rem 0.5rem; margin-top: 0.5rem; }
-        #automationPathfinder .ai-elaboration-container { margin-top: 0.5rem; padding: 0.5rem; background-color: rgba(30, 64, 124, 0.3); border-radius: 6px; border: 1px solid #3E6990; font-size: 0.8rem;}
-
-
-        /* Earnings Forecaster specific styles */
-        #earningsForecaster .forecaster-inputs, #earningsForecaster .results-display-container { background-color: transparent; border: none; box-shadow:none; }
-        #earningsForecaster label { color: #A2D2FF; font-weight: 600; }
-        #earningsForecaster input[type="number"] { background-color: #102A43; border-color: #3E6990; color: #E0E1DD; border-radius: 8px; -moz-appearance: textfield; }
-        #earningsForecaster input[type="number"]::-webkit-outer-spin-button, #earningsForecaster input[type="number"]::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
-        #earningsForecaster button.fc-button { background-color: #6ee7b7; color: #0D1B2A; }
-        #earningsForecaster .chart-container { max-width: 600px; height: 300px; max-height: 350px; }
-        #earningsForecaster .earnings-breakdown p { margin-bottom: 0.5rem; }
-        #earningsForecaster .earnings-breakdown strong { color: #A2D2FF; }
-        #earningsForecaster .comparison-text { font-size: 0.9rem; color: #A2D2FF]/80; }
-        #earningsForecaster .ai-tips-container { margin-top: 1rem; padding: 0.75rem; background-color: rgba(30, 64, 124, 0.3); border-radius: 8px; border: 1px solid #3E6990; }
-
-        /* AI Policy Navigator specific styles */
-        #aiPolicyNavigator .scenario-card, #aiPolicyNavigator .feedback-card-container { background-color: #1E407C; border-radius: 12px; border: 1px solid #3E6990; }
-        #aiPolicyNavigator label.option-label { display: block; padding: 0.75rem 1rem; border: 1px solid #3E6990; border-radius: 8px; cursor: pointer; transition: background-color 0.2s ease, border-color 0.2s ease; color: #A2D2FF; }
-        #aiPolicyNavigator label.option-label:hover { background-color: #3E6990; border-color: #A2D2FF; }
+        #automationPathfinder button.nav-button { font-size: 0.8rem; padding: 0.4rem 0.8rem; }
+        #earningsForecaster .chart-container { max-width: 580px; height: 280px; max-height: 330px; }
+        #aiPolicyNavigator .option-label { display: block; padding: 0.6rem 0.8rem; border: 1px solid #3E6990; border-radius: 8px; cursor: pointer; color: #A2D2FF; font-size: 0.875rem;}
         #aiPolicyNavigator input[type="radio"] { display: none; }
-        #aiPolicyNavigator button.nav-button { background-color: #A2D2FF; color: #0D1B2A; }
-        #aiPolicyNavigator button.nav-button:hover:not(:disabled) { background-color: #8cbbed; }
-        #aiPolicyNavigator button.nav-button:disabled { background-color: #3E6990; cursor: not-allowed; }
-        #aiPolicyNavigator .feedback-correct { background-color: #166534; border-left: 4px solid #6ee7b7; color: #d1fae5; }
-        #aiPolicyNavigator .feedback-caution { background-color: #78350F; border-left: 4px solid #facc15; color: #fef3c7; }
-        #aiPolicyNavigator .feedback-incorrect { background-color: #7F1D1D; border-left: 4px solid #ff7b7b; color: #fee2e2; }
-        #aiPolicyNavigator .policy-reference { font-size: 0.8rem; color: #A2D2FF; opacity: 0.7; }
-        #aiPolicyNavigator .ai-policy-elaboration-button { background-color: #2563eb; color: white; font-size: 0.7rem; padding: 0.2rem 0.4rem; margin-left: 0.5rem; border-radius:4px; }
-        #aiPolicyNavigator .ai-policy-elaboration-container { margin-top: 0.5rem; padding: 0.5rem; background-color: rgba(30, 64, 124, 0.3); border-radius: 6px; border: 1px solid #3E6990; font-size: 0.8rem;}
-
-
-        /* Lean Workflow Optimizer specific styles */
-        #leanOptimizer .optimizer-inputs, #leanOptimizer .results-display-container { background-color: transparent; border: none; box-shadow:none;}
-        #leanOptimizer .practice-category h3 { color: #A2D2FF; font-weight: 700; border-bottom: 1px solid #3E6990; padding-bottom: 0.5rem; margin-bottom: 0.75rem; }
-        #leanOptimizer label.practice-label { display: flex; align-items: center; padding: 0.5rem 0.75rem; border: 1px solid transparent; border-radius: 8px; cursor: pointer; transition: background-color 0.2s ease; color: #E0E1DD; font-size: 0.9rem; }
-        #leanOptimizer label.practice-label:hover { background-color: #1E407C; }
-        #leanOptimizer input[type="checkbox"] { accent-color: #6ee7b7; margin-right: 0.75rem; width: 1.1rem; height: 1.1rem; border-radius: 4px; }
-        #leanOptimizer button.action-button { background-color: #6ee7b7; color: #0D1B2A; }
-        #leanOptimizer .score-bar-container { background-color: #1E407C; border-radius: 8px; height: 2rem; overflow: hidden; border: 1px solid #3E6990; }
-        #leanOptimizer .score-bar-fill { background-color: #6ee7b7; height: 100%; transition: width 0.5s ease-in-out; display: flex; align-items: center; justify-content: center; font-weight: 600; color: #0D1B2A; }
-        #leanOptimizer .recommendation-list li { background-color: rgba(30, 64, 124, 0.5); padding: 0.5rem 0.75rem; border-radius: 6px; margin-bottom: 0.5rem; border-left: 3px solid #A2D2FF; }
-        #leanOptimizer .ai-action-plan-container { margin-top: 1rem; padding: 0.75rem; background-color: rgba(30, 64, 124, 0.3); border-radius: 8px; border: 1px solid #3E6990; }
-
+        #aiPolicyNavigator button.nav-button { font-size: 0.8rem; padding: 0.4rem 0.8rem; }
+        #aiPolicyNavigator .feedback-correct { background-color: #166534; border-left: 4px solid #6ee7b7; color: #d1fae5; padding: 0.75rem; }
+        #aiPolicyNavigator .feedback-caution { background-color: #78350F; border-left: 4px solid #facc15; color: #fef3c7; padding: 0.75rem; }
+        #aiPolicyNavigator .feedback-incorrect { background-color: #7F1D1D; border-left: 4px solid #ff7b7b; color: #fee2e2; padding: 0.75rem; }
+        #leanOptimizer .practice-category h3 { color: #A2D2FF; font-weight: 700; border-bottom: 1px solid #3E6990; padding-bottom: 0.5rem; margin-bottom: 0.75rem; font-size: 1.1rem; }
+        #leanOptimizer label.practice-label { font-size: 0.875rem; }
+        #leanOptimizer .score-bar-container { height: 1.75rem; }
+        #leanOptimizer .score-bar-fill { font-size: 0.8rem; }
 
         h1, h2, h3, h4 { font-weight: 800; letter-spacing: -0.025em; }
         h1 { color: #A2D2FF; } 
         h2 { color: #E0E1DD; } 
         h3 { color: #A2D2FF; }
-
-        .gemini-loading {
-            font-style: italic;
-            color: #A2D2FF;
-            opacity: 0.8;
-        }
     </style>
 </head>
 <body class="antialiased min-h-screen flex flex-col">
-    <header class="text-center py-6 md:py-10">
-        <h1 class="text-3xl sm:text-4xl md:text-5xl">Comprehensive OnlyFans Creator Toolkit</h1>
-        <p class="text-md sm:text-lg text-[#A2D2FF]/80 max-w-3xl mx-auto mt-2">Your all-in-one suite for strategy simulation, compliance guidance, earnings forecasting, policy navigation, and workflow optimization.</p>
+    <header class="text-center py-6 md:py-8">
+        <h1 class="text-3xl sm:text-4xl md:text-4xl">Advanced OnlyFans Creator Toolkit</h1>
+        <p class="text-md sm:text-lg text-[#A2D2FF]/80 max-w-3xl mx-auto mt-1.5">Personalized strategies, compliance guidance, and workflow optimization powered by AI.</p>
     </header>
 
-    <nav id="toolTabs" class="flex flex-wrap justify-center px-4 mb-0 sticky top-0 z-40 bg-[#0D1B2A]/80 backdrop-blur-md py-2">
-        <button class="tab-button active" data-tool="strategySimulator">Strategy Simulator</button>
-        <button class="tab-button" data-tool="automationPathfinder">Automation Pathfinder</button>
-        <button class="tab-button" data-tool="earningsForecaster">Earnings Forecaster</button>
-        <button class="tab-button" data-tool="aiPolicyNavigator">AI Policy Navigator</button>
-        <button class="tab-button" data-tool="leanOptimizer">Workflow Optimizer</button>
+    <nav id="toolTabs" class="flex flex-wrap justify-center px-2 sm:px-4 mb-0 sticky top-0 z-40 bg-[#0D1B2A]/80 backdrop-blur-md py-1.5">
+        <button class="tab-button active" data-tool="strategySimulator">Strategy Sim</button>
+        <button class="tab-button" data-tool="automationPathfinder">Automation Path</button>
+        <button class="tab-button" data-tool="earningsForecaster">Earnings Forecast</button>
+        <button class="tab-button" data-tool="aiPolicyNavigator">AI Policy Nav</button>
+        <button class="tab-button" data-tool="leanOptimizer">Workflow Opt</button>
+        <button class="tab-button" data-tool="contentCalendar">Content AI</button>
+        <button class="tab-button" data-tool="engagementPrompter">Engagement AI</button>
+        <button class="tab-button" data-tool="analyticsInterpreter">Analytics AI</button>
+        <button class="tab-button" data-tool="complianceShield">Compliance AI</button>
+        <button class="tab-button" data-tool="nicheExplorer">Niche Explorer AI</button>
     </nav>
 
-    <main class="flex-grow container mx-auto p-4 md:p-8">
-        <div id="strategySimulator" class="tool-content active tool-container p-6 md:p-8">
-            <header class="text-center mb-6">
-                <h2 class="text-2xl md:text-3xl font-bold text-[#E0E1DD]">OnlyFans Strategy Simulator</h2>
-                <p class="text-sm text-[#A2D2FF]/70">Experiment with strategic choices to see potential outcomes.</p>
+    <main class="flex-grow container mx-auto p-4 md:p-6">
+        <div id="strategySimulator" class="tool-content active tool-container p-5 md:p-6">
+            <header class="text-center mb-4">
+                <h2 class="text-xl md:text-2xl font-bold text-[#E0E1DD]">Strategy Simulator (Advanced)</h2>
+                <p class="text-xs text-[#A2D2FF]/70">Model outcomes with detailed inputs & get AI persona insights.</p>
             </header>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div class="control-panel p-4 space-y-5 rounded-lg border border-[#3E6990]">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                <div class="p-4 space-y-4 rounded-lg border border-[#3E6990]">
+                    <h3 class="text-lg font-semibold text-center mb-2">Define Your Strategy</h3>
                     <div>
-                        <label for="sim_contentStrategy" class="block text-sm mb-1">Content Niche & Velocity:</label>
-                        <select id="sim_contentStrategy" class="w-full p-2 text-sm">
-                            <option value="casual">Casual (General, Low Consistency)</option>
-                            <option value="niche_moderate">Niche Focus (Moderate Consistency, Some PPV)</option>
-                            <option value="pro_high_value">Pro (Specific Niche, High Consistency, High-Value PPV/Customs)</option>
-                        </select>
+                        <label for="sim_adv_targetAudienceAge">Target Audience Age:</label>
+                        <select id="sim_adv_targetAudienceAge" class="w-full"><option value="18-24">18-24</option><option value="25-34" selected>25-34</option><option value="35-44">35-44</option><option value="45+">45+</option></select>
                     </div>
                     <div>
-                        <label for="sim_promotionEffort" class="block text-sm mb-1">External Promotion Effort:</label>
-                        <select id="sim_promotionEffort" class="w-full p-2 text-sm">
-                            <option value="low">Low (Minimal external presence)</option>
-                            <option value="medium">Medium (Regular posts on 1-2 platforms)</option>
-                            <option value="high">High (Aggressive, multi-channel, optimized)</option>
-                        </select>
+                        <label for="sim_adv_targetAudienceInterests">Primary Audience Interests (comma-separated):</label>
+                        <input type="text" id="sim_adv_targetAudienceInterests" class="w-full" value="Gaming, Cosplay">
+                    </div>
+                     <div>
+                        <label for="sim_adv_contentPillar1">Content Pillar 1:</label>
+                        <select id="sim_adv_contentPillar1" class="w-full"><option value="Live Streams">Interactive Live Streams</option><option value="Photo Sets">Artistic Photo Sets</option><option value="Videos">Personalized Videos</option><option value="Vlogs">BTS Vlogs</option></select>
                     </div>
                     <div>
-                        <label for="sim_automationLevel" class="block text-sm mb-1">Automation Level (Compliant Tools):</label>
-                        <select id="sim_automationLevel" class="w-full p-2 text-sm">
-                            <option value="none">None (Fully manual)</option>
-                            <option value="basic">Basic (Native schedulers, email parsing)</option>
-                            <option value="advanced">Advanced (Zapier/n8n for external, AI-assist drafts)</option>
-                        </select>
+                        <label for="sim_adv_contentPillar2">Content Pillar 2 (Optional):</label>
+                        <select id="sim_adv_contentPillar2" class="w-full"><option value="">None</option><option value="Live Streams">Interactive Live Streams</option><option value="Photo Sets" selected>Artistic Photo Sets</option><option value="Videos">Personalized Videos</option><option value="Vlogs">BTS Vlogs</option></select>
+                    </div>
+                     <div>
+                        <label for="sim_adv_promoPlatform1Intensity">Promotion: Twitter Intensity</label>
+                        <select id="sim_adv_promoPlatform1Intensity" class="w-full"><option value="low">Low</option><option value="medium">Medium</option><option value="high" selected>High</option></select>
                     </div>
                     <div>
-                        <label for="sim_complianceStance" class="block text-sm mb-1">Compliance Stance:</label>
-                        <select id="sim_complianceStance" class="w-full p-2 text-sm">
-                            <option value="strict">Strict Adherence</option>
-                            <option value="gray_area">Exploring Gray Areas (Cautious AI-assist DMs)</option>
-                            <option value="risky">High Risk (Unofficial on-platform bots - NOT RECOMMENDED)</option>
-                        </select>
+                        <label for="sim_adv_promoPlatform2Intensity">Promotion: Instagram Intensity</label>
+                        <select id="sim_adv_promoPlatform2Intensity" class="w-full"><option value="low">Low</option><option value="medium" selected>Medium</option><option value="high">High</option></select>
                     </div>
-                    <button id="sim_simulateButton" class="w-full py-2.5 sim-button">Simulate Strategy</button>
+                    <input type="hidden" id="sim_contentStrategy" value="pro_high_value"> <input type="hidden" id="sim_promotionEffort" value="high">
+                    <input type="hidden" id="sim_automationLevel" value="advanced">
+                    <input type="hidden" id="sim_complianceStance" value="strict">
+
+                    <button id="sim_adv_simulateButton" class="w-full py-2.5 tool-action-button">Simulate Advanced Strategy</button>
                 </div>
-                <div id="sim_resultsPanel" class="results-panel p-4 space-y-3 rounded-lg border border-[#3E6990] hidden">
-                    <h3 class="text-xl font-bold text-center text-[#E0E1DD]">Simulation Results</h3>
-                    <div class="chart-container">
-                        <canvas id="sim_resultsChart"></canvas>
+                <div id="sim_adv_resultsPanel" class="p-4 space-y-3 rounded-lg border border-[#3E6990] hidden">
+                    <h3 class="text-lg font-bold text-center text-[#E0E1DD]">Advanced Simulation Results</h3>
+                    <div id="sim_adv_aiPersonaContainer" class="ai-output-container">
+                        <h4 class="text-sm">✨ Projected Fan Persona:</h4>
+                        <p id="sim_adv_aiPersonaText" class="text-xs gemini-loading">Generating persona...</p>
                     </div>
-                    <div class="text-center p-2 bg-[#102A43]/70 rounded-md text-sm">
-                        <h4 class="font-semibold text-[#A2D2FF]">Potential Earnings Tier:</h4>
-                        <p id="sim_earningsText">-</p>
-                    </div>
-                    <div class="text-center p-2 bg-[#102A43]/70 rounded-md text-sm">
-                        <h4 class="font-semibold text-[#A2D2FF]">Operational Efficiency:</h4>
-                        <p id="sim_efficiencyText">-</p>
-                    </div>
-                    <div class="text-center p-2 bg-[#102A43]/70 rounded-md text-sm">
-                        <h4 class="font-semibold text-[#A2D2FF]">Compliance Risk Level:</h4>
-                        <p id="sim_complianceText">-</p>
-                    </div>
-                    <div id="sim_feedbackText" class="text-xs text-center text-[#A2D2FF]/70 p-2 border border-[#3E6990] rounded-md">
-                        <p>Illustrative feedback based on generalized trends.</p>
-                    </div>
-                    <button id="sim_getAiAdviceButton" class="w-full py-2 sim-button mt-3 hidden">✨ Get AI Strategy Insights</button>
-                    <div id="sim_aiAdviceContainer" class="ai-advice-container hidden">
-                        <h4 class="font-semibold text-sm text-[#6ee7b7] mb-1">✨ AI-Powered Insights:</h4>
-                        <p id="sim_aiAdviceText" class="text-xs"></p>
+                    <div class="chart-container !h-64 !max-h-72"> <canvas id="sim_adv_resultsChart"></canvas> </div>
+                    <div class="text-center p-1.5 bg-[#102A43]/70 rounded-md text-xs"><h4 class="font-semibold text-[#A2D2FF]">Earnings Tier:</h4><p id="sim_adv_earningsText">-</p></div>
+                    <div class="text-center p-1.5 bg-[#102A43]/70 rounded-md text-xs"><h4 class="font-semibold text-[#A2D2FF]">Efficiency:</h4><p id="sim_adv_efficiencyText">-</p></div>
+                    <div class="text-center p-1.5 bg-[#102A43]/70 rounded-md text-xs"><h4 class="font-semibold text-[#A2D2FF]">Risk Level:</h4><p id="sim_adv_complianceText">-</p></div>
+                    <button id="sim_adv_getAiAdviceButton" class="w-full py-2 tool-action-button text-sm ai-trigger-button">✨ Get AI Persona-Tailored Advice</button>
+                    <div id="sim_adv_aiAdviceContainer" class="ai-output-container hidden">
+                        <h4 class="text-sm">✨ AI Strategic Advice:</h4>
+                        <p id="sim_adv_aiAdviceText" class="text-xs"></p>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div id="automationPathfinder" class="tool-content tool-container p-6 md:p-8">
-            <header class="text-center mb-6">
-                <h2 class="text-2xl md:text-3xl font-bold text-[#E0E1DD]">Compliant Automation Pathfinder</h2>
-                <p class="text-sm text-[#A2D2FF]/70">Find safe and effective automation strategies.</p>
-            </header>
-            <div id="path_pathfinder" class="space-y-6">
-                <div id="path_questionArea" class="question-card p-5">
-                    <h3 id="path_questionTitle" class="text-lg font-bold mb-3 text-[#E0E1DD]">Starting...</h3>
-                    <div id="path_optionsArea" class="space-y-2.5"></div>
-                </div>
-                <div id="path_navigationArea" class="flex justify-between items-center">
-                    <button id="path_prevButton" class="nav-button text-sm py-2 px-3" disabled>Previous</button>
-                    <span id="path_stepIndicator" class="text-xs text-[#A2D2FF]/70">Step 1 / X</span>
-                    <button id="path_nextButton" class="nav-button text-sm py-2 px-3" disabled>Next</button>
-                </div>
-                <div id="path_resultArea" class="result-card p-5 hidden">
-                    <h3 class="text-xl font-bold mb-3 text-center text-[#E0E1DD]">Pathfinder Results:</h3>
-                    <div id="path_resultContent" class="space-y-3"></div>
-                    <button id="path_aiElaborateButton" class="nav-button mt-3 w-full text-sm py-2 ai-elaboration-button hidden">✨ AI: Elaborate on this Path</button>
-                    <div id="path_aiElaborationContainer" class="ai-elaboration-container hidden">
-                        <h4 class="font-semibold text-xs text-[#6ee7b7] mb-1">✨ AI Elaboration:</h4>
-                        <p id="path_aiElaborationText" class="text-xs"></p>
+        <div id="automationPathfinder" class="tool-content tool-container p-5 md:p-6">
+             <header class="text-center mb-4"><h2 class="text-xl md:text-2xl font-bold">Automation Pathfinder (AI Enhanced)</h2><p class="text-xs text-[#A2D2FF]/70">Find safe automation & get AI cost/benefit/risk analysis.</p></header>
+            <div id="path_pathfinder" class="space-y-5">
+                <div id="path_questionArea" class="question-card p-4"><h3 id="path_questionTitle" class="text-md font-bold mb-2">Starting...</h3><div id="path_optionsArea" class="space-y-2"></div></div>
+                <div id="path_navigationArea" class="flex justify-between items-center"><button id="path_prevButton" class="nav-button text-xs py-1.5 px-2.5" disabled>Previous</button><span id="path_stepIndicator" class="text-xs text-[#A2D2FF]/70">Step 1</span><button id="path_nextButton" class="nav-button text-xs py-1.5 px-2.5" disabled>Next</button></div>
+                <div id="path_resultArea" class="result-card p-4 hidden">
+                    <h3 class="text-md font-bold mb-2 text-center">Pathfinder Results:</h3><div id="path_resultContent" class="space-y-2 text-sm"></div>
+                    <button id="path_aiCostBenefitButton" class="nav-button mt-2.5 w-full text-xs py-1.5 ai-trigger-button hidden">✨ AI: Analyze Cost/Benefit/Risk</button>
+                    <div id="path_aiCostBenefitContainer" class="ai-output-container hidden !text-xs">
+                        <h4 class="!text-xs">✨ AI Cost/Benefit/Risk Analysis:</h4><p id="path_aiCostBenefitText"></p>
                     </div>
-                    <button id="path_restartButton" class="nav-button mt-5 w-full text-sm py-2">Start Over</button>
+                    <button id="path_restartButton" class="nav-button mt-4 w-full text-xs py-1.5">Start Over</button>
                 </div>
             </div>
         </div>
 
-        <div id="earningsForecaster" class="tool-content tool-container p-6 md:p-8">
-            <header class="text-center mb-6">
-                <h2 class="text-2xl md:text-3xl font-bold text-[#E0E1DD]">Creator Earnings Potential Forecaster</h2>
-                <p class="text-sm text-[#A2D2FF]/70">Estimate monthly earnings based on your operational targets.</p>
-            </header>
-            <div class="forecaster-inputs grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
-                <div>
-                    <label for="fc_subscribers" class="block text-sm mb-1">Target Subscribers:</label>
-                    <input type="number" id="fc_subscribers" value="100" class="w-full p-2 text-sm">
-                </div>
-                <div>
-                    <label for="fc_subPrice" class="block text-sm mb-1">Avg. Sub Price ($):</label>
-                    <input type="number" id="fc_subPrice" value="9.99" step="0.01" class="w-full p-2 text-sm">
-                </div>
-                <div>
-                    <label for="fc_ppvOffers" class="block text-sm mb-1">PPV Offers/Month:</label>
-                    <input type="number" id="fc_ppvOffers" value="2" class="w-full p-2 text-sm">
-                </div>
-                <div>
-                    <label for="fc_ppvPrice" class="block text-sm mb-1">Avg. Price/PPV ($):</label>
-                    <input type="number" id="fc_ppvPrice" value="20" class="w-full p-2 text-sm">
-                </div>
-                <div>
-                    <label for="fc_ppvConversionRate" class="block text-sm mb-1">PPV Purchase Rate (%):</label>
-                    <input type="number" id="fc_ppvConversionRate" value="15" min="0" max="100" class="w-full p-2 text-sm">
-                </div>
-                <div>
-                    <label for="fc_avgTipPerSub" class="block text-sm mb-1">Avg. Monthly Tip/Sub ($):</label>
-                    <input type="number" id="fc_avgTipPerSub" value="5" class="w-full p-2 text-sm">
-                </div>
-                <div class="md:col-span-2">
-                     <button id="fc_forecastButton" class="w-full py-2.5 mt-3 fc-button">Forecast Earnings</button>
-                </div>
+        <div id="earningsForecaster" class="tool-content tool-container p-5 md:p-6">
+            <header class="text-center mb-4"><h2 class="text-xl md:text-2xl font-bold">Earnings Forecaster (AI Goal Seek)</h2><p class="text-xs text-[#A2D2FF]/70">Estimate earnings & get AI-driven scenarios for your income goals.</p></header>
+            <div class="forecaster-inputs grid grid-cols-1 md:grid-cols-2 gap-x-5 gap-y-3">
+                <div><label for="fc_targetIncome" class="!text-sm">Target Monthly Net Income ($):</label><input type="number" id="fc_targetIncome" value="3000" class="w-full !p-1.5 !text-sm"></div>
+                <div><label for="fc_currentSubPrice" class="!text-sm">Your Current/Planned Sub Price ($):</label><input type="number" id="fc_currentSubPrice" value="12.99" step="0.01" class="w-full !p-1.5 !text-sm"></div>
+                <div class="md:col-span-2"><button id="fc_goalSeekButton" class="w-full py-2 tool-action-button text-sm ai-trigger-button">✨ AI: Suggest Scenarios for Target</button></div>
             </div>
-            <div id="fc_resultsDisplayContainer" class="results-display-container p-5 space-y-5 mt-6 hidden rounded-lg border border-[#3E6990]">
-                <h3 class="text-xl font-bold text-center text-[#E0E1DD]">Estimated Monthly Earnings</h3>
-                <div class="earnings-breakdown text-center text-md">
-                    <p>Subscription Revenue: <strong id="fc_subRevenueText">$0.00</strong></p>
-                    <p>PPV Revenue: <strong id="fc_ppvRevenueText">$0.00</strong></p>
-                    <p>Tip Revenue: <strong id="fc_tipRevenueText">$0.00</strong></p>
-                    <hr class="border-[#3E6990] my-1.5">
-                    <p>Total Gross: <strong id="fc_totalGrossEarningsText" class="text-[#6ee7b7] text-lg">$0.00</strong></p>
-                    <p class="text-xs">(Before 20% Platform Fee)</p>
-                    <p>Est. Net (Take-Home): <strong id="fc_totalNetEarningsText" class="text-[#6ee7b7] text-lg">$0.00</strong></p>
-                </div>
-                <div class="chart-container !h-64 sm:!h-72"> <canvas id="fc_comparisonChart"></canvas> </div>
+            <div id="fc_aiScenariosContainer" class="ai-output-container hidden !text-xs mt-3">
+                <h4 class="!text-xs">✨ AI-Suggested Scenarios to Reach Target:</h4><div id="fc_aiScenariosText"></div>
+            </div>
+            <hr class="border-[#3E6990] my-4">
+            <h3 class="text-center text-md font-semibold mb-2">Or, Input Your Own Scenario:</h3>
+            <div class="forecaster-inputs grid grid-cols-1 md:grid-cols-2 gap-x-5 gap-y-3">
+                <div><label for="fc_subscribers" class="!text-sm">Target Subscribers:</label><input type="number" id="fc_subscribers" value="200" class="w-full !p-1.5 !text-sm"></div>
+                <div><label for="fc_subPrice" class="!text-sm">Avg. Sub Price ($):</label><input type="number" id="fc_subPrice" value="15.00" step="0.01" class="w-full !p-1.5 !text-sm"></div>
+                <div><label for="fc_ppvOffers" class="!text-sm">PPV Offers/Month:</label><input type="number" id="fc_ppvOffers" value="4" class="w-full !p-1.5 !text-sm"></div>
+                <div><label for="fc_ppvPrice" class="!text-sm">Avg. Price/PPV ($):</label><input type="number" id="fc_ppvPrice" value="30" class="w-full !p-1.5 !text-sm"></div>
+                <div><label for="fc_ppvConversionRate" class="!text-sm">PPV Purchase Rate (%):</label><input type="number" id="fc_ppvConversionRate" value="30" min="0" max="100" class="w-full !p-1.5 !text-sm"></div>
+                <div><label for="fc_avgTipPerSub" class="!text-sm">Avg. Monthly Tip/Sub ($):</label><input type="number" id="fc_avgTipPerSub" value="8" class="w-full !p-1.5 !text-sm"></div>
+                <div class="md:col-span-2"><button id="fc_forecastButton" class="w-full py-2 tool-action-button text-sm mt-2">Forecast This Scenario</button></div>
+            </div>
+             <div id="fc_resultsDisplayContainer" class="p-4 space-y-4 mt-4 hidden rounded-lg border border-[#3E6990]">
+                <h3 class="text-md font-bold text-center">Estimated Monthly Earnings</h3>
+                <div class="earnings-breakdown text-center text-sm"><p>Sub Revenue: <strong id="fc_subRevenueText">$0</strong></p><p>PPV Revenue: <strong id="fc_ppvRevenueText">$0</strong></p><p>Tip Revenue: <strong id="fc_tipRevenueText">$0</strong></p><hr class="border-[#3E6990] my-1"><p>Total Gross: <strong id="fc_totalGrossEarningsText" class="text-[#6ee7b7] text-md">$0</strong></p><p class="text-xs">(Before 20% Fee)</p><p>Est. Net: <strong id="fc_totalNetEarningsText" class="text-[#6ee7b7] text-md">$0</strong></p></div>
+                <div class="chart-container !h-56 sm:!h-64"><canvas id="fc_comparisonChart"></canvas></div>
                 <p id="fc_comparisonContextText" class="comparison-text text-center text-xs"></p>
-                <button id="fc_getAiTipsButton" class="w-full py-2 fc-button mt-3 hidden">✨ AI: Get Growth Tips</button>
-                <div id="fc_aiTipsContainer" class="ai-tips-container hidden">
-                    <h4 class="font-semibold text-sm text-[#6ee7b7] mb-1">✨ AI-Powered Growth Tips:</h4>
-                    <ul id="fc_aiTipsList" class="list-disc list-inside text-xs space-y-1"></ul>
+                <button id="fc_getAiFeasibilityButton" class="w-full py-1.5 tool-action-button text-xs ai-trigger-button hidden">✨ AI: Analyze Scenario Feasibility</button>
+                <div id="fc_aiFeasibilityContainer" class="ai-output-container hidden !text-xs">
+                    <h4 class="!text-xs">✨ AI Feasibility & Trade-off Analysis:</h4><p id="fc_aiFeasibilityText"></p>
                 </div>
             </div>
         </div>
 
-        <div id="aiPolicyNavigator" class="tool-content tool-container p-6 md:p-8">
-            <header class="text-center mb-6">
-                <h2 class="text-2xl md:text-3xl font-bold text-[#E0E1DD]">AI Content Policy Navigator</h2>
-                <p class="text-sm text-[#A2D2FF]/70">Test your understanding of OnlyFans' AI policies.</p>
-            </header>
-            <div id="nav_navigatorApp" class="space-y-5">
-                <div id="nav_scenarioDisplay" class="scenario-card p-5">
-                    <h3 id="nav_scenarioTitle" class="text-lg font-bold mb-1 text-[#E0E1DD]">Scenario Title</h3>
-                    <p id="nav_scenarioDescription" class="text-xs text-[#A2D2FF]/90 mb-3">Description.</p>
-                    <div id="nav_optionsContainer" class="space-y-2.5"></div>
+        <div id="aiPolicyNavigator" class="tool-content tool-container p-5 md:p-6">
+            <header class="text-center mb-4"><h2 class="text-xl md:text-2xl font-bold">AI Policy Navigator (Custom Scenarios)</h2><p class="text-xs text-[#A2D2FF]/70">Test pre-set scenarios or get AI analysis on your custom AI use idea.</p></header>
+            <div class="mb-4 p-4 rounded-lg border border-[#3E6990] bg-[#1E407C]/50">
+                <label for="nav_customScenarioText" class="!text-sm">Describe your custom AI activity/content idea:</label>
+                <textarea id="nav_customScenarioText" rows="3" class="w-full !p-1.5 !text-sm" placeholder="e.g., Use AI to generate SFW animated teasers from my photos with my AI voice for TikTok..."></textarea>
+                <button id="nav_analyzeCustomScenarioButton" class="w-full py-1.5 tool-action-button text-xs mt-2 ai-trigger-button">✨ AI: Analyze My Custom Scenario</button>
+                <div id="nav_customAiAnalysisContainer" class="ai-output-container hidden !text-xs">
+                    <h4 class="!text-xs">✨ AI Risk Assessment for Custom Scenario:</h4><p id="nav_customAiAnalysisText"></p>
+                    <button id="nav_getAiMitigationButton" class="w-full py-1 tool-action-button text-xs mt-1.5 ai-trigger-button hidden">✨ AI: Suggest Mitigation</button>
+                    <div id="nav_aiMitigationContainer" class="ai-output-container hidden !text-xs"><h4 class="!text-xs">✨ AI Mitigation Ideas:</h4><p id="nav_aiMitigationText"></p></div>
                 </div>
-                <div id="nav_feedbackDisplayContainer" class="feedback-card-container p-3 hidden">
-                    <h4 id="nav_feedbackTitle" class="text-md font-semibold mb-1">Feedback</h4>
-                    <p id="nav_feedbackText" class="text-xs mb-1"></p>
-                    <div class="flex items-center">
-                        <p id="nav_feedbackPolicy" class="policy-reference text-xs"></p>
-                        <button id="nav_aiExplainPolicyButton" class="ai-policy-elaboration-button hidden">✨ AI Explain</button>
-                    </div>
-                    <div id="nav_aiPolicyElaborationContainer" class="ai-policy-elaboration-container hidden">
-                        <h5 class="font-semibold text-xs text-[#6ee7b7] mb-0.5">✨ AI Deeper Dive:</h5>
-                        <p id="nav_aiPolicyElaborationText" class="text-xs"></p>
-                    </div>
-                </div>
-                <div id="nav_scoreDisplay" class="text-center text-md hidden">
-                    <p>Your Score: <span id="nav_scoreValue" class="font-bold">0</span> / <span id="nav_totalScenariosValue">0</span></p>
-                    <p id="nav_finalMessage" class="mt-1 text-sm"></p>
-                </div>
-                <button id="nav_nextScenarioButton" class="nav-button w-full mt-3 text-sm py-2">Submit Answer</button>
-                <button id="nav_restartNavigatorButton" class="nav-button w-full mt-1.5 hidden bg-red-700 hover:bg-red-800 !text-white text-sm py-2">Restart Navigator</button>
+            </div>
+            <hr class="border-[#3E6990] my-4">
+            <h3 class="text-center text-md font-semibold mb-2">Or, Navigate Pre-set Scenarios:</h3>
+            <div id="nav_navigatorApp" class="space-y-4">
+                <div id="nav_scenarioDisplay" class="scenario-card p-4"><h3 id="nav_scenarioTitle" class="text-md font-bold mb-1">Scenario Title</h3><p id="nav_scenarioDescription" class="text-xs text-[#A2D2FF]/90 mb-2">Desc.</p><div id="nav_optionsContainer" class="space-y-2"></div></div>
+                <div id="nav_feedbackDisplayContainer" class="feedback-card-container p-2.5 hidden"><h4 id="nav_feedbackTitle" class="text-sm font-semibold mb-0.5">Feedback</h4><p id="nav_feedbackText" class="text-xs mb-0.5"></p><div class="flex items-center text-xs"><p id="nav_feedbackPolicy" class="policy-reference"></p><button id="nav_aiExplainPolicyButton" class="ai-policy-elaboration-button hidden !text-xs !py-0.5 !px-1">✨ AI Explain</button></div><div id="nav_aiPolicyElaborationContainer" class="ai-output-container hidden !text-xs"><h5 class="!text-xs">✨ AI Deeper Dive:</h5><p id="nav_aiPolicyElaborationText"></p></div></div>
+                <div id="nav_scoreDisplay" class="text-center text-sm hidden"><p>Score: <span id="nav_scoreValue" class="font-bold">0</span>/<span id="nav_totalScenariosValue">0</span></p><p id="nav_finalMessage" class="mt-0.5 text-xs"></p></div>
+                <button id="nav_nextScenarioButton" class="nav-button w-full mt-2 text-xs py-1.5">Submit</button>
+                <button id="nav_restartNavigatorButton" class="nav-button w-full mt-1 hidden bg-red-700 hover:bg-red-800 !text-white text-xs py-1.5">Restart Quiz</button>
             </div>
         </div>
 
-        <div id="leanOptimizer" class="tool-content tool-container p-6 md:p-8">
-            <header class="text-center mb-6">
-                <h2 class="text-2xl md:text-3xl font-bold text-[#E0E1DD]">Lean Creator Workflow Optimizer</h2>
-                <p class="text-sm text-[#A2D2FF]/70">Assess your practices and get advice to streamline workflows.</p>
-            </header>
-            <div id="opt_optimizerApp" class="optimizer-inputs space-y-5">
-                <div class="practice-category">
-                    <h3 class="text-lg">📅 Content Creation & Scheduling</h3>
-                    <div id="opt_contentPractices" class="space-y-1.5"></div>
+        <div id="leanOptimizer" class="tool-content tool-container p-5 md:p-6">
+            <header class="text-center mb-4"><h2 class="text-xl md:text-2xl font-bold">Lean Workflow Optimizer (AI Enhanced)</h2><p class="text-xs text-[#A2D2FF]/70">Assess practices, get AI bottleneck analysis & custom process redesign ideas.</p></header>
+            <div class="mb-4 p-4 rounded-lg border border-[#3E6990] bg-[#1E407C]/50">
+                <label for="opt_detailedWorkflowInput" class="!text-sm">Describe your typical weekly content workflow (tasks & hours):</label>
+                <textarea id="opt_detailedWorkflowInput" rows="4" class="w-full !p-1.5 !text-sm" placeholder="e.g., Mon: Plan (2h), Film (4h). Tue: Edit (6h)..."></textarea>
+                <button id="opt_analyzeWorkflowAiButton" class="w-full py-1.5 tool-action-button text-xs mt-2 ai-trigger-button">✨ AI: Analyze My Workflow for Bottlenecks</button>
+                <div id="opt_aiBottleneckContainer" class="ai-output-container hidden !text-xs">
+                    <h4 class="!text-xs">✨ AI Bottleneck Analysis:</h4><p id="opt_aiBottleneckText"></p>
+                    <button id="opt_getAiWorkflowSuggestionButton" class="w-full py-1 tool-action-button text-xs mt-1.5 ai-trigger-button hidden">✨ AI: Suggest Optimized Workflow</button>
+                    <div id="opt_aiWorkflowSuggestionContainer" class="ai-output-container hidden !text-xs"><h4 class="!text-xs">✨ AI Optimized Workflow Idea:</h4><p id="opt_aiWorkflowSuggestionText"></p></div>
                 </div>
-                <div class="practice-category">
-                    <h3 class="text-lg">📢 External Promotion & Marketing</h3>
-                    <div id="opt_promotionPractices" class="space-y-1.5"></div>
-                </div>
-                <div class="practice-category">
-                    <h3 class="text-lg">💬 Fan Engagement & Communication (Compliant)</h3>
-                    <div id="opt_engagementPractices" class="space-y-1.5"></div>
-                </div>
-                <button id="opt_calculateScoreButton" class="action-button w-full mt-3 !py-2.5">Optimize My Workflow</button>
             </div>
-            <div id="opt_resultsDisplayContainer" class="results-display-container p-5 space-y-5 mt-6 hidden rounded-lg border border-[#3E6990]">
-                <h3 class="text-xl font-bold text-center text-[#E0E1DD]">Workflow Optimization Report</h3>
-                <div class="text-center">
-                    <p class="text-md">Lean Score: <span id="opt_leanScoreValue" class="font-bold text-xl text-[#6ee7b7]">0</span> / 100</p>
-                    <p id="opt_leanScoreTier" class="text-sm text-[#A2D2FF]/80"></p>
-                </div>
-                <div class="score-bar-container !h-7">
-                    <div id="opt_scoreBarFill" class="score-bar-fill !text-sm" style="width: 0%;">0%</div>
-                </div>
-                <div>
-                    <h4 class="text-md font-semibold mb-2 text-[#A2D2FF]">Recommendations:</h4>
-                    <ul id="opt_recommendationList" class="recommendation-list list-none p-0 text-xs"></ul>
-                </div>
-                <button id="opt_getAiActionPlanButton" class="action-button w-full mt-3 !py-2 hidden">✨ AI: Generate Personalized Lean Action Plan</button>
-                <div id="opt_aiActionPlanContainer" class="ai-action-plan-container hidden">
-                    <h4 class="font-semibold text-sm text-[#6ee7b7] mb-1">✨ AI-Powered Action Plan:</h4>
-                    <p id="opt_aiActionPlanText" class="text-xs"></p>
-                </div>
-                <button id="opt_reassessButton" class="action-button w-full mt-3 !py-2">Re-assess Workflow</button>
+            <hr class="border-[#3E6990] my-4">
+            <h3 class="text-center text-md font-semibold mb-2">Or, Use the Lean Practices Checklist:</h3>
+            <div id="opt_optimizerApp" class="optimizer-inputs space-y-4"><div class="practice-category"><h3 class="text-md">📅 Content Creation & Scheduling</h3><div id="opt_contentPractices" class="space-y-1"></div></div><div class="practice-category"><h3 class="text-md">📢 External Promotion</h3><div id="opt_promotionPractices" class="space-y-1"></div></div><div class="practice-category"><h3 class="text-md">💬 Fan Engagement (Compliant)</h3><div id="opt_engagementPractices" class="space-y-1"></div></div><button id="opt_calculateScoreButton" class="action-button w-full mt-2 !py-2 text-sm">Optimize From Checklist</button></div>
+            <div id="opt_resultsDisplayContainer" class="p-4 space-y-4 mt-4 hidden rounded-lg border border-[#3E6990]">
+                <h3 class="text-md font-bold text-center">Workflow Report (Checklist)</h3>
+                <div class="text-center text-sm"><p>Lean Score: <span id="opt_leanScoreValue" class="font-bold text-lg text-[#6ee7b7]">0</span>/100</p><p id="opt_leanScoreTier" class="text-xs text-[#A2D2FF]/80"></p></div>
+                <div class="score-bar-container !h-6"><div id="opt_scoreBarFill" class="score-bar-fill !text-xs" style="width:0%;">0%</div></div>
+                <div><h4 class="text-sm font-semibold mb-1 text-[#A2D2FF]">Recommendations:</h4><ul id="opt_recommendationList" class="recommendation-list list-none p-0 text-xs"></ul></div>
+                <button id="opt_getAiActionPlanButton" class="action-button w-full mt-2 !py-1.5 text-xs ai-trigger-button hidden">✨ AI: Generate Lean Action Plan</button>
+                <div id="opt_aiActionPlanContainer" class="ai-output-container hidden !text-xs"><h4 class="!text-xs">✨ AI Action Plan:</h4><p id="opt_aiActionPlanText"></p></div>
+                <button id="opt_reassessButton" class="action-button w-full mt-2 !py-1.5 text-xs">Re-assess Checklist</button>
+            </div>
+        </div>
+
+        <div id="contentCalendar" class="tool-content tool-container p-5 md:p-6">
+            <header class="text-center mb-4"><h2 class="text-xl md:text-2xl font-bold">AI Content Calendar & Idea Expander</h2><p class="text-xs text-[#A2D2FF]/70">Get AI-generated content calendars and expanded ideas for your niche.</p></header>
+            <div class="space-y-3">
+                <div><label for="cc_primaryNiche" class="!text-sm">Your Primary Niche(s) (e.g., Fitness, ASMR, Cosplay):</label><input type="text" id="cc_primaryNiche" class="w-full !p-1.5 !text-sm" value="ASMR Roleplay"></div>
+                <div><label for="cc_userIdea" class="!text-sm">An Existing Idea/Theme to Expand (Optional):</label><input type="text" id="cc_userIdea" class="w-full !p-1.5 !text-sm" placeholder="e.g., Library-themed ASMR video"></div>
+                <button id="cc_generateButton" class="w-full py-2 tool-action-button text-sm ai-trigger-button">✨ AI: Generate Calendar & Expand Ideas</button>
+            </div>
+            <div id="cc_aiOutputContainer" class="ai-output-container hidden mt-3 !text-xs">
+                <h4 class="!text-xs">✨ AI-Powered Content Suggestions:</h4>
+                <div id="cc_aiCalendarText" class="mb-2"></div>
+                <div id="cc_aiIdeaExpansionText"></div>
+            </div>
+        </div>
+
+        <div id="engagementPrompter" class="tool-content tool-container p-5 md:p-6">
+            <header class="text-center mb-4"><h2 class="text-xl md:text-2xl font-bold">Personalized Fan Engagement Prompter (AI)</h2><p class="text-xs text-[#A2D2FF]/70">Get AI suggestions for engaging specific fan segments.</p></header>
+            <div class="space-y-3">
+                <div><label for="ep_fanSegmentDescription" class="!text-sm">Describe Fan Segment (e.g., long-term sub, high tipper, loves BTS):</label><textarea id="ep_fanSegmentDescription" rows="3" class="w-full !p-1.5 !text-sm" placeholder="Long-term subscriber, high tipper, often comments on story posts, seems interested in behind-the-scenes content"></textarea></div>
+                <button id="ep_generatePromptsButton" class="w-full py-2 tool-action-button text-sm ai-trigger-button">✨ AI: Get Engagement & PPV Ideas</button>
+            </div>
+            <div id="ep_aiOutputContainer" class="ai-output-container hidden mt-3 !text-xs">
+                <h4 class="!text-xs">✨ AI Engagement & PPV Suggestions:</h4>
+                <div id="ep_aiEngagementPromptsText" class="mb-2"></div>
+                <div id="ep_aiPpvAngleText"></div>
+            </div>
+        </div>
+
+        <div id="analyticsInterpreter" class="tool-content tool-container p-5 md:p-6">
+            <header class="text-center mb-4"><h2 class="text-xl md:text-2xl font-bold">Advanced Analytics Interpretation (AI)</h2><p class="text-xs text-[#A2D2FF]/70">Input your key metrics for AI-driven insights and recommendations.</p></header>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-5 gap-y-3">
+                <div><label for="an_subGrowthRate" class="!text-sm">Monthly Sub Growth Rate (%):</label><input type="number" id="an_subGrowthRate" class="w-full !p-1.5 !text-sm" value="5"></div>
+                <div><label for="an_churnRate" class="!text-sm">Monthly Churn Rate (%):</label><input type="number" id="an_churnRate" class="w-full !p-1.5 !text-sm" value="20"></div>
+                <div><label for="an_ppvConversionRate" class="!text-sm">Avg. PPV Purchase Rate (%):</label><input type="number" id="an_ppvConversionRate" class="w-full !p-1.5 !text-sm" value="10"></div>
+                <div><label for="an_topContentType" class="!text-sm">Your Top Performing Content Type:</label><input type="text" id="an_topContentType" class="w-full !p-1.5 !text-sm" value="Live Streams"></div>
+                <div class="sm:col-span-2"><button id="an_analyzeMetricsButton" class="w-full py-2 tool-action-button text-sm mt-2 ai-trigger-button">✨ AI: Analyze My Metrics</button></div>
+            </div>
+            <div id="an_aiOutputContainer" class="ai-output-container hidden mt-3 !text-xs">
+                <h4 class="!text-xs">✨ AI Analytics Insights & Recommendations:</h4>
+                <div id="an_aiInsightsText" class="mb-2"></div>
+                <div id="an_aiRecommendationsText"></div>
+            </div>
+        </div>
+
+        <div id="complianceShield" class="tool-content tool-container p-5 md:p-6">
+            <header class="text-center mb-4"><h2 class="text-xl md:text-2xl font-bold">"Compliance Shield" (AI-Assisted Review)</h2><p class="text-xs text-[#A2D2FF]/70">Paste draft text for AI to flag potential policy conflicts.</p></header>
+            <div class="space-y-3">
+                <div><label for="cs_draftText" class="!text-sm">Paste your draft caption, DM, PPV offer, or content description:</label><textarea id="cs_draftText" rows="4" class="w-full !p-1.5 !text-sm" placeholder="e.g., My HOTTEST video yet! 🔥 DM me your number after purchase for a special surprise! 😉"></textarea></div>
+                <button id="cs_reviewTextButton" class="w-full py-2 tool-action-button text-sm ai-trigger-button">✨ AI: Review for Compliance Flags</button>
+            </div>
+            <div id="cs_aiOutputContainer" class="ai-output-container hidden mt-3 !text-xs">
+                <h4 class="!text-xs">✨ AI Compliance Review:</h4>
+                <div id="cs_aiPolicyFlagsText" class="mb-2"></div>
+                <div id="cs_aiRephrasingText"></div>
+            </div>
+        </div>
+
+        <div id="nicheExplorer" class="tool-content tool-container p-5 md:p-6">
+            <header class="text-center mb-4"><h2 class="text-xl md:text-2xl font-bold">Niche Deep Dive & Expansion (AI)</h2><p class="text-xs text-[#A2D2FF]/70">Get AI ideas for sub-niches and cross-niche synergies.</p></header>
+            <div class="space-y-3">
+                <div><label for="ne_primaryNiche" class="!text-sm">Your Primary Niche (e.g., Fitness, ASMR, Cosplay, Art):</label><input type="text" id="ne_primaryNiche" class="w-full !p-1.5 !text-sm" value="Fitness"></div>
+                <button id="ne_exploreNicheButton" class="w-full py-2 tool-action-button text-sm ai-trigger-button">✨ AI: Explore Niche Opportunities</button>
+            </div>
+            <div id="ne_aiOutputContainer" class="ai-output-container hidden mt-3 !text-xs">
+                <h4 class="!text-xs">✨ AI Niche Exploration:</h4>
+                <div id="ne_aiSubNichesText" class="mb-2"></div>
+                <div id="ne_aiSynergyIdeasText"></div>
             </div>
         </div>
     </main>
 
-    <footer class="text-center py-8 mt-auto">
-        <p class="text-xs text-[#3E6990]">Comprehensive Creator Toolkit. All tools are for illustrative and educational purposes. Always refer to official platform terms.</p>
+    <footer class="text-center py-6 mt-auto">
+        <p class="text-xs text-[#3E6990]">Advanced Creator Toolkit. AI features provide suggestions and are not definitive financial or legal advice. Always verify with official sources and use your judgment.</p>
     </footer>
 
 <script>
     // --- Gemini API Call Function ---
-    async function callGeminiAPI(prompt) {
-        const apiKey = ""; // Key will be injected by the environment if needed for specific models
+    async function callGeminiAPI(prompt, loadingElementId = null, outputElementId = null, buttonElement = null) {
+        const aiOutputElem = outputElementId ? document.getElementById(outputElementId) : null;
+        const loadingElem = loadingElementId ? document.getElementById(loadingElementId) : (aiOutputElem || null);
+
+        if (loadingElem) {
+            if (aiOutputElem && loadingElementId !== outputElementId) aiOutputElem.textContent = ''; // Clear output if separate
+            loadingElem.classList.remove('hidden');
+            loadingElem.innerHTML = '<p class="gemini-loading">✨ Thinking...</p>'; // Use innerHTML for p tag
+        }
+        if (buttonElement) buttonElement.disabled = true;
+
+        const apiKey = ""; 
         const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
-        
-        const payload = {
-            contents: [{ role: "user", parts: [{ text: prompt }] }]
-        };
+        const payload = { contents: [{ role: "user", parts: [{ text: prompt }] }] };
 
         try {
             const response = await fetch(apiUrl, {
@@ -395,20 +332,24 @@
             if (!response.ok) {
                 const errorBody = await response.text();
                 console.error("Gemini API Error Response:", errorBody);
-                throw new Error(`API request failed with status ${response.status}: ${response.statusText}`);
+                throw new Error(`API request failed: ${response.status} ${response.statusText}`);
             }
             const result = await response.json();
-            if (result.candidates && result.candidates.length > 0 &&
-                result.candidates[0].content && result.candidates[0].content.parts &&
-                result.candidates[0].content.parts.length > 0) {
+            if (result.candidates && result.candidates[0]?.content?.parts[0]?.text) {
+                if (loadingElem && loadingElementId === outputElementId) loadingElem.classList.add('hidden'); // Hide loading if it's the output elem
+                else if (loadingElem) loadingElem.textContent = ''; // Clear loading text if separate
                 return result.candidates[0].content.parts[0].text;
             } else {
                 console.error("Unexpected Gemini API response structure:", result);
-                return "Could not retrieve advice from AI at this time. (Unexpected response)";
+                if (loadingElem) loadingElem.innerHTML = '<p class="text-red-400">Error: Unexpected AI response.</p>';
+                return "Could not retrieve advice from AI. (Unexpected response)";
             }
         } catch (error) {
             console.error("Error calling Gemini API:", error);
-            return `Could not retrieve advice from AI: ${error.message}. Check console for details.`;
+            if (loadingElem) loadingElem.innerHTML = `<p class="text-red-400">Error: ${error.message}.</p>`;
+            return `Could not retrieve advice from AI: ${error.message}.`;
+        } finally {
+            if (buttonElement) buttonElement.disabled = false;
         }
     }
 
@@ -418,150 +359,116 @@
         const toolContents = document.querySelectorAll('.tool-content');
 
         function activateTool(toolId) {
-            toolContents.forEach(content => {
-                content.classList.toggle('active', content.id === toolId);
-            });
-            tabs.forEach(tab => {
-                tab.classList.toggle('active', tab.dataset.tool === toolId);
-            });
+            toolContents.forEach(content => content.classList.toggle('active', content.id === toolId));
+            tabs.forEach(tab => tab.classList.toggle('active', tab.dataset.tool === toolId));
         }
 
-        tabs.forEach(tab => {
-            tab.addEventListener('click', function() {
-                activateTool(this.dataset.tool);
-            });
-        });
+        tabs.forEach(tab => tab.addEventListener('click', function() { activateTool(this.dataset.tool); }));
+        if (tabs.length > 0) activateTool(tabs[0].dataset.tool);
 
-        if (tabs.length > 0) {
-            activateTool(tabs[0].dataset.tool);
-        }
-
-        initStrategySimulator();
-        initAutomationPathfinder();
-        initEarningsForecaster();
-        initAiPolicyNavigator();
-        initLeanOptimizer();
+        initStrategySimulatorAdvanced();
+        initAutomationPathfinderAdvanced(); // This will call the corrected version
+        initEarningsForecasterAdvanced();
+        initAiPolicyNavigatorAdvanced();
+        initLeanOptimizerAdvanced();
+        initContentCalendarTool();
+        initEngagementPrompterTool();
+        initAnalyticsInterpreterTool();
+        initComplianceShieldTool();
+        initNicheExplorerTool();
     });
 
-    // --- Tool 1: Strategy Simulator JS ---
-    function initStrategySimulator() {
-        const simulateButton = document.getElementById('sim_simulateButton');
-        const resultsPanel = document.getElementById('sim_resultsPanel');
-        const getAiAdviceButton = document.getElementById('sim_getAiAdviceButton');
-        const aiAdviceContainer = document.getElementById('sim_aiAdviceContainer');
-        const aiAdviceTextElem = document.getElementById('sim_aiAdviceText');
+    // --- Tool 1: Strategy Simulator (Advanced) JS ---
+    function initStrategySimulatorAdvanced() {
+        const simulateButton = document.getElementById('sim_adv_simulateButton');
+        const resultsPanel = document.getElementById('sim_adv_resultsPanel');
+        const getAiAdviceButton = document.getElementById('sim_adv_getAiAdviceButton');
+        const aiPersonaTextElem = document.getElementById('sim_adv_aiPersonaText');
+        const aiAdviceContainer = document.getElementById('sim_adv_aiAdviceContainer');
+        const aiAdviceTextElem = document.getElementById('sim_adv_aiAdviceText');
         
-        const earningsTextElem = document.getElementById('sim_earningsText');
-        const efficiencyTextElem = document.getElementById('sim_efficiencyText');
-        const complianceTextElem = document.getElementById('sim_complianceText');
-        const feedbackTextElem = document.getElementById('sim_feedbackText').querySelector('p');
+        const earningsTextElem = document.getElementById('sim_adv_earningsText');
+        const efficiencyTextElem = document.getElementById('sim_adv_efficiencyText');
+        const complianceTextElem = document.getElementById('sim_adv_complianceText');
         let resultsChartInstance = null;
-        const strategyFactors = {
-            content: { casual: { earnings: 1, efficiency: 2, text: "Casual (General, Low Consistency)", baseFeedback: "Casual content may lead to modest, inconsistent earnings..." }, niche_moderate: { earnings: 4, efficiency: 5, text: "Niche Focus (Moderate Consistency, Some PPV)", baseFeedback: "A niche focus with moderate consistency can build a loyal audience..." }, pro_high_value: { earnings: 8, efficiency: 7, text: "Pro (Specific Niche, High Consistency, High-Value PPV/Customs)", baseFeedback: "Professional, high-value niche content has the highest earnings potential..." } },
-            promotion: { low: { earnings: 1, efficiency: 3, text: "Low (Minimal external presence)", baseFeedback: "Minimal promotion severely limits audience growth..." }, medium: { earnings: 4, efficiency: 6, text: "Medium (Regular posts on 1-2 platforms)", baseFeedback: "Regular promotion on a few platforms can steadily grow your audience..." }, high: { earnings: 8, efficiency: 8, text: "High (Aggressive, multi-channel, optimized)", baseFeedback: "Aggressive, optimized multi-channel promotion is key..." } },
-            automation: { none: { earnings: 2, efficiency: 1, text: "None (Fully manual)", baseFeedback: "Fully manual operations are highly inefficient..." }, basic: { earnings: 4, efficiency: 5, text: "Basic (Native schedulers, email parsing)", baseFeedback: "Basic automation improves consistency..." }, advanced: { earnings: 7, efficiency: 9, text: "Advanced (Zapier/n8n for external, AI-assist drafts)", baseFeedback: "Advanced compliant automation significantly boosts efficiency..." } },
-            compliance: { strict: { risk: 1, earnings_mod: 0, text: "Strict Adherence", baseFeedback: "Strict adherence to policies ensures account safety..." }, gray_area: { risk: 5, earnings_mod: 1, text: "Exploring Gray Areas (Cautious AI-assist DMs)", baseFeedback: "Exploring gray areas carries moderate compliance risks..." }, risky: { risk: 10, earnings_mod: -5, text: "High Risk (Unofficial on-platform bots - NOT RECOMMENDED)", baseFeedback: "Engaging in high-risk activities can lead to account termination..." } }
+        const strategyFactors = { 
+            content: { "Live Streams": 7, "Artistic Photo Sets": 6, "Personalized Videos": 8, "BTS Vlogs": 5, "": 0 }, // Added "" for None
+            promotion: { low: 2, medium: 5, high: 8 },
         };
         const toolTipConfig = { callbacks: { title: function(tooltipItems) { const item = tooltipItems[0]; let label = item.chart.data.labels[item.dataIndex]; if (Array.isArray(label)) { return label.join(' '); } return label; } } };
+        let currentPersona = "";
 
-        simulateButton.addEventListener('click', function() {
-            // ... (simulation logic from previous version) ...
-            const contentVal = document.getElementById('sim_contentStrategy').value;
-            const promotionVal = document.getElementById('sim_promotionEffort').value;
-            const automationVal = document.getElementById('sim_automationLevel').value;
-            const complianceVal = document.getElementById('sim_complianceStance').value;
+        simulateButton.addEventListener('click', async function() {
+            resultsPanel.classList.remove('hidden');
+            aiPersonaTextElem.innerHTML = '<p class="gemini-loading">✨ Generating projected fan persona...</p>'; // Use innerHTML
+            aiAdviceContainer.classList.add('hidden'); 
+            getAiAdviceButton.classList.add('hidden'); 
+            this.disabled = true; // Disable simulate button during processing
 
-            let earningsScore = strategyFactors.content[contentVal].earnings + strategyFactors.promotion[promotionVal].earnings + strategyFactors.automation[automationVal].earnings + strategyFactors.compliance[complianceVal].earnings_mod;
-            let efficiencyScore = strategyFactors.content[contentVal].efficiency + strategyFactors.promotion[promotionVal].efficiency + strategyFactors.automation[automationVal].efficiency;
-            let complianceRiskScore = strategyFactors.compliance[complianceVal].risk;
-
-            let earningsTierText;
-            if (earningsScore <= 5) earningsTierText = "Median Earner (~$180/mo)";
-            else if (earningsScore <= 10) earningsTierText = "Above Average (Potentially $500-$1.5k/mo)";
-            else if (earningsScore <= 15) earningsTierText = "High Earner (Potentially $1.5k-$5k+/mo)";
-            else earningsTierText = "Top Tier Potential (Significant Income - >1% club)";
-            if (complianceRiskScore >= 8 && earningsScore > 0) earningsTierText += " (Highly Unstable due to Risk!)";
-
-            let efficiencyText;
-            if (efficiencyScore <= 5) efficiencyText = "Low (High Manual Effort)";
-            else if (efficiencyScore <= 12) efficiencyText = "Moderate (Some Systems in Place)";
-            else if (efficiencyScore <= 20) efficiencyText = "High (Well-Oiled Machine)";
-            else efficiencyText = "Peak Efficiency (Highly Optimized)";
-
-            let complianceRiskText;
-            if (complianceRiskScore <= 2) complianceRiskText = "Low Risk (Safe Practices)";
-            else if (complianceRiskScore <= 6) complianceRiskText = "Moderate Risk (Caution Advised)";
-            else complianceRiskText = "High Risk (Account Jeopardy!)";
+            const targetAudienceAge = document.getElementById('sim_adv_targetAudienceAge').value;
+            const targetAudienceInterests = document.getElementById('sim_adv_targetAudienceInterests').value;
+            const contentPillar1 = document.getElementById('sim_adv_contentPillar1').value;
+            const contentPillar2 = document.getElementById('sim_adv_contentPillar2').value;
+            const promoTwitter = document.getElementById('sim_adv_promoPlatform1Intensity').value;
+            const promoInstagram = document.getElementById('sim_adv_promoPlatform2Intensity').value;
             
-            let detailedFeedback = "<ul class='list-disc list-inside text-left text-xs'>";
-            detailedFeedback += "<li class='mt-1'>Content: " + strategyFactors.content[contentVal].baseFeedback + "</li>";
-            detailedFeedback += "<li class='mt-1'>Promotion: " + strategyFactors.promotion[promotionVal].baseFeedback + "</li>";
-            detailedFeedback += "<li class='mt-1'>Automation: " + strategyFactors.automation[automationVal].baseFeedback + "</li>";
-            detailedFeedback += "<li class='mt-1'>Compliance: " + strategyFactors.compliance[complianceVal].baseFeedback + "</li>";
-            detailedFeedback += "</ul>";
+            let earningsScore = (strategyFactors.content[contentPillar1] || 0) + (strategyFactors.content[contentPillar2] || 0) +
+                                strategyFactors.promotion[promoTwitter] + strategyFactors.promotion[promoInstagram] + 
+                                7 + 0; // 7 for advanced automation, 0 for strict compliance mod
+            let efficiencyScore = (strategyFactors.content[contentPillar1] ? 3 : 0) + (strategyFactors.content[contentPillar2] ? 3 : 0) +
+                                  (promoTwitter === "high" ? 3 : (promoTwitter === "medium" ? 2:1)) +
+                                  (promoInstagram === "high" ? 3 : (promoInstagram === "medium" ? 2:1)) + 7;
+            let complianceRiskScore = 1; // Strict compliance
+
+            let earningsTierText = earningsScore > 20 ? "Top Tier Potential" : (earningsScore > 15 ? "High Earner" : (earningsScore > 10 ? "Above Average" : "Median Earner"));
+            let efficiencyText = efficiencyScore > 15 ? "High Efficiency" : (efficiencyScore > 10 ? "Moderate Efficiency" : "Low Efficiency");
+            let complianceRiskText = "Low Risk (Strict Compliance)";
 
             earningsTextElem.textContent = earningsTierText;
             efficiencyTextElem.textContent = efficiencyText;
             complianceTextElem.textContent = complianceRiskText;
-            feedbackTextElem.innerHTML = detailedFeedback;
-            resultsPanel.classList.remove('hidden');
-            getAiAdviceButton.classList.remove('hidden');
-            aiAdviceContainer.classList.add('hidden'); // Hide previous AI advice
-            
-            const chartData = {
-                labels: ['Earnings Potential', 'Efficiency', 'Safety (Low Risk)'],
-                datasets: [{
-                    label: 'Strategy Profile',
-                    data: [ Math.max(0, Math.min(10, earningsScore / 2.5)), Math.max(0, Math.min(10, efficiencyScore / 2.7)), Math.max(0, Math.min(10, 10 - complianceRiskScore)) ],
-                    fill: true, backgroundColor: 'rgba(162, 210, 255, 0.3)', borderColor: '#A2D2FF', pointBackgroundColor: '#A2D2FF', pointBorderColor: '#fff', pointHoverBackgroundColor: '#fff', pointHoverBorderColor: '#A2D2FF'
-                }]
-            };
-            const chartConfig = { type: 'radar', data: chartData, options: { responsive: true, maintainAspectRatio: false, elements: { line: { borderWidth: 2 } }, scales: { r: { angleLines: { display: true, color: 'rgba(128, 128, 128, 0.3)' }, suggestedMin: 0, suggestedMax: 10, grid: { color: 'rgba(128, 128, 128, 0.3)' }, pointLabels: { font: { size: 10, family: "'Inter', sans-serif" }, color: '#E0E1DD' }, ticks: { backdropColor: 'rgba(0,0,0,0)', color: '#A2D2FF', stepSize: 2, font: { family: "'Inter', sans-serif", size: 9 } } } }, plugins: { legend: { display: false }, tooltip: toolTipConfig } } };
+
+            const personaPrompt = `Given an OnlyFans creator strategy targeting audience (Age: ${targetAudienceAge}, Interests: ${targetAudienceInterests}) with content pillars (${contentPillar1}${contentPillar2 ? ", " + contentPillar2 : ""}) and promotion intensity (Twitter: ${promoTwitter}, Instagram: ${promoInstagram}), describe the likely 'Projected Fan Persona' in 2-3 sentences, including their likely expectations and preferred engagement style.`;
+            currentPersona = await callGeminiAPI(personaPrompt); 
+            aiPersonaTextElem.textContent = currentPersona; // Display result
+            if (!currentPersona.toLowerCase().includes("error")) {
+                 getAiAdviceButton.classList.remove('hidden');
+            }
+            this.disabled = false; // Re-enable simulate button
+
+            const chartData = { labels: ['Earnings Potential', 'Efficiency', 'Safety (Low Risk)'], datasets: [{ label: 'Strategy Profile', data: [ Math.max(0, Math.min(10, earningsScore / 2.5)), Math.max(0, Math.min(10, efficiencyScore / 1.8)), Math.max(0, Math.min(10, 10 - complianceRiskScore)) ], fill: true, backgroundColor: 'rgba(162, 210, 255, 0.3)', borderColor: '#A2D2FF', pointBackgroundColor: '#A2D2FF', pointBorderColor: '#fff', pointHoverBackgroundColor: '#fff', pointHoverBorderColor: '#A2D2FF' }] };
+            const chartConfig = { type: 'radar', data: chartData, options: { responsive: true, maintainAspectRatio: false, elements: { line: { borderWidth: 2 } }, scales: { r: { angleLines: { display: true, color: 'rgba(128, 128, 128, 0.3)' }, suggestedMin: 0, suggestedMax: 10, grid: { color: 'rgba(128, 128, 128, 0.3)' }, pointLabels: { font: { size: 9, family: "'Inter', sans-serif" }, color: '#E0E1DD' }, ticks: { backdropColor: 'rgba(0,0,0,0)', color: '#A2D2FF', stepSize: 2, font: { family: "'Inter', sans-serif", size: 8 } } } }, plugins: { legend: { display: false }, tooltip: toolTipConfig } } };
             if (resultsChartInstance) resultsChartInstance.destroy();
-            resultsChartInstance = new Chart(document.getElementById('sim_resultsChart'), chartConfig);
+            resultsChartInstance = new Chart(document.getElementById('sim_adv_resultsChart'), chartConfig);
         });
 
         getAiAdviceButton.addEventListener('click', async function() {
-            aiAdviceTextElem.textContent = '✨ Thinking...';
+            aiAdviceTextElem.innerHTML = '<p class="gemini-loading">✨ Thinking...</p>';
             aiAdviceContainer.classList.remove('hidden');
             this.disabled = true;
-
-            const contentChoice = strategyFactors.content[document.getElementById('sim_contentStrategy').value].text;
-            const promotionChoice = strategyFactors.promotion[document.getElementById('sim_promotionEffort').value].text;
-            const automationChoice = strategyFactors.automation[document.getElementById('sim_automationLevel').value].text;
-            const complianceChoice = strategyFactors.compliance[document.getElementById('sim_complianceStance').value].text;
-
+            const contentPillar1 = document.getElementById('sim_adv_contentPillar1').value;
+            const contentPillar2 = document.getElementById('sim_adv_contentPillar2').value;
+            const promoTwitter = document.getElementById('sim_adv_promoPlatform1Intensity').value;
+            const promoInstagram = document.getElementById('sim_adv_promoPlatform2Intensity').value;
             const earningsOutcome = earningsTextElem.textContent;
             const efficiencyOutcome = efficiencyTextElem.textContent;
             const complianceOutcome = complianceTextElem.textContent;
 
-            const prompt = `I'm using an OnlyFans strategy simulator. My choices were:
-            - Content Strategy: ${contentChoice}
-            - Promotion Effort: ${promotionChoice}
-            - Automation Level: ${automationChoice}
-            - Compliance Stance: ${complianceChoice}
-            The simulated outcomes are:
-            - Potential Earnings Tier: ${earningsOutcome}
-            - Operational Efficiency: ${efficiencyOutcome}
-            - Compliance Risk Level: ${complianceOutcome}
-            Based on this profile, provide a short (1-2 sentences) paragraph of actionable advice. Focus on suggesting one key area for improvement or reinforcement to create a more balanced or successful strategy. Be encouraging but realistic.`;
-
-            const advice = await callGeminiAPI(prompt);
+            const advicePrompt = `For an OnlyFans strategy (Content: ${contentPillar1}${contentPillar2 ? " & " + contentPillar2 : ""}, Promotion: Twitter-${promoTwitter}, Instagram-${promoInstagram}, Automation: Advanced, Compliance: Strict) resulting in '${earningsOutcome}, ${efficiencyOutcome}, ${complianceOutcome},' and targeting the fan persona: "${currentPersona}", provide one key piece of advice (1-2 sentences) to further enhance engagement or optimize for this specific persona and strategy.`;
+            const advice = await callGeminiAPI(advicePrompt, null, null, this); // Pass button
             aiAdviceTextElem.textContent = advice;
-            this.disabled = false;
         });
     }
 
-    // --- Tool 2: Automation Pathfinder JS ---
-    function initAutomationPathfinder() {
-        // ... (Pathfinder JS logic from previous version, adapted with unique IDs for elements if needed) ...
-        const questions = [ /* same questions as before */ 
+    // --- Tool 2: Automation Pathfinder (AI Enhanced) JS ---
+    function initAutomationPathfinderAdvanced() {
+        const questions_path = [ 
             { id: 'q1', title: 'Task type to automate?', options: [ { text: 'External Promotion (Social Media)', next: 'q_external_promo' }, { text: 'On-Platform (OnlyFans Page)', next: 'q_on_platform' }, { text: 'Content Creation Aid', next: 'q_content_creation' }] },
             { id: 'q_external_promo', title: 'External promotion task?', options: [ { text: 'Schedule SFW posts', next: 'res_external_scheduling'}, { text: 'Auto cross-post SFW content', next: 'res_external_crossposting'}, { text: 'Parse OF email notifications', next: 'res_email_parsing'}] },
             { id: 'q_on_platform', title: 'On-OnlyFans task?', options: [ { text: 'Schedule feed posts', next: 'res_of_native_scheduler'}, { text: 'Send welcome DMs', next: 'res_of_welcome_dm'}, { text: 'Send mass DMs (PPV/Announce)', next: 'res_of_mass_dm'}, { text: 'Automate DM replies/comments', next: 'res_on_platform_dm_auto'}, { text: 'Scrape data / Auto-like/follow', next: 'res_on_platform_scraping_bots'}] },
             { id: 'q_content_creation', title: 'AI for content creation?', options: [ { text: 'Ideas for SFW promo content', next: 'res_ai_promo_ideas'}, { text: 'AI images/avatars like me for OF', next: 'res_ai_creator_likeness'}, { text: 'Draft DM replies (manual send)', next: 'res_ai_dm_assist'}] }
         ];
-        const results = { /* same results as before */ 
+        const results_path = { 
             'res_external_scheduling': { recommendation: "Highly Recommended & Compliant.", details: "Use tools like Buffer, Hootsuite, Later, or Social Rise for scheduling SFW promotional content on external platforms.", tools: "Buffer, Hootsuite, Later, Social Rise.", policy: "External promotion is generally compliant. Adhere to each platform's ToS." },
             'res_external_crossposting': { recommendation: "Recommended & Compliant (External).", details: "Utilize Zapier or n8n.io to connect social media for SFW teaser sharing.", tools: "Zapier, n8n.io.", policy: "Uses official APIs of external platforms. Ensure SFW content." },
             'res_email_parsing': { recommendation: "Compliant Workaround (Indirect OF Tracking).", details: "Use Zapier/n8n.io to parse OF email notifications for alerts/logging.", tools: "Zapier (Email Parser), n8n.io (IMAP node).", policy: "Indirect method, generally compliant. Mind data privacy." },
@@ -575,7 +482,9 @@
             'res_ai_dm_assist': { recommendation: "Compliant for DRAFTING (Manual Send Required).", details: "AI tools can help DRAFT DM replies/PPV text. YOU or a human MUST manually review & SEND on OF.", tools: "ChatGPT, AI writing assistants.", policy: "'Human-in-the-loop' is compliant with 'no-chatbot' policy." }
         };
 
-        let currentQuestionIndex_path = 0; let userPath_path = []; let currentResultData_path = null;
+        let currentQuestionIndex_path = 0; 
+        let userPath_path = []; 
+        let currentResultData_path_adv = null;
         const questionTitleElem_path = document.getElementById('path_questionTitle');
         const optionsAreaElem_path = document.getElementById('path_optionsArea');
         const resultAreaElem_path = document.getElementById('path_resultArea');
@@ -586,13 +495,12 @@
         const nextButton_path = document.getElementById('path_nextButton');
         const restartButton_path = document.getElementById('path_restartButton');
         const stepIndicatorElem_path = document.getElementById('path_stepIndicator');
-        const aiElaborateButton_path = document.getElementById('path_aiElaborateButton');
-        const aiElaborationContainer_path = document.getElementById('path_aiElaborationContainer');
-        const aiElaborationTextElem_path = document.getElementById('path_aiElaborationText');
+        const aiElaborateButton_path = document.getElementById('path_aiCostBenefitButton');
+        const aiElaborationContainer_path = document.getElementById('path_aiCostBenefitContainer');
+        const aiElaborationTextElem_path = document.getElementById('path_aiCostBenefitText');
 
-
-        function displayQuestion_path(index) { /* ... same ... */
-            const question = questions[index];
+        function displayQuestion_path_adv(index) {
+            const question = questions_path[index];
             questionTitleElem_path.textContent = question.title;
             optionsAreaElem_path.innerHTML = '';
             nextButton_path.disabled = true;
@@ -611,20 +519,20 @@
             aiElaborationContainer_path.classList.add('hidden');
         }
 
-        function showResult_path(resultId) { /* ... same, plus ai button logic ... */
+        function showResult_path_adv(resultId) {
             questionAreaElem_path.classList.add('hidden');
             navigationAreaElem_path.classList.add('hidden');
             resultAreaElem_path.classList.remove('hidden');
-            currentResultData_path = results[resultId]; // Store current result data
-            if (currentResultData_path) {
+            currentResultData_path_adv = results_path[resultId]; 
+            if (currentResultData_path_adv) {
                 resultContentElem_path.innerHTML = `
-                    <p class="text-md recommendation">${currentResultData_path.recommendation}</p>
-                    ${currentResultData_path.warning ? `<p class="text-sm warning mt-1.5">${currentResultData_path.warning}</p>` : ''}
-                    <p class="text-xs text-[#E0E1DD] mt-2">${currentResultData_path.details}</p>
-                    ${currentResultData_path.tools ? `<p class="text-xs mt-1.5"><strong class="text-[#A2D2FF]">Tools:</strong> ${currentResultData_path.tools}</p>` : ''}
-                    <p class="policy-note mt-2"><strong class="text-[#A2D2FF]">Policy Note:</strong> ${currentResultData_path.policy}</p>`;
+                    <p class="text-md recommendation">${currentResultData_path_adv.recommendation}</p>
+                    ${currentResultData_path_adv.warning ? `<p class="text-sm warning mt-1.5">${currentResultData_path_adv.warning}</p>` : ''}
+                    <p class="text-xs text-[#E0E1DD] mt-2">${currentResultData_path_adv.details}</p>
+                    ${currentResultData_path_adv.tools ? `<p class="text-xs mt-1.5"><strong class="text-[#A2D2FF]">Tools:</strong> ${currentResultData_path_adv.tools}</p>` : ''}
+                    <p class="policy-note mt-2"><strong class="text-[#A2D2FF]">Policy Note:</strong> ${currentResultData_path_adv.policy}</p>`;
                 aiElaborateButton_path.classList.remove('hidden');
-                aiElaborationContainer_path.classList.add('hidden'); // Hide previous
+                aiElaborationContainer_path.classList.add('hidden'); 
             } else {
                 resultContentElem_path.innerHTML = `<p class="warning">Path information not found. Please restart.</p>`;
                 aiElaborateButton_path.classList.add('hidden');
@@ -632,98 +540,119 @@
         }
         
         aiElaborateButton_path.addEventListener('click', async function() {
-            if (!currentResultData_path) return;
-            aiElaborationTextElem_path.textContent = '✨ Thinking...';
+            if (!currentResultData_path_adv) return;
+            aiElaborationTextElem_path.innerHTML = '<p class="gemini-loading">✨ Analyzing path...</p>';
             aiElaborationContainer_path.classList.remove('hidden');
             this.disabled = true;
 
-            const prompt = `I'm using an OnlyFans Automation Pathfinder. I've reached a result for an automation task.
-            The result title is: "${currentResultData_path.recommendation}"
-            Details provided: "${currentResultData_path.details}"
-            Suggested tools: "${currentResultData_path.tools || 'None specified'}"
-            Policy note: "${currentResultData_path.policy}"
-            ${currentResultData_path.warning ? `Specific Warning: "${currentResultData_path.warning}"` : ""}
-            Please elaborate on this specific automation path in 2-3 sentences. If it's recommended, offer a pro-tip or an example of effective use. If it's risky, explain the risk in more detail or offer a safer alternative if appropriate.`;
+            const prompt = `For the OnlyFans automation path resulting in:
+            - Recommendation: "${currentResultData_path_adv.recommendation}"
+            - Details: "${currentResultData_path_adv.details}"
+            - Suggested Tools: "${currentResultData_path_adv.tools || 'N/A'}"
+            - Policy Note: "${currentResultData_path_adv.policy}"
+            ${currentResultData_path_adv.warning ? `- Warning: "${currentResultData_path_adv.warning}"` : ""}
+            Provide a brief (1-2 sentences) analysis covering one key benefit, one potential cost or effort, and one minor risk or consideration for implementing this specific automation strategy. Format with clear labels like 'Benefit:', 'Cost/Effort:', 'Consideration:'.`;
             
-            const elaboration = await callGeminiAPI(prompt);
-            aiElaborationTextElem_path.textContent = elaboration;
-            this.disabled = false;
+            const analysis = await callGeminiAPI(prompt, null, null, this);
+            aiElaborationTextElem_path.innerHTML = analysis.replace(/Benefit:/g, "<strong>Benefit:</strong>")
+                                                        .replace(/Cost\/Effort:/g, "<br><strong>Cost/Effort:</strong>")
+                                                        .replace(/Consideration:/g, "<br><strong>Consideration:</strong>")
+                                                        .replace(/Risk:/g, "<br><strong>Risk:</strong>");
         });
 
-        nextButton_path.addEventListener('click', () => { /* ... same ... */
-            const currentQuestion = questions[currentQuestionIndex_path];
+        nextButton_path.addEventListener('click', () => {
+            const currentQuestion = questions_path[currentQuestionIndex_path];
             const selectedOptionInput = document.querySelector(`input[name="path_${currentQuestion.id}"]:checked`);
             if (selectedOptionInput) {
                 const nextTarget = selectedOptionInput.value;
                 userPath_path.push({ questionIndex: currentQuestionIndex_path, selectedValue: nextTarget });
                 if (nextTarget.startsWith('res_')) {
-                    showResult_path(nextTarget);
+                    showResult_path_adv(nextTarget);
                 } else {
-                    const nextQuestionObj = questions.find(q => q.id === nextTarget);
+                    const nextQuestionObj = questions_path.find(q => q.id === nextTarget);
                     if (nextQuestionObj) {
-                        currentQuestionIndex_path = questions.indexOf(nextQuestionObj);
-                        displayQuestion_path(currentQuestionIndex_path);
-                    } else { showResult_path(null); }
+                        currentQuestionIndex_path = questions_path.indexOf(nextQuestionObj);
+                        displayQuestion_path_adv(currentQuestionIndex_path);
+                    } else { showResult_path_adv(null); }
                 }
             }
         });
-        prevButton_path.addEventListener('click', () => { /* ... same ... */
+        prevButton_path.addEventListener('click', () => {
              if (userPath_path.length > 0) {
                 const lastStep = userPath_path.pop();
                 currentQuestionIndex_path = lastStep.questionIndex;
-                displayQuestion_path(currentQuestionIndex_path);
-                resultAreaElem_path.classList.add('hidden'); // Hide result area when going back
+                displayQuestion_path_adv(currentQuestionIndex_path);
+                resultAreaElem_path.classList.add('hidden'); 
                 questionAreaElem_path.classList.remove('hidden');
                 navigationAreaElem_path.classList.remove('hidden');
             }
         });
-        restartButton_path.addEventListener('click', () => { /* ... same ... */
-            currentQuestionIndex_path = 0; userPath_path = []; currentResultData_path = null;
+        restartButton_path.addEventListener('click', () => {
+            currentQuestionIndex_path = 0; userPath_path = []; currentResultData_path_adv = null;
             questionAreaElem_path.classList.remove('hidden');
             navigationAreaElem_path.classList.remove('hidden');
             resultAreaElem_path.classList.add('hidden');
             aiElaborateButton_path.classList.add('hidden');
             aiElaborationContainer_path.classList.add('hidden');
-            displayQuestion_path(currentQuestionIndex_path);
+            displayQuestion_path_adv(currentQuestionIndex_path);
         });
-        displayQuestion_path(currentQuestionIndex_path); // Initial call
+        displayQuestion_path_adv(currentQuestionIndex_path); // Initial call
     }
 
-    // --- Tool 3: Earnings Forecaster JS ---
-    function initEarningsForecaster() {
-        // ... (Forecaster JS logic from previous version, adapted with unique IDs for elements if needed) ...
-        const forecastButton_fc = document.getElementById('fc_forecastButton');
+
+    // --- Tool 3: Earnings Forecaster (AI Goal Seek) JS ---
+    function initEarningsForecasterAdvanced() {
+        const goalSeekButton_fc = document.getElementById('fc_goalSeekButton');
+        const aiScenariosContainer_fc = document.getElementById('fc_aiScenariosContainer');
+        const aiScenariosTextElem_fc = document.getElementById('fc_aiScenariosText');
+        const getAiFeasibilityButton_fc = document.getElementById('fc_getAiFeasibilityButton');
+        const aiFeasibilityContainer_fc = document.getElementById('fc_aiFeasibilityContainer');
+        const aiFeasibilityTextElem_fc = document.getElementById('fc_aiFeasibilityText');
+        const forecastButton_fc_orig = document.getElementById('fc_forecastButton');
         const resultsDisplayContainer_fc = document.getElementById('fc_resultsDisplayContainer');
-        const getAiTipsButton_fc = document.getElementById('fc_getAiTipsButton');
-        const aiTipsContainer_fc = document.getElementById('fc_aiTipsContainer');
-        const aiTipsListElem_fc = document.getElementById('fc_aiTipsList');
         let comparisonChartInstance_fc = null;
         const platformBenchmarks_fc = { medianGross: 225, top10PercentGrossEst: 2500, top1PercentGrossEst: 12000 };
         const toolTipConfig_fc = { callbacks: { title: function(tooltipItems) { const item = tooltipItems[0]; let label = item.chart.data.labels[item.dataIndex]; if (Array.isArray(label)) { return label.join(' '); } return label; } } };
-        let currentForecastData_fc = {};
+        let currentForecastData_fc_adv = {};
 
+        goalSeekButton_fc.addEventListener('click', async function() {
+            const targetIncome = parseFloat(document.getElementById('fc_targetIncome').value) || 3000;
+            const currentSubPrice = parseFloat(document.getElementById('fc_currentSubPrice').value) || 12.99;
+            
+            aiScenariosTextElem_fc.innerHTML = '<p class="gemini-loading">✨ Generating scenarios to reach target...</p>';
+            aiScenariosContainer_fc.classList.remove('hidden');
+            this.disabled = true;
 
-        forecastButton_fc.addEventListener('click', function() {
-            currentForecastData_fc.subscribers = parseFloat(document.getElementById('fc_subscribers').value) || 0;
-            currentForecastData_fc.subPrice = parseFloat(document.getElementById('fc_subPrice').value) || 0;
-            currentForecastData_fc.ppvOffers = parseFloat(document.getElementById('fc_ppvOffers').value) || 0;
-            currentForecastData_fc.ppvPrice = parseFloat(document.getElementById('fc_ppvPrice').value) || 0;
-            currentForecastData_fc.ppvConversionRate = (parseFloat(document.getElementById('fc_ppvConversionRate').value) || 0) / 100;
-            currentForecastData_fc.avgTipPerSub = parseFloat(document.getElementById('fc_avgTipPerSub').value) || 0;
+            const prompt = `An OnlyFans creator wants to achieve $${targetIncome.toFixed(0)} net monthly income. Their current/planned sub price is $${currentSubPrice.toFixed(2)}. Suggest two distinct, plausible scenarios involving subscriber count, number of PPV offers per month (assume average $25 price per PPV offer), and PPV purchase rate (as a percentage of subscribers) to reach this goal. Assume an 80% creator payout (20% platform fee). Present each scenario clearly with bullet points for Subscribers, PPV Offers/Month, and PPV Purchase Rate.`;
+            
+            const scenarios = await callGeminiAPI(prompt, null, null, this); 
+            aiScenariosTextElem_fc.innerHTML = scenarios.replace(/\* Scenario /g, "<br><strong>Scenario ")
+                                                       .replace(/\* Subscribers:/g, "<li>Subscribers:")
+                                                       .replace(/\* PPV Offers\/Month:/g, "<li>PPV Offers/Month:")
+                                                       .replace(/\* PPV Purchase Rate:/g, "<li>PPV Purchase Rate:")
+                                                       .split('<li>').map(s => s.length > 0 ? `<li>${s}</li>` : s).join('').replace("<li><br>", "<li>"); 
+        });
 
-            const subRevenue = currentForecastData_fc.subscribers * currentForecastData_fc.subPrice;
-            const ppvBuyers = currentForecastData_fc.subscribers * currentForecastData_fc.ppvConversionRate;
-            const ppvRevenue = ppvBuyers * currentForecastData_fc.ppvOffers * currentForecastData_fc.ppvPrice;
-            const tipRevenue = currentForecastData_fc.subscribers * currentForecastData_fc.avgTipPerSub;
+        forecastButton_fc_orig.addEventListener('click', function() { 
+            currentForecastData_fc_adv.subscribers = parseFloat(document.getElementById('fc_subscribers').value) || 0;
+            currentForecastData_fc_adv.subPrice = parseFloat(document.getElementById('fc_subPrice').value) || 0;
+            currentForecastData_fc_adv.ppvOffers = parseFloat(document.getElementById('fc_ppvOffers').value) || 0;
+            currentForecastData_fc_adv.ppvPrice = parseFloat(document.getElementById('fc_ppvPrice').value) || 0;
+            currentForecastData_fc_adv.ppvConversionRate = (parseFloat(document.getElementById('fc_ppvConversionRate').value) || 0) / 100;
+            currentForecastData_fc_adv.avgTipPerSub = parseFloat(document.getElementById('fc_avgTipPerSub').value) || 0;
+            
+            const subRevenue = currentForecastData_fc_adv.subscribers * currentForecastData_fc_adv.subPrice;
+            const ppvBuyers = currentForecastData_fc_adv.subscribers * currentForecastData_fc_adv.ppvConversionRate;
+            const ppvRevenue = ppvBuyers * currentForecastData_fc_adv.ppvOffers * currentForecastData_fc_adv.ppvPrice;
+            const tipRevenue = currentForecastData_fc_adv.subscribers * currentForecastData_fc_adv.avgTipPerSub;
             const totalGrossEarnings = subRevenue + ppvRevenue + tipRevenue;
             const totalNetEarnings = totalGrossEarnings * 0.80;
 
-            currentForecastData_fc.calculatedSubRevenue = subRevenue;
-            currentForecastData_fc.calculatedPpvRevenue = ppvRevenue;
-            currentForecastData_fc.calculatedTipRevenue = tipRevenue;
-            currentForecastData_fc.calculatedTotalGross = totalGrossEarnings;
-            currentForecastData_fc.calculatedTotalNet = totalNetEarnings;
-
+            currentForecastData_fc_adv.calculatedSubRevenue = subRevenue;
+            currentForecastData_fc_adv.calculatedPpvRevenue = ppvRevenue;
+            currentForecastData_fc_adv.calculatedTipRevenue = tipRevenue;
+            currentForecastData_fc_adv.calculatedTotalGross = totalGrossEarnings;
+            currentForecastData_fc_adv.calculatedTotalNet = totalNetEarnings;
 
             document.getElementById('fc_subRevenueText').textContent = `$${subRevenue.toFixed(2)}`;
             document.getElementById('fc_ppvRevenueText').textContent = `$${ppvRevenue.toFixed(2)}`;
@@ -731,11 +660,15 @@
             document.getElementById('fc_totalGrossEarningsText').textContent = `$${totalGrossEarnings.toFixed(2)}`;
             document.getElementById('fc_totalNetEarningsText').textContent = `$${totalNetEarnings.toFixed(2)}`;
             resultsDisplayContainer_fc.classList.remove('hidden');
-            getAiTipsButton_fc.classList.remove('hidden');
-            aiTipsContainer_fc.classList.add('hidden');
+            
+            if (totalGrossEarnings > 0) { 
+                getAiFeasibilityButton_fc.classList.remove('hidden');
+            } else {
+                getAiFeasibilityButton_fc.classList.add('hidden');
+            }
+            aiFeasibilityContainer_fc.classList.add('hidden'); 
 
-
-            const chartData = { /* ... same chart data ... */ 
+            const chartData = { 
                 labels: ['Your Est. Gross', 'Platform Median (Gross)', 'Est. Top 10% Avg (Gross)', 'Est. Top 1% Avg (Gross)'],
                 datasets: [{
                     label: 'Estimated Monthly Gross Earnings ($)',
@@ -753,10 +686,9 @@
             else if (totalNetEarnings > platformBenchmarks_fc.medianGross * 0.8) contextText_fc += "are above the platform median. Good job!";
             else contextText_fc += "are around/below platform median. Focus on growth strategies.";
             comparisonContextTextElem_fc.textContent = contextText_fc;
-            currentForecastData_fc.comparisonContext = contextText_fc;
+            currentForecastData_fc_adv.comparisonContext = contextText_fc;
 
-
-            const chartConfig = { /* ... same chart config ... */ 
+            const chartConfig = { 
                 type: 'bar', data: chartData,
                 options: {
                     responsive: true, maintainAspectRatio: false, indexAxis: 'y',
@@ -771,45 +703,29 @@
             comparisonChartInstance_fc = new Chart(document.getElementById('fc_comparisonChart'), chartConfig);
         });
 
-        getAiTipsButton_fc.addEventListener('click', async function() {
-            aiTipsListElem_fc.innerHTML = '<li class="gemini-loading">✨ Generating growth tips...</li>';
-            aiTipsContainer_fc.classList.remove('hidden');
+        getAiFeasibilityButton_fc.addEventListener('click', async function() {
+            aiFeasibilityTextElem_fc.innerHTML = '<p class="gemini-loading">✨ Analyzing scenario...</p>';
+            aiFeasibilityContainer_fc.classList.remove('hidden');
             this.disabled = true;
 
-            const prompt = `I'm an OnlyFans creator using an earnings forecaster. My inputs were:
-            - Target Subscribers: ${currentForecastData_fc.subscribers}
-            - Avg. Sub Price: $${currentForecastData_fc.subPrice.toFixed(2)}
-            - PPV Offers/Month: ${currentForecastData_fc.ppvOffers}
-            - Avg. Price/PPV: $${currentForecastData_fc.ppvPrice.toFixed(2)}
-            - PPV Purchase Rate: ${ (currentForecastData_fc.ppvConversionRate * 100).toFixed(0) }%
-            - Avg. Monthly Tip/Sub: $${currentForecastData_fc.avgTipPerSub.toFixed(2)}
-            The forecast is:
-            - Est. Gross Earnings: $${currentForecastData_fc.calculatedTotalGross.toFixed(2)}
-            - Est. Net Earnings: $${currentForecastData_fc.calculatedTotalNet.toFixed(2)}
-            - Comparison Context: "${currentForecastData_fc.comparisonContext}"
-            Please provide 2-3 specific, actionable growth tips tailored to this scenario. Focus on areas that could be improved based on the inputs (e.g., if PPV revenue is low, suggest PPV strategies). Format as a bulleted list (using '*' for bullets).`;
+            const prompt = `Analyze the feasibility of an OnlyFans creator scenario:
+            - Subscribers: ${currentForecastData_fc_adv.subscribers}
+            - Avg. Sub Price: $${currentForecastData_fc_adv.subPrice.toFixed(2)}
+            - PPV Offers/Month: ${currentForecastData_fc_adv.ppvOffers}
+            - Avg. Price/PPV: $${currentForecastData_fc_adv.ppvPrice.toFixed(2)}
+            - PPV Purchase Rate: ${(currentForecastData_fc_adv.ppvConversionRate * 100).toFixed(0)}%
+            - Avg. Monthly Tip/Sub: $${currentForecastData_fc_adv.avgTipPerSub.toFixed(2)}
+            The forecasted gross monthly earnings are $${currentForecastData_fc_adv.calculatedTotalGross.toFixed(2)}.
+            What is the primary challenge or effort required to make this specific scenario successful? Provide a concise (1-2 sentences) analysis highlighting key trade-offs or efforts.`;
 
-            const tips = await callGeminiAPI(prompt);
-            const tipsArray = tips.split('*').map(tip => tip.trim()).filter(tip => tip.length > 0);
-            
-            aiTipsListElem_fc.innerHTML = '';
-            if (tipsArray.length > 0) {
-                tipsArray.forEach(tipText => {
-                    const li = document.createElement('li');
-                    li.textContent = tipText;
-                    aiTipsListElem_fc.appendChild(li);
-                });
-            } else {
-                aiTipsListElem_fc.innerHTML = '<li>Could not generate specific tips at this time.</li>';
-            }
-            this.disabled = false;
+            const analysis = await callGeminiAPI(prompt, null, null, this);
+            aiFeasibilityTextElem_fc.textContent = analysis;
         });
     }
 
-    // --- Tool 4: AI Policy Navigator JS ---
-    function initAiPolicyNavigator() {
-        // ... (AI Policy Navigator JS logic from previous version, adapted with unique IDs for elements if needed) ...
-        const scenarios_nav = [ /* same scenarios */ 
+    // --- Tool 4: AI Policy Navigator (Custom Scenarios) JS ---
+    function initAiPolicyNavigatorAdvanced() {
+        const scenarios_nav = [ 
             { id: 's1', title: 'AI-Generated Profile Picture', description: 'You want to use an AI-generated image as your main OF profile pic. It\'s stylized but clearly looks like you.', options: [ { text: 'Use it, no disclosure needed.', correct: false, feedback: 'Incorrect. OF policy generally requires disclosure if content is AI-generated or significantly altered to maintain transparency.', policy: "AI content must visibly resemble verified creator AND its AI nature should be evident or disclosed." }, { text: 'Use it, and mention in bio "Profile pic is AI-assisted art of me!"', correct: true, feedback: 'Correct! This aligns with policy by ensuring resemblance and clear disclosure.', policy: "AI content resembling creator is allowed if AI nature is disclosed." }, { text: 'Use a fictional AI anime character not resembling you.', correct: false, feedback: 'Incorrect for main profile. Main profile pic should generally represent the verified creator.', policy: "Profile identity typically must resemble verified creator." } ] },
             { id: 's2', title: 'Automated DM Replies', description: 'DMs are overwhelming. You consider a third-party AI chatbot for autonomous 24/7 fan message handling.', options: [ { text: 'Implement the fully autonomous AI chatbot.', correct: false, feedback: 'Incorrect & High Risk. OF has a strict "no-chatbot" policy for DMs. Violates ToS.', policy: "Strict 'no-chatbot' policy for DMs. Human must send messages." }, { text: 'Use AI to DRAFT replies, but you/human assistant review & manually send each.', correct: true, feedback: 'Correct! "Human-in-the-loop" is compliant. AI assists drafting, human sends.', policy: "AI can assist drafting, manual send required." }, { text: 'Use chatbot only for generic "thank you" messages.', correct: false, feedback: 'Incorrect. Fully autonomous likely violates "no-chatbot" policy. Use native welcome DM.', policy: "No fully autonomous chatbots for DMs." } ] },
             { id: 's3', title: 'AI Deepfake of Yourself', description: 'You want to create a "deepfake" video of your AI-likeness performing an activity you didn\'t film.', options: [ { text: 'Post it without disclosure, as it looks like you.', correct: false, feedback: 'Incorrect. Posting realistic AI-generated video of yourself performing actions you didn\'t do, without clear disclosure, is deceptive.', policy: "AI-generated content must be disclosed, especially if depicting actions not actually performed." }, { text: 'Post it, clearly labeled in caption/title as "AI-Generated Fantasy Scenario".', correct: true, feedback: 'Correct! Clear and prominent disclosure is crucial for compliance and fan trust.', policy: "Disclosure of AI generation mandatory. Must resemble verified creator." }, { text: 'Create a deepfake of another celebrity and post it.', correct: false, feedback: 'Incorrect & Severe Violation. Non-consensual deepfakes are major ethical/policy violations.', policy: "Non-consensual deepfakes strictly prohibited." } ] },
@@ -833,8 +749,17 @@
         const aiExplainPolicyButton_nav = document.getElementById('nav_aiExplainPolicyButton');
         const aiPolicyElaborationContainer_nav = document.getElementById('nav_aiPolicyElaborationContainer');
         const aiPolicyElaborationTextElem_nav = document.getElementById('nav_aiPolicyElaborationText');
+        const analyzeCustomScenarioButton_nav = document.getElementById('nav_analyzeCustomScenarioButton');
+        const customScenarioText_nav = document.getElementById('nav_customScenarioText');
+        const customAiAnalysisContainer_nav = document.getElementById('nav_customAiAnalysisContainer');
+        const customAiAnalysisTextElem_nav = document.getElementById('nav_customAiAnalysisText');
+        const getAiMitigationButton_nav = document.getElementById('nav_getAiMitigationButton');
+        const aiMitigationContainer_nav = document.getElementById('nav_aiMitigationContainer');
+        const aiMitigationTextElem_nav = document.getElementById('nav_aiMitigationText');
+        let currentCustomScenarioRisk_nav = "";
 
-        function displayScenario_nav(index) { /* ... same, hide AI button ... */
+
+        function displayScenario_nav(index) { 
             answered_nav = false; currentScenarioData_nav = scenarios_nav[index];
             scenarioTitleElem_nav.textContent = `Scenario ${index + 1}: ${currentScenarioData_nav.title}`;
             scenarioDescriptionElem_nav.textContent = currentScenarioData_nav.description;
@@ -853,11 +778,11 @@
             totalScenariosValueElem_nav.textContent = scenarios_nav.length;
         }
 
-        function showFeedback_nav() { /* ... same, show AI button ... */
-            const scenario = currentScenarioData_nav; // Use stored current scenario
+        function showFeedback_nav() { 
+            const scenario = currentScenarioData_nav; 
             const selectedOptionIndex = parseInt(document.querySelector(`input[name="nav_scenario_${scenario.id}"]:checked`).value);
             const selectedOptionData = scenario.options[selectedOptionIndex];
-            currentScenarioData_nav.selectedOptionForAI = selectedOptionData; // Store for AI button
+            currentScenarioData_nav.selectedOptionForAI = selectedOptionData; 
 
             feedbackTitleElem_nav.textContent = selectedOptionData.correct ? 'Correct Assessment!' : (selectedOptionData.feedback.toLowerCase().includes("caution") ? 'Caution Advised!' : 'Incorrect Assessment');
             feedbackTextElem_nav.textContent = selectedOptionData.feedback;
@@ -881,12 +806,12 @@
             nextScenarioButton_nav.disabled = false; 
             scoreValueElem_nav.textContent = score_nav;
             aiExplainPolicyButton_nav.classList.remove('hidden');
-            aiPolicyElaborationContainer_nav.classList.add('hidden'); // Hide previous
+            aiPolicyElaborationContainer_nav.classList.add('hidden'); 
         }
         
         aiExplainPolicyButton_nav.addEventListener('click', async function() {
             if (!currentScenarioData_nav || !currentScenarioData_nav.selectedOptionForAI) return;
-            aiPolicyElaborationTextElem_nav.textContent = '✨ Thinking...';
+            aiPolicyElaborationTextElem_nav.innerHTML = '<p class="gemini-loading">✨ Thinking...</p>';
             aiPolicyElaborationContainer_nav.classList.remove('hidden');
             this.disabled = true;
 
@@ -900,12 +825,11 @@
             The relevant policy point mentioned: "${option.policy}"
             Please elaborate on this specific policy point in 2-3 sentences. Explain why my chosen response was correct or incorrect in light of this policy, or provide a more nuanced understanding of the policy itself.`;
 
-            const elaboration = await callGeminiAPI(prompt);
+            const elaboration = await callGeminiAPI(prompt, null, null, this);
             aiPolicyElaborationTextElem_nav.textContent = elaboration;
-            this.disabled = false;
         });
         
-        function showFinalScore_nav() { /* ... same ... */
+        function showFinalScore_nav() { 
             scenarioDisplay_nav.classList.add('hidden');
             feedbackDisplayContainer_nav.classList.add('hidden');
             nextScenarioButton_nav.classList.add('hidden');
@@ -919,7 +843,7 @@
             finalMessageElem_nav.textContent = message;
         }
 
-        nextScenarioButton_nav.addEventListener('click', () => { /* ... same ... */
+        nextScenarioButton_nav.addEventListener('click', () => { 
             if (!answered_nav) {
                 const selectedOption = document.querySelector(`input[name="nav_scenario_${scenarios_nav[currentScenarioIndex_nav].id}"]:checked`);
                 if (selectedOption) showFeedback_nav();
@@ -929,22 +853,60 @@
                 else showFinalScore_nav();
             }
         });
-        restartNavigatorButton_nav.addEventListener('click', () => { /* ... same ... */
+        restartNavigatorButton_nav.addEventListener('click', () => { 
             currentScenarioIndex_nav = 0; score_nav = 0; answered_nav = false; currentScenarioData_nav = null;
             scenarioDisplay_nav.classList.remove('hidden');
             feedbackDisplayContainer_nav.classList.add('hidden'); scoreDisplayElem_nav.classList.add('hidden');
             nextScenarioButton_nav.classList.remove('hidden'); restartNavigatorButton_nav.classList.add('hidden');
             aiExplainPolicyButton_nav.classList.add('hidden');
             aiPolicyElaborationContainer_nav.classList.add('hidden');
-            displayScenario_nav(currentScenarioIndex_nav);
+            displayScenario_nav(currentScenarioIndex_nav); 
         });
-        displayScenario_nav(currentScenarioIndex_nav); // Initial call
+
+        analyzeCustomScenarioButton_nav.addEventListener('click', async function() {
+            const userScenario = customScenarioText_nav.value.trim();
+            if (!userScenario) {
+                customAiAnalysisTextElem_nav.textContent = "Please describe your scenario first.";
+                customAiAnalysisContainer_nav.classList.remove('hidden');
+                return;
+            }
+            customAiAnalysisTextElem_nav.innerHTML = '<p class="gemini-loading">✨ Analyzing your scenario...</p>';
+            customAiAnalysisContainer_nav.classList.remove('hidden');
+            getAiMitigationButton_nav.classList.add('hidden');
+            aiMitigationContainer_nav.classList.add('hidden');
+            this.disabled = true;
+
+            const prompt = `An OnlyFans creator is considering the following activity: "${userScenario}".
+            Analyze this planned activity for compliance risks according to typical OnlyFans platform policies (focus on AI content, likeness, automation, disclosure, off-platform contact, etc.). Provide a risk level (Low, Medium, or High) and a brief justification (1-2 sentences).`;
+            
+            const riskAssessment = await callGeminiAPI(prompt, null, null, this);
+            customAiAnalysisTextElem_nav.textContent = riskAssessment;
+            currentCustomScenarioRisk_nav = riskAssessment.toLowerCase(); 
+
+            if (currentCustomScenarioRisk_nav.includes("medium") || currentCustomScenarioRisk_nav.includes("high")) {
+                getAiMitigationButton_nav.classList.remove('hidden');
+            }
+        });
+
+        getAiMitigationButton_nav.addEventListener('click', async function() {
+            const userScenario = customScenarioText_nav.value.trim();
+            if (!userScenario || !currentCustomScenarioRisk_nav) return;
+
+            aiMitigationTextElem_nav.innerHTML = '<p class="gemini-loading">✨ Brainstorming mitigation...</p>';
+            aiMitigationContainer_nav.classList.remove('hidden');
+            this.disabled = true;
+
+            const prompt = `For the OnlyFans creator activity: "${userScenario}", which was assessed with the following risk: "${customAiAnalysisTextElem_nav.textContent}", suggest one or two key mitigation steps or modifications to make the activity more compliant or safer. Be specific and actionable.`;
+
+            const mitigationStrategies = await callGeminiAPI(prompt, null, null, this);
+            aiMitigationTextElem_nav.textContent = mitigationStrategies;
+        });
+        displayScenario_nav(currentScenarioIndex_nav); 
     }
 
-    // --- Tool 5: Lean Workflow Optimizer JS ---
-    function initLeanOptimizer() {
-        // ... (Optimizer JS logic from previous version, adapted with unique IDs for elements if needed) ...
-        const practices_opt = { /* same practices */ 
+    // --- Tool 5: Lean Workflow Optimizer (AI Enhanced) JS ---
+    function initLeanOptimizerAdvanced() {
+        const practices_opt_data = { 
             content: [ { id: 'c1', text: 'Regularly batch content creation (e.g., weekly shoots).', weight: 15, advice: 'Implement content batching: Dedicate blocks of time for advance content creation.' }, { id: 'c2', text: 'Repurpose core content for different formats/platforms.', weight: 10, advice: 'Maximize content value via repurposing: Edit videos into teasers, use photos for various posts.' }, { id: 'c3', text: 'Use OnlyFans\' native post scheduler extensively.', weight: 10, advice: 'Utilize native OF scheduler: Queue batched content to maintain an active profile.' }, { id: 'c4', text: 'Maintain a content calendar for planning.', weight: 5, advice: 'Develop a content calendar: Plan themes, post types, and promotions in advance.' } ],
             promotion: [ { id: 'p1', text: 'Use external scheduling tools (Buffer, etc.) for SFW promo.', weight: 10, advice: 'Automate external promo scheduling: Use tools like Buffer for optimal timing of SFW teasers.' }, { id: 'p2', text: 'Automate cross-posting of SFW content (Zapier/n8n.io).', weight: 10, advice: 'Set up cross-posting automation: Use Zapier/n8n.io to share SFW content externally.' }, { id: 'p3', text: 'Use AI to assist drafting SFW promo captions/ideas.', weight: 5, advice: 'Leverage AI for promo content ideas: Use AI for catchy captions and themes for external promo.' }, { id: 'p4', text: 'Regularly analyze external promo channel effectiveness.', weight: 5, advice: 'Track promo effectiveness: Monitor which external platforms drive most traffic/engagement.' } ],
             engagement: [ { id: 'e1', text: 'Utilize OF\'s native automatic welcome DM.', weight: 5, advice: 'Activate native welcome DM: Set up an automatic welcome message on OF.' }, { id: 'e2', text: 'Use AI to DRAFT DM replies/PPV text (manual send on OF).', weight: 10, advice: 'Use AI for DM drafting assistance: Employ AI for DM/PPV messages, but always review & manually send on OF.' }, { id: 'e3', text: 'Use OF\'s mass messaging for PPV/announcements.', weight: 10, advice: 'Leverage mass DMs for PPV: Use OF mass messaging for PPV offers and announcements.' }, { id: 'e4', text: 'Have pre-written templates/shortcuts for common replies.', weight: 5, advice: 'Prepare message templates: Create templates/shortcuts for frequent questions to speed up responses.' } ]
@@ -963,25 +925,36 @@
         const getAiActionPlanButton_opt = document.getElementById('opt_getAiActionPlanButton');
         const aiActionPlanContainer_opt = document.getElementById('opt_aiActionPlanContainer');
         const aiActionPlanTextElem_opt = document.getElementById('opt_aiActionPlanText');
+        const analyzeWorkflowAiButton_opt = document.getElementById('opt_analyzeWorkflowAiButton');
+        const detailedWorkflowInput_opt = document.getElementById('opt_detailedWorkflowInput');
+        const aiBottleneckContainer_opt = document.getElementById('opt_aiBottleneckContainer');
+        const aiBottleneckTextElem_opt = document.getElementById('opt_aiBottleneckText');
+        const getAiWorkflowSuggestionButton_opt = document.getElementById('opt_getAiWorkflowSuggestionButton');
+        const aiWorkflowSuggestionContainer_opt = document.getElementById('opt_aiWorkflowSuggestionContainer');
+        const aiWorkflowSuggestionTextElem_opt = document.getElementById('opt_aiWorkflowSuggestionText');
         let currentUnselectedPractices_opt = [];
+        let currentBottleneckAnalysis_opt = "";
 
+        function findPracticeById_opt(id) {
+            for (const category in practices_opt_data) { const found = practices_opt_data[category].find(p => p.id === id); if (found) return found; } return null;
+        }
 
-        function populatePractices_opt() { /* ... same ... */ 
+        function populatePractices_opt() { 
             function createPracticeCheckbox(practice) {
                 const div = document.createElement('div');
                 const input = document.createElement('input'); input.type = 'checkbox'; input.id = `opt_${practice.id}`; input.value = practice.weight; input.dataset.advice = practice.advice; input.classList.add('form-checkbox');
                 const label = document.createElement('label'); label.htmlFor = `opt_${practice.id}`; label.textContent = practice.text; label.classList.add('practice-label', 'ml-2');
                 div.appendChild(input); div.appendChild(label); return div;
             }
-            contentPracticesContainer_opt.innerHTML = ''; // Clear before populating
+            contentPracticesContainer_opt.innerHTML = ''; 
             promotionPracticesContainer_opt.innerHTML = '';
             engagementPracticesContainer_opt.innerHTML = '';
-            practices_opt.content.forEach(p => contentPracticesContainer_opt.appendChild(createPracticeCheckbox(p)));
-            practices_opt.promotion.forEach(p => promotionPracticesContainer_opt.appendChild(createPracticeCheckbox(p)));
-            practices_opt.engagement.forEach(p => engagementPracticesContainer_opt.appendChild(createPracticeCheckbox(p)));
+            practices_opt_data.content.forEach(p => contentPracticesContainer_opt.appendChild(createPracticeCheckbox(p)));
+            practices_opt_data.promotion.forEach(p => promotionPracticesContainer_opt.appendChild(createPracticeCheckbox(p)));
+            practices_opt_data.engagement.forEach(p => engagementPracticesContainer_opt.appendChild(createPracticeCheckbox(p)));
         }
 
-        calculateScoreButton_opt.addEventListener('click', function() { /* ... same, store unselected ... */ 
+        calculateScoreButton_opt.addEventListener('click', function() {  
             let currentScore = 0; let maxScore = 0; currentUnselectedPractices_opt = [];
             optimizerApp_opt.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
                 const practiceId = checkbox.id.substring(4); 
@@ -989,7 +962,7 @@
                 if (practiceData) {
                     maxScore += practiceData.weight;
                     if (checkbox.checked) currentScore += practiceData.weight;
-                    else currentUnselectedPractices_opt.push(practiceData.advice); // Store advice for unselected
+                    else currentUnselectedPractices_opt.push(practiceData.advice); 
                 }
             });
             const finalScore = maxScore > 0 ? Math.round((currentScore / maxScore) * 100) : 0;
@@ -1007,12 +980,12 @@
                 const li = document.createElement('li'); li.textContent = "All listed lean practices implemented! Keep it up."; recommendationListElem_opt.appendChild(li); 
                 getAiActionPlanButton_opt.classList.add('hidden');
             }
-            aiActionPlanContainer_opt.classList.add('hidden'); // Hide previous AI plan
+            aiActionPlanContainer_opt.classList.add('hidden'); 
             optimizerApp_opt.classList.add('hidden'); resultsDisplayContainer_opt.classList.remove('hidden');
         });
 
         getAiActionPlanButton_opt.addEventListener('click', async function() {
-            aiActionPlanTextElem_opt.textContent = '✨ Generating your action plan...';
+            aiActionPlanTextElem_opt.innerHTML = '<p class="gemini-loading">✨ Generating your action plan...</p>';
             aiActionPlanContainer_opt.classList.remove('hidden');
             this.disabled = true;
 
@@ -1026,21 +999,236 @@
             ${recommendationsText}
             Based on this, please generate a short, encouraging, and personalized action plan. Prioritize 2-3 of these unselected practices that would likely offer the biggest initial impact on my workflow efficiency or consistency. Explain why these are important first steps. Keep it concise (2-4 sentences).`;
 
-            const actionPlan = await callGeminiAPI(prompt);
+            const actionPlan = await callGeminiAPI(prompt, null, null, this);
             aiActionPlanTextElem_opt.textContent = actionPlan;
-            this.disabled = false;
+        });
+        
+        analyzeWorkflowAiButton_opt.addEventListener('click', async function() {
+            const userWorkflow = detailedWorkflowInput_opt.value.trim();
+            if (!userWorkflow) {
+                aiBottleneckTextElem_opt.textContent = "Please describe your weekly workflow first.";
+                aiBottleneckContainer_opt.classList.remove('hidden');
+                return;
+            }
+            aiBottleneckTextElem_opt.innerHTML = '<p class="gemini-loading">✨ Analyzing your workflow for bottlenecks...</p>';
+            aiBottleneckContainer_opt.classList.remove('hidden');
+            getAiWorkflowSuggestionButton_opt.classList.add('hidden');
+            aiWorkflowSuggestionContainer_opt.classList.add('hidden');
+            this.disabled = true;
+
+            const prompt = `Analyze this OnlyFans creator's weekly workflow for potential bottlenecks or inefficiencies based on lean principles: "${userWorkflow}". Identify one primary bottleneck and explain it briefly (1-2 sentences).`;
+            
+            currentBottleneckAnalysis_opt = await callGeminiAPI(prompt, null, null, this);
+            aiBottleneckTextElem_opt.textContent = currentBottleneckAnalysis_opt;
+            if (currentBottleneckAnalysis_opt && !currentBottleneckAnalysis_opt.toLowerCase().includes("error")) {
+                getAiWorkflowSuggestionButton_opt.classList.remove('hidden');
+            }
         });
 
-        reassessButton_opt.addEventListener('click', function() { /* ... same ... */ 
+        getAiWorkflowSuggestionButton_opt.addEventListener('click', async function() {
+            const userWorkflow = detailedWorkflowInput_opt.value.trim();
+            if (!userWorkflow || !currentBottleneckAnalysis_opt) return;
+
+            aiWorkflowSuggestionTextElem_opt.innerHTML = '<p class="gemini-loading">✨ Generating optimized workflow ideas...</p>';
+            aiWorkflowSuggestionContainer_opt.classList.remove('hidden');
+            this.disabled = true;
+            
+            let unselectedPracticesContext = "The creator might not be fully utilizing all lean practices from a checklist they also filled out (if they used that part of the tool).";
+
+
+            const prompt = `An OnlyFans creator described their workflow as: "${userWorkflow}".
+            A potential bottleneck was identified: "${currentBottleneckAnalysis_opt}".
+            Context on other lean practices: "${unselectedPracticesContext}".
+            Suggest a revised, more "lean" workflow structure or specific adjustments (1-2 key changes) to address the bottleneck and improve overall flow. Explain the benefit of these changes in 2-3 sentences.`;
+
+            const workflowSuggestion = await callGeminiAPI(prompt, null, null, this);
+            aiWorkflowSuggestionTextElem_opt.textContent = workflowSuggestion;
+        });
+
+
+        reassessButton_opt.addEventListener('click', function() { 
             resultsDisplayContainer_opt.classList.add('hidden'); 
             optimizerApp_opt.classList.remove('hidden'); 
             getAiActionPlanButton_opt.classList.add('hidden');
             aiActionPlanContainer_opt.classList.add('hidden');
         });
-        function findPracticeById_opt(id) { /* ... same ... */ 
-            for (const category in practices_opt) { const found = practices_opt[category].find(p => p.id === id); if (found) return found; } return null;
-        }
-        populatePractices_opt(); // Initial call
+        populatePractices_opt(); 
+    }
+
+    // --- Tool 6: AI Content Calendar & Idea Expander JS ---
+    function initContentCalendarTool() {
+        const generateButton = document.getElementById('cc_generateButton');
+        const nicheInput = document.getElementById('cc_primaryNiche');
+        const userIdeaInput = document.getElementById('cc_userIdea');
+        const aiOutputContainer = document.getElementById('cc_aiOutputContainer');
+        const aiCalendarTextElem = document.getElementById('cc_aiCalendarText');
+        const aiIdeaExpansionTextElem = document.getElementById('cc_aiIdeaExpansionText');
+
+        generateButton.addEventListener('click', async function() {
+            const niche = nicheInput.value.trim();
+            const userIdea = userIdeaInput.value.trim();
+            if (!niche) {
+                aiCalendarTextElem.textContent = "Please enter your primary niche.";
+                aiOutputContainer.classList.remove('hidden');
+                return;
+            }
+            aiCalendarTextElem.innerHTML = '<p class="gemini-loading">✨ Generating content calendar...</p>';
+            aiIdeaExpansionTextElem.innerHTML = userIdea ? '<p class="gemini-loading">✨ Expanding your idea...</p>' : '';
+            aiOutputContainer.classList.remove('hidden');
+            this.disabled = true;
+
+            let calendarPrompt = `Generate a sample 1-week OnlyFans content calendar outline for a creator in the '${niche}' niche. Suggest daily post types (e.g., Photo Set, Short Video, Live Stream Teaser, Poll, PPV Announcement, BTS Clip). Format as a list for each day (e.g., Monday: [Suggestion]).`;
+            const calendarSuggestions = await callGeminiAPI(calendarPrompt, null, null, this); // Button passed to re-enable
+            aiCalendarTextElem.innerHTML = `<strong>Sample 1-Week Content Calendar for '${niche}':</strong><ul class="list-disc list-inside mt-1">${calendarSuggestions.replace(/(\b(?:Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday)\b:)/g, "</li><li><strong>$1</strong>").substring(5)}</ul>`;
+
+
+            if (userIdea) {
+                let ideaPrompt = `An OnlyFans creator in the '${niche}' niche has an idea: '${userIdea}'. Expand this idea into 3-4 distinct content variations suitable for OnlyFans (could be feed posts, PPV, or live stream concepts). Be specific and creative. Format as a numbered list.`;
+                const expandedIdeas = await callGeminiAPI(ideaPrompt, null, null, this); // Button passed
+                aiIdeaExpansionTextElem.innerHTML = `<br><strong>Expanding on your idea '${userIdea}':</strong><ol class="list-decimal list-inside mt-1">${expandedIdeas.replace(/\d\.\s/g, "<li>").replace(/\n/g, "")}</ol>`;
+            } else {
+                aiIdeaExpansionTextElem.innerHTML = "";
+            }
+             // Re-enable button if it wasn't passed to the last call or if only one call was made
+            if (!userIdea || (userIdea && this.disabled)) {
+                 this.disabled = false;
+            }
+        });
+    }
+
+    // --- Tool 7: Personalized Fan Engagement Prompter (AI) JS ---
+    function initEngagementPrompterTool() {
+        const generateButton = document.getElementById('ep_generatePromptsButton');
+        const fanDescriptionInput = document.getElementById('ep_fanSegmentDescription');
+        const aiOutputContainer = document.getElementById('ep_aiOutputContainer');
+        const aiEngagementPromptsElem = document.getElementById('ep_aiEngagementPromptsText');
+        const aiPpvAngleElem = document.getElementById('ep_aiPpvAngleText');
+
+        generateButton.addEventListener('click', async function() {
+            const fanDescription = fanDescriptionInput.value.trim();
+            if (!fanDescription) {
+                aiEngagementPromptsElem.textContent = "Please describe the fan segment.";
+                aiOutputContainer.classList.remove('hidden');
+                return;
+            }
+            aiEngagementPromptsElem.innerHTML = '<p class="gemini-loading">✨ Generating engagement prompts...</p>';
+            aiPpvAngleElem.innerHTML = '<p class="gemini-loading">✨ Brainstorming PPV angles...</p>';
+            aiOutputContainer.classList.remove('hidden');
+            this.disabled = true;
+
+            let promptsPrompt = `For an OnlyFans fan segment described as: '${fanDescription}', suggest 2-3 compliant message starters (max 2 sentences each) for a creator to manually send to re-engage them or offer value. Format as a numbered list.`;
+            const engagementPrompts = await callGeminiAPI(promptsPrompt);
+            aiEngagementPromptsElem.innerHTML = `<strong>Tailored Engagement Prompts:</strong><ol class="list-decimal list-inside mt-1">${engagementPrompts.replace(/\d\.\s/g, "<li>").replace(/\n/g, "")}</ol>`;
+
+            let ppvPrompt = `For the OnlyFans fan segment: '${fanDescription}', suggest one tailored angle or theme for a personalized PPV offer (1-2 sentences).`;
+            const ppvAngle = await callGeminiAPI(ppvPrompt); // Second call, button will be re-enabled by this one
+            aiPpvAngleElem.innerHTML = `<br><strong>Potential PPV Angle:</strong><p class="mt-1">${ppvAngle}</p>`;
+            
+            this.disabled = false;
+        });
+    }
+
+    // --- Tool 8: Advanced Analytics Interpretation (AI) JS ---
+    function initAnalyticsInterpreterTool() {
+        const analyzeButton = document.getElementById('an_analyzeMetricsButton');
+        const aiOutputContainer = document.getElementById('an_aiOutputContainer');
+        const aiInsightsElem = document.getElementById('an_aiInsightsText');
+        const aiRecommendationsElem = document.getElementById('an_aiRecommendationsText');
+
+        analyzeButton.addEventListener('click', async function() {
+            const subGrowth = document.getElementById('an_subGrowthRate').value;
+            const churnRate = document.getElementById('an_churnRate').value;
+            const ppvConversion = document.getElementById('an_ppvConversionRate').value;
+            const topContent = document.getElementById('an_topContentType').value;
+
+            if (!subGrowth || !churnRate || !ppvConversion || !topContent) {
+                aiInsightsElem.textContent = "Please fill in all your key metrics.";
+                aiOutputContainer.classList.remove('hidden');
+                return;
+            }
+            aiInsightsElem.innerHTML = '<p class="gemini-loading">✨ Analyzing your metrics...</p>';
+            aiRecommendationsElem.textContent = '';
+            aiOutputContainer.classList.remove('hidden');
+            this.disabled = true;
+
+            let insightsPrompt = `Analyze these OnlyFans creator metrics: Monthly Subscriber Growth: ${subGrowth}%. Monthly Churn Rate: ${churnRate}%. Average PPV Purchase Rate: ${ppvConversion}%. Top Performing Content Type: '${topContent}'. Identify one key strength and one primary area of concern based on these numbers. Explain briefly (1 sentence each).`;
+            const insights = await callGeminiAPI(insightsPrompt);
+            aiInsightsElem.innerHTML = `<strong>AI Insights:</strong><p class="mt-1">${insights}</p>`;
+
+            if (!insights.toLowerCase().includes("error")) {
+                aiRecommendationsElem.innerHTML = '<p class="gemini-loading">✨ Generating recommendations...</p>';
+                let recommendationsPrompt = `Given these OnlyFans creator metrics (Sub Growth: ${subGrowth}%, Churn: ${churnRate}%, PPV Conversion: ${ppvConversion}%, Top Content: '${topContent}') and the AI-generated insight: "${insights}", suggest 1-2 specific, actionable strategy adjustments related to content or engagement to address the primary concern or leverage the strength. Keep it concise (1-2 sentences per suggestion).`;
+                const recommendations = await callGeminiAPI(recommendationsPrompt); // Second call
+                aiRecommendationsElem.innerHTML = `<br><strong>AI Recommendations:</strong><p class="mt-1">${recommendations}</p>`;
+            }
+            this.disabled = false;
+        });
+    }
+
+    // --- Tool 9: Compliance Shield (AI-Assisted) JS ---
+    function initComplianceShieldTool() {
+        const reviewButton = document.getElementById('cs_reviewTextButton');
+        const draftTextInput = document.getElementById('cs_draftText');
+        const aiOutputContainer = document.getElementById('cs_aiOutputContainer');
+        const aiPolicyFlagsElem = document.getElementById('cs_aiPolicyFlagsText');
+        const aiRephrasingElem = document.getElementById('cs_aiRephrasingText');
+
+        reviewButton.addEventListener('click', async function() {
+            const draftText = draftTextInput.value.trim();
+            if (!draftText) {
+                aiPolicyFlagsElem.textContent = "Please paste your draft text to review.";
+                aiOutputContainer.classList.remove('hidden');
+                return;
+            }
+            aiPolicyFlagsElem.innerHTML = '<p class="gemini-loading">✨ Scanning for potential policy conflicts...</p>';
+            aiRephrasingElem.textContent = '';
+            aiOutputContainer.classList.remove('hidden');
+            this.disabled = true;
+
+            let flagsPrompt = `Review this draft text intended for OnlyFans (could be a caption, DM, or PPV offer description) for potential policy conflicts based on typical platform guidelines (e.g., soliciting off-platform contact, risky promises, problematic terms): "${draftText}". Identify potential policy flags (1-2 key points). If no major flags, say so.`;
+            const policyFlags = await callGeminiAPI(flagsPrompt);
+            aiPolicyFlagsElem.innerHTML = `<strong>Potential Policy Flags:</strong><p class="mt-1">${policyFlags}</p>`;
+
+            if (!policyFlags.toLowerCase().includes("error") && (policyFlags.toLowerCase().includes("flag") || policyFlags.toLowerCase().includes("issue") || policyFlags.toLowerCase().includes("violat") || policyFlags.toLowerCase().includes("concern"))) {
+                aiRephrasingElem.innerHTML = '<p class="gemini-loading">✨ Suggesting rephrasing...</p>';
+                let rephrasingPrompt = `The following OnlyFans draft text was flagged with potential policy issues: "${draftText}". The issues noted were: "${policyFlags}". Suggest a more compliant rephrasing or modification to address these concerns while trying to maintain the original intent if possible.`;
+                const rephrasingSuggestion = await callGeminiAPI(rephrasingPrompt); // Second call
+                aiRephrasingElem.innerHTML = `<br><strong>AI Rephrasing Suggestion:</strong><p class="mt-1">${rephrasingSuggestion}</p>`;
+            }
+            this.disabled = false;
+        });
+    }
+
+    // --- Tool 10: Niche Deep Dive & Expansion (AI) JS ---
+    function initNicheExplorerTool() {
+        const exploreButton = document.getElementById('ne_exploreNicheButton');
+        const nicheInput = document.getElementById('ne_primaryNiche');
+        const aiOutputContainer = document.getElementById('ne_aiOutputContainer');
+        const aiSubNichesElem = document.getElementById('ne_aiSubNichesText');
+        const aiSynergyIdeasElem = document.getElementById('ne_aiSynergyIdeasText');
+
+        exploreButton.addEventListener('click', async function() {
+            const primaryNiche = nicheInput.value.trim();
+            if (!primaryNiche) {
+                aiSubNichesElem.textContent = "Please enter your primary niche.";
+                aiOutputContainer.classList.remove('hidden');
+                return;
+            }
+            aiSubNichesElem.innerHTML = '<p class="gemini-loading">✨ Exploring sub-niches...</p>';
+            aiSynergyIdeasElem.innerHTML = '<p class="gemini-loading">✨ Brainstorming cross-niche synergies...</p>';
+            aiOutputContainer.classList.remove('hidden');
+            this.disabled = true;
+
+            let subNichePrompt = `For an OnlyFans creator in the '${primaryNiche}' niche, suggest 3-4 related sub-niches or emerging content trends they could explore to differentiate themselves or expand their offerings. Format as a bulleted list.`;
+            const subNiches = await callGeminiAPI(subNichePrompt);
+            aiSubNichesElem.innerHTML = `<strong>Potential Sub-Niches & Trends for '${primaryNiche}':</strong><ul class="list-disc list-inside mt-1">${subNiches.replace(/- /g, "<li>").replace(/\n/g, "")}</ul>`;
+
+            let synergyPrompt = `Suggest 1-2 creative ways an OnlyFans creator in the '${primaryNiche}' niche could incorporate elements from a *different* potentially complementary niche to create unique appeal. Specify the complementary niche and the blended content idea.`;
+            const synergyIdeas = await callGeminiAPI(synergyPrompt); // Second call
+            aiSynergyIdeasElem.innerHTML = `<br><strong>Cross-Niche Synergy Ideas:</strong><p class="mt-1">${synergyIdeas}</p>`;
+            
+            this.disabled = false;
+        });
     }
 
 </script>
