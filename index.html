@@ -392,8 +392,8 @@
              outputElement.innerHTML = ''; // Clear previous output
         }
         if (buttonElement) buttonElement.disabled = true;
-
-        const apiKey = ""; 
+        
+        const apiKey = "${{ secrets.gemini_api }}"; 
         const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
         const payload = { contents: [{ role: "user", parts: [{ text: prompt }] }] };
 
