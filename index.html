@@ -1,383 +1,1048 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Creator Economy: Automation & Revenue Velocity Strategy</title>
+    <title>Comprehensive OnlyFans Creator Toolkit</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Inter', sans-serif; background-color: #F0F4F8; color: #19376D; }
-        .bg-navy-deep { background-color: #0B2447; }
-        .bg-navy-mid { background-color: #19376D; }
-        .bg-blue-mid { background-color: #576CBC; }
-        .bg-blue-light { background-color: #A5D7E8; }
-        .text-navy-deep { color: #0B2447; }
-        .text-navy-mid { color: #19376D; }
-        .text-blue-mid { color: #576CBC; }
-        .text-blue-light { color: #A5D7E8; }
-        .card { background-color: white; border-radius: 0.75rem; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); padding: 1.5rem; transition: transform 0.3s ease, box-shadow 0.3s ease; }
-        .card:hover { transform: translateY(-5px); box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); }
-        .chart-container { position: relative; width: 100%; max-width: 600px; margin-left: auto; margin-right: auto; height: 350px; max-height: 400px; }
-        .nav-button { transition: all 0.2s ease-in-out; }
-        .nav-button:hover, .nav-button.active { color: #A5D7E8; border-bottom-color: #A5D7E8; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0D1B2A; /* Very Dark Blue */
+            color: #E0E1DD; /* Light Gray/Off-white */
+        }
+        .tool-container { /* Base container for each tool */
+            background-color: #1B263B; /* Primary Darker Blue */
+            border: 1px solid #3E6990; /* Steel Blue */
+            border-radius: 16px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2), 0 6px 6px rgba(0,0,0,0.15);
+        }
+        .tab-button {
+            padding: 0.75rem 1rem;
+            margin: 0 0.25rem;
+            border-radius: 8px 8px 0 0;
+            font-weight: 600;
+            color: #A2D2FF;
+            background-color: #1E407C; /* Medium Blue for inactive tabs */
+            border: 1px solid #3E6990;
+            border-bottom: none;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            cursor: pointer;
+            font-size: 0.8rem; /* Smaller font for tabs */
+        }
+        .tab-button:hover {
+            background-color: #3E6990; /* Steel Blue on hover */
+        }
+        .tab-button.active {
+            background-color: #1B263B; /* Primary Darker Blue for active tab (matches tool container) */
+            color: #6ee7b7; /* Teal accent for active tab text */
+            border-color: #3E6990;
+        }
+        .tool-content {
+            display: none; /* Hidden by default */
+        }
+        .tool-content.active {
+            display: block;
+        }
+
+        /* Tool-specific styles - prefixed or contained to avoid clashes */
+        /* Strategy Simulator specific styles */
+        #strategySimulator .control-panel, #strategySimulator .results-panel { background-color: transparent; border: none; box-shadow: none; }
+        #strategySimulator label { color: #A2D2FF; font-weight: 600; }
+        #strategySimulator select, #strategySimulator input[type="range"] { background-color: #102A43; border-color: #3E6990; color: #E0E1DD; border-radius: 8px; }
+        #strategySimulator button.sim-button { background-color: #6ee7b7; color: #0D1B2A; font-weight: 700; border-radius: 8px; transition: background-color 0.3s ease; }
+        #strategySimulator button.sim-button:hover { background-color: #5ce1a7; }
+        #strategySimulator .chart-container { max-width: 450px; height: 350px; max-height: 380px; margin-top: 1rem; }
+        #strategySimulator .ai-advice-container { margin-top: 1rem; padding: 0.75rem; background-color: rgba(30, 64, 124, 0.3); border-radius: 8px; border: 1px solid #3E6990; }
+
+
+        /* Automation Pathfinder specific styles */
+        #automationPathfinder .question-card, #automationPathfinder .result-card { background-color: #1E407C; border-radius: 12px; border: 1px solid #3E6990;}
+        #automationPathfinder label.option-label { display: block; padding: 0.75rem 1rem; border: 1px solid #3E6990; border-radius: 8px; cursor: pointer; transition: background-color 0.2s ease, border-color 0.2s ease; color: #A2D2FF; }
+        #automationPathfinder label.option-label:hover { background-color: #3E6990; border-color: #A2D2FF; }
+        #automationPathfinder input[type="radio"]:checked + label.option-label { background-color: #6ee7b7; border-color: #6ee7b7; color: #0D1B2A; font-weight: 600; }
+        #automationPathfinder input[type="radio"] { display: none; }
+        #automationPathfinder button.nav-button { background-color: #A2D2FF; color: #0D1B2A; }
+        #automationPathfinder button.nav-button:hover:not(:disabled) { background-color: #8cbbed; }
+        #automationPathfinder button.nav-button:disabled { background-color: #3E6990; cursor: not-allowed; }
+        #automationPathfinder .recommendation { color: #6ee7b7; }
+        #automationPathfinder .warning { color: #ff7b7b; }
+        #automationPathfinder .policy-note { color: #A2D2FF; font-size: 0.8rem; }
+        #automationPathfinder .ai-elaboration-button { background-color: #2563eb; color: white; font-size: 0.75rem; padding: 0.25rem 0.5rem; margin-top: 0.5rem; }
+        #automationPathfinder .ai-elaboration-container { margin-top: 0.5rem; padding: 0.5rem; background-color: rgba(30, 64, 124, 0.3); border-radius: 6px; border: 1px solid #3E6990; font-size: 0.8rem;}
+
+
+        /* Earnings Forecaster specific styles */
+        #earningsForecaster .forecaster-inputs, #earningsForecaster .results-display-container { background-color: transparent; border: none; box-shadow:none; }
+        #earningsForecaster label { color: #A2D2FF; font-weight: 600; }
+        #earningsForecaster input[type="number"] { background-color: #102A43; border-color: #3E6990; color: #E0E1DD; border-radius: 8px; -moz-appearance: textfield; }
+        #earningsForecaster input[type="number"]::-webkit-outer-spin-button, #earningsForecaster input[type="number"]::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+        #earningsForecaster button.fc-button { background-color: #6ee7b7; color: #0D1B2A; }
+        #earningsForecaster .chart-container { max-width: 600px; height: 300px; max-height: 350px; }
+        #earningsForecaster .earnings-breakdown p { margin-bottom: 0.5rem; }
+        #earningsForecaster .earnings-breakdown strong { color: #A2D2FF; }
+        #earningsForecaster .comparison-text { font-size: 0.9rem; color: #A2D2FF]/80; }
+        #earningsForecaster .ai-tips-container { margin-top: 1rem; padding: 0.75rem; background-color: rgba(30, 64, 124, 0.3); border-radius: 8px; border: 1px solid #3E6990; }
+
+        /* AI Policy Navigator specific styles */
+        #aiPolicyNavigator .scenario-card, #aiPolicyNavigator .feedback-card-container { background-color: #1E407C; border-radius: 12px; border: 1px solid #3E6990; }
+        #aiPolicyNavigator label.option-label { display: block; padding: 0.75rem 1rem; border: 1px solid #3E6990; border-radius: 8px; cursor: pointer; transition: background-color 0.2s ease, border-color 0.2s ease; color: #A2D2FF; }
+        #aiPolicyNavigator label.option-label:hover { background-color: #3E6990; border-color: #A2D2FF; }
+        #aiPolicyNavigator input[type="radio"] { display: none; }
+        #aiPolicyNavigator button.nav-button { background-color: #A2D2FF; color: #0D1B2A; }
+        #aiPolicyNavigator button.nav-button:hover:not(:disabled) { background-color: #8cbbed; }
+        #aiPolicyNavigator button.nav-button:disabled { background-color: #3E6990; cursor: not-allowed; }
+        #aiPolicyNavigator .feedback-correct { background-color: #166534; border-left: 4px solid #6ee7b7; color: #d1fae5; }
+        #aiPolicyNavigator .feedback-caution { background-color: #78350F; border-left: 4px solid #facc15; color: #fef3c7; }
+        #aiPolicyNavigator .feedback-incorrect { background-color: #7F1D1D; border-left: 4px solid #ff7b7b; color: #fee2e2; }
+        #aiPolicyNavigator .policy-reference { font-size: 0.8rem; color: #A2D2FF; opacity: 0.7; }
+        #aiPolicyNavigator .ai-policy-elaboration-button { background-color: #2563eb; color: white; font-size: 0.7rem; padding: 0.2rem 0.4rem; margin-left: 0.5rem; border-radius:4px; }
+        #aiPolicyNavigator .ai-policy-elaboration-container { margin-top: 0.5rem; padding: 0.5rem; background-color: rgba(30, 64, 124, 0.3); border-radius: 6px; border: 1px solid #3E6990; font-size: 0.8rem;}
+
+
+        /* Lean Workflow Optimizer specific styles */
+        #leanOptimizer .optimizer-inputs, #leanOptimizer .results-display-container { background-color: transparent; border: none; box-shadow:none;}
+        #leanOptimizer .practice-category h3 { color: #A2D2FF; font-weight: 700; border-bottom: 1px solid #3E6990; padding-bottom: 0.5rem; margin-bottom: 0.75rem; }
+        #leanOptimizer label.practice-label { display: flex; align-items: center; padding: 0.5rem 0.75rem; border: 1px solid transparent; border-radius: 8px; cursor: pointer; transition: background-color 0.2s ease; color: #E0E1DD; font-size: 0.9rem; }
+        #leanOptimizer label.practice-label:hover { background-color: #1E407C; }
+        #leanOptimizer input[type="checkbox"] { accent-color: #6ee7b7; margin-right: 0.75rem; width: 1.1rem; height: 1.1rem; border-radius: 4px; }
+        #leanOptimizer button.action-button { background-color: #6ee7b7; color: #0D1B2A; }
+        #leanOptimizer .score-bar-container { background-color: #1E407C; border-radius: 8px; height: 2rem; overflow: hidden; border: 1px solid #3E6990; }
+        #leanOptimizer .score-bar-fill { background-color: #6ee7b7; height: 100%; transition: width 0.5s ease-in-out; display: flex; align-items: center; justify-content: center; font-weight: 600; color: #0D1B2A; }
+        #leanOptimizer .recommendation-list li { background-color: rgba(30, 64, 124, 0.5); padding: 0.5rem 0.75rem; border-radius: 6px; margin-bottom: 0.5rem; border-left: 3px solid #A2D2FF; }
+        #leanOptimizer .ai-action-plan-container { margin-top: 1rem; padding: 0.75rem; background-color: rgba(30, 64, 124, 0.3); border-radius: 8px; border: 1px solid #3E6990; }
+
+
+        h1, h2, h3, h4 { font-weight: 800; letter-spacing: -0.025em; }
+        h1 { color: #A2D2FF; } 
+        h2 { color: #E0E1DD; } 
+        h3 { color: #A2D2FF; }
+
+        .gemini-loading {
+            font-style: italic;
+            color: #A2D2FF;
+            opacity: 0.8;
+        }
     </style>
 </head>
-<body class="antialiased">
-
-    <header class="bg-navy-deep text-white p-4 sticky top-0 z-50 shadow-lg">
-        <div class="container mx-auto flex justify-between items-center">
-            <h1 class="text-xl md:text-2xl font-bold">Creator Strategy OS</h1>
-            <nav class="hidden md:flex space-x-6 text-lg">
-                <a href="#market" class="nav-button border-b-2 border-transparent pb-1">Market</a>
-                <a href="#automation" class="nav-button border-b-2 border-transparent pb-1">Automation</a>
-                <a href="#efficiency" class="nav-button border-b-2 border-transparent pb-1">Efficiency</a>
-                <a href="#revenue" class="nav-button border-b-2 border-transparent pb-1">Revenue</a>
-                <a href="#risk" class="nav-button border-b-2 border-transparent pb-1">Risk</a>
-            </nav>
-        </div>
+<body class="antialiased min-h-screen flex flex-col">
+    <header class="text-center py-6 md:py-10">
+        <h1 class="text-3xl sm:text-4xl md:text-5xl">Comprehensive OnlyFans Creator Toolkit</h1>
+        <p class="text-md sm:text-lg text-[#A2D2FF]/80 max-w-3xl mx-auto mt-2">Your all-in-one suite for strategy simulation, compliance guidance, earnings forecasting, policy navigation, and workflow optimization.</p>
     </header>
 
-    <main class="container mx-auto p-4 md:p-8">
+    <nav id="toolTabs" class="flex flex-wrap justify-center px-4 mb-0 sticky top-0 z-40 bg-[#0D1B2A]/80 backdrop-blur-md py-2">
+        <button class="tab-button active" data-tool="strategySimulator">Strategy Simulator</button>
+        <button class="tab-button" data-tool="automationPathfinder">Automation Pathfinder</button>
+        <button class="tab-button" data-tool="earningsForecaster">Earnings Forecaster</button>
+        <button class="tab-button" data-tool="aiPolicyNavigator">AI Policy Navigator</button>
+        <button class="tab-button" data-tool="leanOptimizer">Workflow Optimizer</button>
+    </nav>
 
-        <section id="market" class="my-8 scroll-mt-24">
-            <div class="text-center mb-12">
-                <h2 class="text-4xl font-black text-navy-deep">The Financial Landscape</h2>
-                <p class="text-lg mt-2 max-w-3xl mx-auto">To succeed, you must first understand the tale of two economies: the platform's massive success versus the statistical reality for the individual creator. This section provides the core financial context that shapes all winning strategies.</p>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
-                <div class="card space-y-6">
-                    <h3 class="text-2xl font-bold text-center text-navy-deep">Platform Financials (OnlyFans)</h3>
-                    <p class="text-center">The platform operates at a massive scale, processing billions and generating substantial revenue from its 20% commission. This illustrates the size of the market you are operating in.</p>
-                    <div class="text-center bg-blue-light p-4 rounded-lg">
-                        <p class="text-sm uppercase font-bold text-navy-mid">Gross Payments Processed (FY2023)</p>
-                        <p class="text-4xl font-black text-navy-deep">$6.6 Billion</p>
+    <main class="flex-grow container mx-auto p-4 md:p-8">
+        <div id="strategySimulator" class="tool-content active tool-container p-6 md:p-8">
+            <header class="text-center mb-6">
+                <h2 class="text-2xl md:text-3xl font-bold text-[#E0E1DD]">OnlyFans Strategy Simulator</h2>
+                <p class="text-sm text-[#A2D2FF]/70">Experiment with strategic choices to see potential outcomes.</p>
+            </header>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="control-panel p-4 space-y-5 rounded-lg border border-[#3E6990]">
+                    <div>
+                        <label for="sim_contentStrategy" class="block text-sm mb-1">Content Niche & Velocity:</label>
+                        <select id="sim_contentStrategy" class="w-full p-2 text-sm">
+                            <option value="casual">Casual (General, Low Consistency)</option>
+                            <option value="niche_moderate">Niche Focus (Moderate Consistency, Some PPV)</option>
+                            <option value="pro_high_value">Pro (Specific Niche, High Consistency, High-Value PPV/Customs)</option>
+                        </select>
                     </div>
-                    <div class="flex space-x-4">
-                        <div class="w-1/2 text-center bg-gray-100 p-4 rounded-lg">
-                            <p class="text-sm uppercase font-bold text-navy-mid">Platform Revenue</p>
-                            <p class="text-3xl font-black text-navy-deep">$1.3B</p>
-                        </div>
-                        <div class="w-1/2 text-center bg-gray-100 p-4 rounded-lg">
-                            <p class="text-sm uppercase font-bold text-navy-mid">Profit After Tax</p>
-                            <p class="text-3xl font-black text-navy-deep">$485M</p>
-                        </div>
+                    <div>
+                        <label for="sim_promotionEffort" class="block text-sm mb-1">External Promotion Effort:</label>
+                        <select id="sim_promotionEffort" class="w-full p-2 text-sm">
+                            <option value="low">Low (Minimal external presence)</option>
+                            <option value="medium">Medium (Regular posts on 1-2 platforms)</option>
+                            <option value="high">High (Aggressive, multi-channel, optimized)</option>
+                        </select>
                     </div>
+                    <div>
+                        <label for="sim_automationLevel" class="block text-sm mb-1">Automation Level (Compliant Tools):</label>
+                        <select id="sim_automationLevel" class="w-full p-2 text-sm">
+                            <option value="none">None (Fully manual)</option>
+                            <option value="basic">Basic (Native schedulers, email parsing)</option>
+                            <option value="advanced">Advanced (Zapier/n8n for external, AI-assist drafts)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="sim_complianceStance" class="block text-sm mb-1">Compliance Stance:</label>
+                        <select id="sim_complianceStance" class="w-full p-2 text-sm">
+                            <option value="strict">Strict Adherence</option>
+                            <option value="gray_area">Exploring Gray Areas (Cautious AI-assist DMs)</option>
+                            <option value="risky">High Risk (Unofficial on-platform bots - NOT RECOMMENDED)</option>
+                        </select>
+                    </div>
+                    <button id="sim_simulateButton" class="w-full py-2.5 sim-button">Simulate Strategy</button>
                 </div>
-
-                <div class="card space-y-6">
-                    <h3 class="text-2xl font-bold text-center text-navy-deep">The Creator Earnings Pyramid</h3>
-                    <p class="text-center">Earnings are heavily skewed in a "winner-take-all" market. A tiny percentage of creators captures the vast majority of income, making efficiency and strategy essential for everyone else.</p>
-                    <div class="space-y-1 text-white text-center font-bold text-sm">
-                        <div class="p-2 bg-navy-deep rounded-t-lg w-1/4 mx-auto">Top 0.1%</div>
-                        <div class="p-2 bg-navy-mid w-1/2 mx-auto">Top 1%</div>
-                        <div class="p-2 bg-blue-mid w-3/4 mx-auto">Top 10%</div>
-                        <div class="p-2 bg-blue-light text-navy-deep rounded-b-lg w-full mx-auto">The Other 90%</div>
-                    </div>
-                    <p class="text-center text-sm mt-2">The top 10% earn 73% of all income, while the median monthly earning is only around $150-$180.</p>
-                </div>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-8">
-                <div class="card">
-                     <h3 class="text-2xl font-bold text-center text-navy-deep">Income Reality Check</h3>
-                     <p class="text-center mt-2 mb-4">This chart visualizes the staggering difference between median earnings and the income of the platform's elite. Note the logarithmic scale, required to make the two values comparable on a single chart.</p>
+                <div id="sim_resultsPanel" class="results-panel p-4 space-y-3 rounded-lg border border-[#3E6990] hidden">
+                    <h3 class="text-xl font-bold text-center text-[#E0E1DD]">Simulation Results</h3>
                     <div class="chart-container">
-                        <canvas id="incomeGapChart"></canvas>
+                        <canvas id="sim_resultsChart"></canvas>
                     </div>
-                </div>
-                <div class="card">
-                     <h3 class="text-2xl font-bold text-center text-navy-deep">Where The Money Is Made</h3>
-                     <p class="text-center mt-2 mb-4">Success is not about passive subscriptions. Transaction data shows that over 90% of revenue comes from active, direct-to-fan monetization through messages and tips. Your strategy must reflect this.</p>
-                    <div class="chart-container">
-                        <canvas id="revenueSourceChart"></canvas>
+                    <div class="text-center p-2 bg-[#102A43]/70 rounded-md text-sm">
+                        <h4 class="font-semibold text-[#A2D2FF]">Potential Earnings Tier:</h4>
+                        <p id="sim_earningsText">-</p>
+                    </div>
+                    <div class="text-center p-2 bg-[#102A43]/70 rounded-md text-sm">
+                        <h4 class="font-semibold text-[#A2D2FF]">Operational Efficiency:</h4>
+                        <p id="sim_efficiencyText">-</p>
+                    </div>
+                    <div class="text-center p-2 bg-[#102A43]/70 rounded-md text-sm">
+                        <h4 class="font-semibold text-[#A2D2FF]">Compliance Risk Level:</h4>
+                        <p id="sim_complianceText">-</p>
+                    </div>
+                    <div id="sim_feedbackText" class="text-xs text-center text-[#A2D2FF]/70 p-2 border border-[#3E6990] rounded-md">
+                        <p>Illustrative feedback based on generalized trends.</p>
+                    </div>
+                    <button id="sim_getAiAdviceButton" class="w-full py-2 sim-button mt-3 hidden">✨ Get AI Strategy Insights</button>
+                    <div id="sim_aiAdviceContainer" class="ai-advice-container hidden">
+                        <h4 class="font-semibold text-sm text-[#6ee7b7] mb-1">✨ AI-Powered Insights:</h4>
+                        <p id="sim_aiAdviceText" class="text-xs"></p>
                     </div>
                 </div>
             </div>
-        </section>
+        </div>
 
-        <section id="automation" class="my-16 scroll-mt-24">
-            <div class="text-center mb-12">
-                <h2 class="text-4xl font-black text-navy-deep">Pillar 1: Workflow Automation</h2>
-                <p class="text-lg mt-2 max-w-3xl mx-auto">Mastering automation requires a dual strategy: aggressive and AI-powered for external promotion, but cautious and compliant for on-platform engagement to respect the platform's "authenticity firewall."</p>
-            </div>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <div class="card border-t-8 border-green-400">
-                    <h3 class="text-2xl font-bold text-green-600 flex items-center"><span class="text-3xl mr-3">✅</span>External Automation (Green Zone)</h3>
-                    <p class="mt-2">Use AI and automation freely to build a powerful marketing funnel outside of OnlyFans. This is your engine for growth and audience acquisition, where you can operate with the fewest restrictions.</p>
-                    <ul class="mt-4 space-y-2 list-disc list-inside">
-                        <li><strong>AI Content Ideation:</strong> Generate endless promotional angles.</li>
-                        <li><strong>Automated Social Media:</strong> Schedule posts to Twitter, Reddit, etc.</li>
-                        <li><strong>AI Visuals & Text:</strong> Create unique teaser images and captions at scale.</li>
-                        <li><strong>External Chatbots:</strong> Automate initial chats on Instagram or Telegram.</li>
-                    </ul>
+        <div id="automationPathfinder" class="tool-content tool-container p-6 md:p-8">
+            <header class="text-center mb-6">
+                <h2 class="text-2xl md:text-3xl font-bold text-[#E0E1DD]">Compliant Automation Pathfinder</h2>
+                <p class="text-sm text-[#A2D2FF]/70">Find safe and effective automation strategies.</p>
+            </header>
+            <div id="path_pathfinder" class="space-y-6">
+                <div id="path_questionArea" class="question-card p-5">
+                    <h3 id="path_questionTitle" class="text-lg font-bold mb-3 text-[#E0E1DD]">Starting...</h3>
+                    <div id="path_optionsArea" class="space-y-2.5"></div>
                 </div>
-                <div class="card border-t-8 border-red-400">
-                    <h3 class="text-2xl font-bold text-red-600 flex items-center"><span class="text-3xl mr-3">🚫</span>On-Platform Automation (Caution Zone)</h3>
-                    <p class="mt-2">OnlyFans' policies heavily restrict automation to protect the user experience. Violation risks account bans. Here, AI should assist, not replace, human interaction.</p>
-                     <ul class="mt-4 space-y-2 list-disc list-inside">
-                        <li><strong>No Autonomous Chatbots:</strong> Fully automated DMs are forbidden.</li>
-                        <li><strong>"Human-in-the-Loop" is Mandatory:</strong> A human must click "send" on every message.</li>
-                        <li><strong>High-Risk Unofficial APIs:</strong> Using third-party tools that require login credentials is a direct ToS violation.</li>
-                    </ul>
+                <div id="path_navigationArea" class="flex justify-between items-center">
+                    <button id="path_prevButton" class="nav-button text-sm py-2 px-3" disabled>Previous</button>
+                    <span id="path_stepIndicator" class="text-xs text-[#A2D2FF]/70">Step 1 / X</span>
+                    <button id="path_nextButton" class="nav-button text-sm py-2 px-3" disabled>Next</button>
                 </div>
-            </div>
-        </section>
-        
-        <section id="efficiency" class="my-16 scroll-mt-24">
-            <div class="text-center mb-12">
-                <h2 class="text-4xl font-black text-navy-deep">Pillar 2: Lean Operational Efficiency</h2>
-                <p class="text-lg mt-2 max-w-3xl mx-auto">Adopt a manufacturing mindset to combat burnout and ensure consistency. Streamline your content pipeline to maximize the value of your effort and minimize wasted time.</p>
-            </div>
-             <div class="card p-8">
-                <p class="text-center text-lg mb-8">This three-step flow transforms content creation from a daily chore into a predictable, manageable system.</p>
-                <div class="flex flex-col md:flex-row items-center justify-between space-y-8 md:space-y-0 text-center">
-                    <div class="flex-1">
-                        <div class="bg-navy-deep text-white text-3xl w-20 h-20 rounded-full flex items-center justify-center mx-auto font-black shadow-lg">1</div>
-                        <h4 class="text-xl font-bold mt-4">Batch Production</h4>
-                        <p class="text-navy-mid mt-1">Dedicate blocks of time to create weeks of content at once. This builds a strategic backlog and ensures you never run out of material.</p>
+                <div id="path_resultArea" class="result-card p-5 hidden">
+                    <h3 class="text-xl font-bold mb-3 text-center text-[#E0E1DD]">Pathfinder Results:</h3>
+                    <div id="path_resultContent" class="space-y-3"></div>
+                    <button id="path_aiElaborateButton" class="nav-button mt-3 w-full text-sm py-2 ai-elaboration-button hidden">✨ AI: Elaborate on this Path</button>
+                    <div id="path_aiElaborationContainer" class="ai-elaboration-container hidden">
+                        <h4 class="font-semibold text-xs text-[#6ee7b7] mb-1">✨ AI Elaboration:</h4>
+                        <p id="path_aiElaborationText" class="text-xs"></p>
                     </div>
-                    <div class="text-blue-mid text-4xl font-thin hidden md:block mx-4">→</div>
-                    <div class="text-blue-mid text-4xl font-thin block md:hidden my-4">↓</div>
-                    <div class="flex-1">
-                        <div class="bg-navy-mid text-white text-3xl w-20 h-20 rounded-full flex items-center justify-center mx-auto font-black shadow-lg">2</div>
-                        <h4 class="text-xl font-bold mt-4">Strategic Repurposing</h4>
-                        <p class="text-navy-mid mt-1">Adapt one core asset for multiple platforms. A long video becomes teaser clips; photos become promotional graphics.</p>
+                    <button id="path_restartButton" class="nav-button mt-5 w-full text-sm py-2">Start Over</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="earningsForecaster" class="tool-content tool-container p-6 md:p-8">
+            <header class="text-center mb-6">
+                <h2 class="text-2xl md:text-3xl font-bold text-[#E0E1DD]">Creator Earnings Potential Forecaster</h2>
+                <p class="text-sm text-[#A2D2FF]/70">Estimate monthly earnings based on your operational targets.</p>
+            </header>
+            <div class="forecaster-inputs grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
+                <div>
+                    <label for="fc_subscribers" class="block text-sm mb-1">Target Subscribers:</label>
+                    <input type="number" id="fc_subscribers" value="100" class="w-full p-2 text-sm">
+                </div>
+                <div>
+                    <label for="fc_subPrice" class="block text-sm mb-1">Avg. Sub Price ($):</label>
+                    <input type="number" id="fc_subPrice" value="9.99" step="0.01" class="w-full p-2 text-sm">
+                </div>
+                <div>
+                    <label for="fc_ppvOffers" class="block text-sm mb-1">PPV Offers/Month:</label>
+                    <input type="number" id="fc_ppvOffers" value="2" class="w-full p-2 text-sm">
+                </div>
+                <div>
+                    <label for="fc_ppvPrice" class="block text-sm mb-1">Avg. Price/PPV ($):</label>
+                    <input type="number" id="fc_ppvPrice" value="20" class="w-full p-2 text-sm">
+                </div>
+                <div>
+                    <label for="fc_ppvConversionRate" class="block text-sm mb-1">PPV Purchase Rate (%):</label>
+                    <input type="number" id="fc_ppvConversionRate" value="15" min="0" max="100" class="w-full p-2 text-sm">
+                </div>
+                <div>
+                    <label for="fc_avgTipPerSub" class="block text-sm mb-1">Avg. Monthly Tip/Sub ($):</label>
+                    <input type="number" id="fc_avgTipPerSub" value="5" class="w-full p-2 text-sm">
+                </div>
+                <div class="md:col-span-2">
+                     <button id="fc_forecastButton" class="w-full py-2.5 mt-3 fc-button">Forecast Earnings</button>
+                </div>
+            </div>
+            <div id="fc_resultsDisplayContainer" class="results-display-container p-5 space-y-5 mt-6 hidden rounded-lg border border-[#3E6990]">
+                <h3 class="text-xl font-bold text-center text-[#E0E1DD]">Estimated Monthly Earnings</h3>
+                <div class="earnings-breakdown text-center text-md">
+                    <p>Subscription Revenue: <strong id="fc_subRevenueText">$0.00</strong></p>
+                    <p>PPV Revenue: <strong id="fc_ppvRevenueText">$0.00</strong></p>
+                    <p>Tip Revenue: <strong id="fc_tipRevenueText">$0.00</strong></p>
+                    <hr class="border-[#3E6990] my-1.5">
+                    <p>Total Gross: <strong id="fc_totalGrossEarningsText" class="text-[#6ee7b7] text-lg">$0.00</strong></p>
+                    <p class="text-xs">(Before 20% Platform Fee)</p>
+                    <p>Est. Net (Take-Home): <strong id="fc_totalNetEarningsText" class="text-[#6ee7b7] text-lg">$0.00</strong></p>
+                </div>
+                <div class="chart-container !h-64 sm:!h-72"> <canvas id="fc_comparisonChart"></canvas> </div>
+                <p id="fc_comparisonContextText" class="comparison-text text-center text-xs"></p>
+                <button id="fc_getAiTipsButton" class="w-full py-2 fc-button mt-3 hidden">✨ AI: Get Growth Tips</button>
+                <div id="fc_aiTipsContainer" class="ai-tips-container hidden">
+                    <h4 class="font-semibold text-sm text-[#6ee7b7] mb-1">✨ AI-Powered Growth Tips:</h4>
+                    <ul id="fc_aiTipsList" class="list-disc list-inside text-xs space-y-1"></ul>
+                </div>
+            </div>
+        </div>
+
+        <div id="aiPolicyNavigator" class="tool-content tool-container p-6 md:p-8">
+            <header class="text-center mb-6">
+                <h2 class="text-2xl md:text-3xl font-bold text-[#E0E1DD]">AI Content Policy Navigator</h2>
+                <p class="text-sm text-[#A2D2FF]/70">Test your understanding of OnlyFans' AI policies.</p>
+            </header>
+            <div id="nav_navigatorApp" class="space-y-5">
+                <div id="nav_scenarioDisplay" class="scenario-card p-5">
+                    <h3 id="nav_scenarioTitle" class="text-lg font-bold mb-1 text-[#E0E1DD]">Scenario Title</h3>
+                    <p id="nav_scenarioDescription" class="text-xs text-[#A2D2FF]/90 mb-3">Description.</p>
+                    <div id="nav_optionsContainer" class="space-y-2.5"></div>
+                </div>
+                <div id="nav_feedbackDisplayContainer" class="feedback-card-container p-3 hidden">
+                    <h4 id="nav_feedbackTitle" class="text-md font-semibold mb-1">Feedback</h4>
+                    <p id="nav_feedbackText" class="text-xs mb-1"></p>
+                    <div class="flex items-center">
+                        <p id="nav_feedbackPolicy" class="policy-reference text-xs"></p>
+                        <button id="nav_aiExplainPolicyButton" class="ai-policy-elaboration-button hidden">✨ AI Explain</button>
                     </div>
-                    <div class="text-blue-mid text-4xl font-thin hidden md:block mx-4">→</div>
-                     <div class="text-blue-mid text-4xl font-thin block md:hidden my-4">↓</div>
-                    <div class="flex-1">
-                        <div class="bg-blue-mid text-white text-3xl w-20 h-20 rounded-full flex items-center justify-center mx-auto font-black shadow-lg">3</div>
-                        <h4 class="text-xl font-bold mt-4">Automated Scheduling</h4>
-                        <p class="text-navy-mid mt-1">Use tools like Buffer or Social Rise to automate distribution, freeing you to focus on high-value fan engagement.</p>
+                    <div id="nav_aiPolicyElaborationContainer" class="ai-policy-elaboration-container hidden">
+                        <h5 class="font-semibold text-xs text-[#6ee7b7] mb-0.5">✨ AI Deeper Dive:</h5>
+                        <p id="nav_aiPolicyElaborationText" class="text-xs"></p>
                     </div>
                 </div>
+                <div id="nav_scoreDisplay" class="text-center text-md hidden">
+                    <p>Your Score: <span id="nav_scoreValue" class="font-bold">0</span> / <span id="nav_totalScenariosValue">0</span></p>
+                    <p id="nav_finalMessage" class="mt-1 text-sm"></p>
+                </div>
+                <button id="nav_nextScenarioButton" class="nav-button w-full mt-3 text-sm py-2">Submit Answer</button>
+                <button id="nav_restartNavigatorButton" class="nav-button w-full mt-1.5 hidden bg-red-700 hover:bg-red-800 !text-white text-sm py-2">Restart Navigator</button>
             </div>
-        </section>
+        </div>
 
-        <section id="revenue" class="my-16 scroll-mt-24">
-            <div class="text-center mb-12">
-                <h2 class="text-4xl font-black text-navy-deep">Pillar 3: High Revenue Velocity</h2>
-                <p class="text-lg mt-2 max-w-3xl mx-auto">Accelerate your income by systematically focusing on the key drivers of profitability: acquiring the right fans and maximizing the value generated from each one through direct interaction.</p>
-            </div>
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-                <div class="card text-center">
-                    <p class="text-5xl">🚀</p>
-                    <h3 class="text-xl font-bold mt-2">Rapid Acquisition</h3>
-                    <p class="mt-1">Use promotional blitzes and collaborations to fuel the top of your funnel and drive initial subscriber growth.</p>
+        <div id="leanOptimizer" class="tool-content tool-container p-6 md:p-8">
+            <header class="text-center mb-6">
+                <h2 class="text-2xl md:text-3xl font-bold text-[#E0E1DD]">Lean Creator Workflow Optimizer</h2>
+                <p class="text-sm text-[#A2D2FF]/70">Assess your practices and get advice to streamline workflows.</p>
+            </header>
+            <div id="opt_optimizerApp" class="optimizer-inputs space-y-5">
+                <div class="practice-category">
+                    <h3 class="text-lg">📅 Content Creation & Scheduling</h3>
+                    <div id="opt_contentPractices" class="space-y-1.5"></div>
                 </div>
-                <div class="card text-center">
-                    <p class="text-5xl">💰</p>
-                    <h3 class="text-xl font-bold mt-2">PPV & DM Monetization</h3>
-                    <p class="mt-1">Design sophisticated PPV campaigns and master upselling in DMs—your primary engine for high-margin revenue.</p>
+                <div class="practice-category">
+                    <h3 class="text-lg">📢 External Promotion & Marketing</h3>
+                    <div id="opt_promotionPractices" class="space-y-1.5"></div>
                 </div>
-                 <div class="card text-center">
-                    <p class="text-5xl">🔄</p>
-                    <h3 class="text-xl font-bold mt-2">Maximize LTV</h3>
-                    <p class="mt-1">Focus on retaining fans longer through deep engagement and proactive renewal offers to increase lifetime value.</p>
+                <div class="practice-category">
+                    <h3 class="text-lg">💬 Fan Engagement & Communication (Compliant)</h3>
+                    <div id="opt_engagementPractices" class="space-y-1.5"></div>
                 </div>
-                <div class="card text-center">
-                    <p class="text-5xl">📈</p>
-                    <h3 class="text-xl font-bold mt-2">Optimize ARPU</h3>
-                    <p class="mt-1">Increase the average revenue per user with tiered PPV, custom content menus, and exclusive bundles.</p>
+                <button id="opt_calculateScoreButton" class="action-button w-full mt-3 !py-2.5">Optimize My Workflow</button>
+            </div>
+            <div id="opt_resultsDisplayContainer" class="results-display-container p-5 space-y-5 mt-6 hidden rounded-lg border border-[#3E6990]">
+                <h3 class="text-xl font-bold text-center text-[#E0E1DD]">Workflow Optimization Report</h3>
+                <div class="text-center">
+                    <p class="text-md">Lean Score: <span id="opt_leanScoreValue" class="font-bold text-xl text-[#6ee7b7]">0</span> / 100</p>
+                    <p id="opt_leanScoreTier" class="text-sm text-[#A2D2FF]/80"></p>
                 </div>
+                <div class="score-bar-container !h-7">
+                    <div id="opt_scoreBarFill" class="score-bar-fill !text-sm" style="width: 0%;">0%</div>
+                </div>
+                <div>
+                    <h4 class="text-md font-semibold mb-2 text-[#A2D2FF]">Recommendations:</h4>
+                    <ul id="opt_recommendationList" class="recommendation-list list-none p-0 text-xs"></ul>
+                </div>
+                <button id="opt_getAiActionPlanButton" class="action-button w-full mt-3 !py-2 hidden">✨ AI: Generate Personalized Lean Action Plan</button>
+                <div id="opt_aiActionPlanContainer" class="ai-action-plan-container hidden">
+                    <h4 class="font-semibold text-sm text-[#6ee7b7] mb-1">✨ AI-Powered Action Plan:</h4>
+                    <p id="opt_aiActionPlanText" class="text-xs"></p>
+                </div>
+                <button id="opt_reassessButton" class="action-button w-full mt-3 !py-2">Re-assess Workflow</button>
             </div>
-        </section>
-
-        <section id="risk" class="my-16 scroll-mt-24">
-            <div class="text-center mb-12">
-                <h2 class="text-4xl font-black text-navy-deep">Risk Assessment & Mitigation</h2>
-                <p class="text-lg mt-2 max-w-3xl mx-auto">Navigating advanced strategies requires a clear-eyed view of the risks. This matrix provides a clear guide to which strategies are safe and which carry the potential for account termination.</p>
-            </div>
-            <div class="card overflow-x-auto">
-                 <table class="w-full min-w-[600px] text-left border-collapse">
-                    <thead>
-                        <tr class="bg-navy-deep text-white">
-                            <th class="p-3 font-bold uppercase text-sm">Strategy</th>
-                            <th class="p-3 font-bold uppercase text-sm">Risk Level</th>
-                            <th class="p-3 font-bold uppercase text-sm">Primary Threat</th>
-                            <th class="p-3 font-bold uppercase text-sm">Recommendation</th>
-                        </tr>
-                    </thead>
-                    <tbody class="text-navy-mid">
-                        <tr class="border-b border-gray-200 hover:bg-gray-50">
-                            <td class="p-3 font-semibold">External AI-Powered Promotion</td>
-                            <td class="p-3"><span class="bg-green-100 text-green-800 py-1 px-3 rounded-full text-xs font-semibold">Low</span></td>
-                            <td class="p-3">Inauthentic messaging on other platforms.</td>
-                            <td class="p-3 font-bold">Recommended with human oversight.</td>
-                        </tr>
-                        <tr class="border-b border-gray-200 hover:bg-gray-50">
-                            <td class="p-3 font-semibold">Compliant AI-Assisted DMs (Human Sends)</td>
-                            <td class="p-3"><span class="bg-green-100 text-green-800 py-1 px-3 rounded-full text-xs font-semibold">Low</span></td>
-                            <td class="p-3">Sounding impersonal if not customized.</td>
-                            <td class="p-3 font-bold">Recommended as an efficiency tool.</td>
-                        </tr>
-                        <tr class="border-b border-gray-200 hover:bg-gray-50">
-                            <td class="p-3 font-semibold">Custom Scripting for On-Platform Actions</td>
-                            <td class="p-3"><span class="bg-red-100 text-red-800 py-1 px-3 rounded-full text-xs font-semibold">High</span></td>
-                            <td class="p-3">Account Ban (ToS Violation).</td>
-                            <td class="p-3 font-bold text-red-700">Avoid unless an expert.</td>
-                        </tr>
-                         <tr class="hover:bg-gray-50">
-                            <td class="p-3 font-semibold">Unofficial API Wrappers</td>
-                            <td class="p-3"><span class="bg-red-500 text-white py-1 px-3 rounded-full text-xs font-semibold">Critical</span></td>
-                            <td class="p-3">Account Ban & Credential Theft.</td>
-                            <td class="p-3 font-bold text-red-700">Do Not Use.</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </section>
-
+        </div>
     </main>
 
-    <footer class="bg-navy-deep text-white text-center py-6">
-        <p>This interactive application is based on a synthesis of publicly available data and strategic analysis for educational purposes.</p>
-        <p class="text-sm text-gray-400 mt-1">Always conduct your own research and adhere to all platform Terms of Service.</p>
+    <footer class="text-center py-8 mt-auto">
+        <p class="text-xs text-[#3E6990]">Comprehensive Creator Toolkit. All tools are for illustrative and educational purposes. Always refer to official platform terms.</p>
     </footer>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const wrapLabel = (label, maxWidth) => {
-                if (label.length <= maxWidth) return label;
-                const words = label.split(' ');
-                let lines = [];
-                let currentLine = words[0];
-                for (let i = 1; i < words.length; i++) {
-                    if ((currentLine + ' ' + words[i]).length > maxWidth) {
-                        lines.push(currentLine);
-                        currentLine = words[i];
-                    } else {
-                        currentLine += ' ' + words[i];
-                    }
-                }
-                lines.push(currentLine);
-                return lines;
-            };
+<script>
+    // --- Gemini API Call Function ---
+    async function callGeminiAPI(prompt) {
+        const apiKey = ""; // Key will be injected by the environment if needed for specific models
+        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+        
+        const payload = {
+            contents: [{ role: "user", parts: [{ text: prompt }] }]
+        };
 
-            const tooltipTitleCallback = (tooltipItems) => {
-                const item = tooltipItems[0];
-                let label = item.chart.data.labels[item.dataIndex];
-                if (Array.isArray(label)) {
-                  return label.join(' ');
-                }
-                return label;
-            };
+        try {
+            const response = await fetch(apiUrl, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+            if (!response.ok) {
+                const errorBody = await response.text();
+                console.error("Gemini API Error Response:", errorBody);
+                throw new Error(`API request failed with status ${response.status}: ${response.statusText}`);
+            }
+            const result = await response.json();
+            if (result.candidates && result.candidates.length > 0 &&
+                result.candidates[0].content && result.candidates[0].content.parts &&
+                result.candidates[0].content.parts.length > 0) {
+                return result.candidates[0].content.parts[0].text;
+            } else {
+                console.error("Unexpected Gemini API response structure:", result);
+                return "Could not retrieve advice from AI at this time. (Unexpected response)";
+            }
+        } catch (error) {
+            console.error("Error calling Gemini API:", error);
+            return `Could not retrieve advice from AI: ${error.message}. Check console for details.`;
+        }
+    }
 
-            const defaultChartOptions = {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: { display: false },
-                    tooltip: {
-                        callbacks: { title: tooltipTitleCallback },
-                        backgroundColor: '#0B2447',
-                        titleFont: { size: 14, weight: 'bold', family: "'Inter', sans-serif" },
-                        bodyFont: { size: 12, family: "'Inter', sans-serif" },
-                        padding: 12,
-                        cornerRadius: 6,
-                        displayColors: false,
-                    }
-                },
-                scales: {
-                    y: { ticks: { color: '#19376D', font: { family: "'Inter', sans-serif" } }, grid: { color: '#E0E7FF' } },
-                    x: { ticks: { color: '#19376D', font: { family: "'Inter', sans-serif" } }, grid: { display: false } }
+    // --- Main Navigation Logic ---
+    document.addEventListener('DOMContentLoaded', function () {
+        const tabs = document.querySelectorAll('.tab-button');
+        const toolContents = document.querySelectorAll('.tool-content');
+
+        function activateTool(toolId) {
+            toolContents.forEach(content => {
+                content.classList.toggle('active', content.id === toolId);
+            });
+            tabs.forEach(tab => {
+                tab.classList.toggle('active', tab.dataset.tool === toolId);
+            });
+        }
+
+        tabs.forEach(tab => {
+            tab.addEventListener('click', function() {
+                activateTool(this.dataset.tool);
+            });
+        });
+
+        if (tabs.length > 0) {
+            activateTool(tabs[0].dataset.tool);
+        }
+
+        initStrategySimulator();
+        initAutomationPathfinder();
+        initEarningsForecaster();
+        initAiPolicyNavigator();
+        initLeanOptimizer();
+    });
+
+    // --- Tool 1: Strategy Simulator JS ---
+    function initStrategySimulator() {
+        const simulateButton = document.getElementById('sim_simulateButton');
+        const resultsPanel = document.getElementById('sim_resultsPanel');
+        const getAiAdviceButton = document.getElementById('sim_getAiAdviceButton');
+        const aiAdviceContainer = document.getElementById('sim_aiAdviceContainer');
+        const aiAdviceTextElem = document.getElementById('sim_aiAdviceText');
+        
+        const earningsTextElem = document.getElementById('sim_earningsText');
+        const efficiencyTextElem = document.getElementById('sim_efficiencyText');
+        const complianceTextElem = document.getElementById('sim_complianceText');
+        const feedbackTextElem = document.getElementById('sim_feedbackText').querySelector('p');
+        let resultsChartInstance = null;
+        const strategyFactors = {
+            content: { casual: { earnings: 1, efficiency: 2, text: "Casual (General, Low Consistency)", baseFeedback: "Casual content may lead to modest, inconsistent earnings..." }, niche_moderate: { earnings: 4, efficiency: 5, text: "Niche Focus (Moderate Consistency, Some PPV)", baseFeedback: "A niche focus with moderate consistency can build a loyal audience..." }, pro_high_value: { earnings: 8, efficiency: 7, text: "Pro (Specific Niche, High Consistency, High-Value PPV/Customs)", baseFeedback: "Professional, high-value niche content has the highest earnings potential..." } },
+            promotion: { low: { earnings: 1, efficiency: 3, text: "Low (Minimal external presence)", baseFeedback: "Minimal promotion severely limits audience growth..." }, medium: { earnings: 4, efficiency: 6, text: "Medium (Regular posts on 1-2 platforms)", baseFeedback: "Regular promotion on a few platforms can steadily grow your audience..." }, high: { earnings: 8, efficiency: 8, text: "High (Aggressive, multi-channel, optimized)", baseFeedback: "Aggressive, optimized multi-channel promotion is key..." } },
+            automation: { none: { earnings: 2, efficiency: 1, text: "None (Fully manual)", baseFeedback: "Fully manual operations are highly inefficient..." }, basic: { earnings: 4, efficiency: 5, text: "Basic (Native schedulers, email parsing)", baseFeedback: "Basic automation improves consistency..." }, advanced: { earnings: 7, efficiency: 9, text: "Advanced (Zapier/n8n for external, AI-assist drafts)", baseFeedback: "Advanced compliant automation significantly boosts efficiency..." } },
+            compliance: { strict: { risk: 1, earnings_mod: 0, text: "Strict Adherence", baseFeedback: "Strict adherence to policies ensures account safety..." }, gray_area: { risk: 5, earnings_mod: 1, text: "Exploring Gray Areas (Cautious AI-assist DMs)", baseFeedback: "Exploring gray areas carries moderate compliance risks..." }, risky: { risk: 10, earnings_mod: -5, text: "High Risk (Unofficial on-platform bots - NOT RECOMMENDED)", baseFeedback: "Engaging in high-risk activities can lead to account termination..." } }
+        };
+        const toolTipConfig = { callbacks: { title: function(tooltipItems) { const item = tooltipItems[0]; let label = item.chart.data.labels[item.dataIndex]; if (Array.isArray(label)) { return label.join(' '); } return label; } } };
+
+        simulateButton.addEventListener('click', function() {
+            // ... (simulation logic from previous version) ...
+            const contentVal = document.getElementById('sim_contentStrategy').value;
+            const promotionVal = document.getElementById('sim_promotionEffort').value;
+            const automationVal = document.getElementById('sim_automationLevel').value;
+            const complianceVal = document.getElementById('sim_complianceStance').value;
+
+            let earningsScore = strategyFactors.content[contentVal].earnings + strategyFactors.promotion[promotionVal].earnings + strategyFactors.automation[automationVal].earnings + strategyFactors.compliance[complianceVal].earnings_mod;
+            let efficiencyScore = strategyFactors.content[contentVal].efficiency + strategyFactors.promotion[promotionVal].efficiency + strategyFactors.automation[automationVal].efficiency;
+            let complianceRiskScore = strategyFactors.compliance[complianceVal].risk;
+
+            let earningsTierText;
+            if (earningsScore <= 5) earningsTierText = "Median Earner (~$180/mo)";
+            else if (earningsScore <= 10) earningsTierText = "Above Average (Potentially $500-$1.5k/mo)";
+            else if (earningsScore <= 15) earningsTierText = "High Earner (Potentially $1.5k-$5k+/mo)";
+            else earningsTierText = "Top Tier Potential (Significant Income - >1% club)";
+            if (complianceRiskScore >= 8 && earningsScore > 0) earningsTierText += " (Highly Unstable due to Risk!)";
+
+            let efficiencyText;
+            if (efficiencyScore <= 5) efficiencyText = "Low (High Manual Effort)";
+            else if (efficiencyScore <= 12) efficiencyText = "Moderate (Some Systems in Place)";
+            else if (efficiencyScore <= 20) efficiencyText = "High (Well-Oiled Machine)";
+            else efficiencyText = "Peak Efficiency (Highly Optimized)";
+
+            let complianceRiskText;
+            if (complianceRiskScore <= 2) complianceRiskText = "Low Risk (Safe Practices)";
+            else if (complianceRiskScore <= 6) complianceRiskText = "Moderate Risk (Caution Advised)";
+            else complianceRiskText = "High Risk (Account Jeopardy!)";
+            
+            let detailedFeedback = "<ul class='list-disc list-inside text-left text-xs'>";
+            detailedFeedback += "<li class='mt-1'>Content: " + strategyFactors.content[contentVal].baseFeedback + "</li>";
+            detailedFeedback += "<li class='mt-1'>Promotion: " + strategyFactors.promotion[promotionVal].baseFeedback + "</li>";
+            detailedFeedback += "<li class='mt-1'>Automation: " + strategyFactors.automation[automationVal].baseFeedback + "</li>";
+            detailedFeedback += "<li class='mt-1'>Compliance: " + strategyFactors.compliance[complianceVal].baseFeedback + "</li>";
+            detailedFeedback += "</ul>";
+
+            earningsTextElem.textContent = earningsTierText;
+            efficiencyTextElem.textContent = efficiencyText;
+            complianceTextElem.textContent = complianceRiskText;
+            feedbackTextElem.innerHTML = detailedFeedback;
+            resultsPanel.classList.remove('hidden');
+            getAiAdviceButton.classList.remove('hidden');
+            aiAdviceContainer.classList.add('hidden'); // Hide previous AI advice
+            
+            const chartData = {
+                labels: ['Earnings Potential', 'Efficiency', 'Safety (Low Risk)'],
+                datasets: [{
+                    label: 'Strategy Profile',
+                    data: [ Math.max(0, Math.min(10, earningsScore / 2.5)), Math.max(0, Math.min(10, efficiencyScore / 2.7)), Math.max(0, Math.min(10, 10 - complianceRiskScore)) ],
+                    fill: true, backgroundColor: 'rgba(162, 210, 255, 0.3)', borderColor: '#A2D2FF', pointBackgroundColor: '#A2D2FF', pointBorderColor: '#fff', pointHoverBackgroundColor: '#fff', pointHoverBorderColor: '#A2D2FF'
+                }]
+            };
+            const chartConfig = { type: 'radar', data: chartData, options: { responsive: true, maintainAspectRatio: false, elements: { line: { borderWidth: 2 } }, scales: { r: { angleLines: { display: true, color: 'rgba(128, 128, 128, 0.3)' }, suggestedMin: 0, suggestedMax: 10, grid: { color: 'rgba(128, 128, 128, 0.3)' }, pointLabels: { font: { size: 10, family: "'Inter', sans-serif" }, color: '#E0E1DD' }, ticks: { backdropColor: 'rgba(0,0,0,0)', color: '#A2D2FF', stepSize: 2, font: { family: "'Inter', sans-serif", size: 9 } } } }, plugins: { legend: { display: false }, tooltip: toolTipConfig } } };
+            if (resultsChartInstance) resultsChartInstance.destroy();
+            resultsChartInstance = new Chart(document.getElementById('sim_resultsChart'), chartConfig);
+        });
+
+        getAiAdviceButton.addEventListener('click', async function() {
+            aiAdviceTextElem.textContent = '✨ Thinking...';
+            aiAdviceContainer.classList.remove('hidden');
+            this.disabled = true;
+
+            const contentChoice = strategyFactors.content[document.getElementById('sim_contentStrategy').value].text;
+            const promotionChoice = strategyFactors.promotion[document.getElementById('sim_promotionEffort').value].text;
+            const automationChoice = strategyFactors.automation[document.getElementById('sim_automationLevel').value].text;
+            const complianceChoice = strategyFactors.compliance[document.getElementById('sim_complianceStance').value].text;
+
+            const earningsOutcome = earningsTextElem.textContent;
+            const efficiencyOutcome = efficiencyTextElem.textContent;
+            const complianceOutcome = complianceTextElem.textContent;
+
+            const prompt = `I'm using an OnlyFans strategy simulator. My choices were:
+            - Content Strategy: ${contentChoice}
+            - Promotion Effort: ${promotionChoice}
+            - Automation Level: ${automationChoice}
+            - Compliance Stance: ${complianceChoice}
+            The simulated outcomes are:
+            - Potential Earnings Tier: ${earningsOutcome}
+            - Operational Efficiency: ${efficiencyOutcome}
+            - Compliance Risk Level: ${complianceOutcome}
+            Based on this profile, provide a short (1-2 sentences) paragraph of actionable advice. Focus on suggesting one key area for improvement or reinforcement to create a more balanced or successful strategy. Be encouraging but realistic.`;
+
+            const advice = await callGeminiAPI(prompt);
+            aiAdviceTextElem.textContent = advice;
+            this.disabled = false;
+        });
+    }
+
+    // --- Tool 2: Automation Pathfinder JS ---
+    function initAutomationPathfinder() {
+        // ... (Pathfinder JS logic from previous version, adapted with unique IDs for elements if needed) ...
+        const questions = [ /* same questions as before */ 
+            { id: 'q1', title: 'Task type to automate?', options: [ { text: 'External Promotion (Social Media)', next: 'q_external_promo' }, { text: 'On-Platform (OnlyFans Page)', next: 'q_on_platform' }, { text: 'Content Creation Aid', next: 'q_content_creation' }] },
+            { id: 'q_external_promo', title: 'External promotion task?', options: [ { text: 'Schedule SFW posts', next: 'res_external_scheduling'}, { text: 'Auto cross-post SFW content', next: 'res_external_crossposting'}, { text: 'Parse OF email notifications', next: 'res_email_parsing'}] },
+            { id: 'q_on_platform', title: 'On-OnlyFans task?', options: [ { text: 'Schedule feed posts', next: 'res_of_native_scheduler'}, { text: 'Send welcome DMs', next: 'res_of_welcome_dm'}, { text: 'Send mass DMs (PPV/Announce)', next: 'res_of_mass_dm'}, { text: 'Automate DM replies/comments', next: 'res_on_platform_dm_auto'}, { text: 'Scrape data / Auto-like/follow', next: 'res_on_platform_scraping_bots'}] },
+            { id: 'q_content_creation', title: 'AI for content creation?', options: [ { text: 'Ideas for SFW promo content', next: 'res_ai_promo_ideas'}, { text: 'AI images/avatars like me for OF', next: 'res_ai_creator_likeness'}, { text: 'Draft DM replies (manual send)', next: 'res_ai_dm_assist'}] }
+        ];
+        const results = { /* same results as before */ 
+            'res_external_scheduling': { recommendation: "Highly Recommended & Compliant.", details: "Use tools like Buffer, Hootsuite, Later, or Social Rise for scheduling SFW promotional content on external platforms.", tools: "Buffer, Hootsuite, Later, Social Rise.", policy: "External promotion is generally compliant. Adhere to each platform's ToS." },
+            'res_external_crossposting': { recommendation: "Recommended & Compliant (External).", details: "Utilize Zapier or n8n.io to connect social media for SFW teaser sharing.", tools: "Zapier, n8n.io.", policy: "Uses official APIs of external platforms. Ensure SFW content." },
+            'res_email_parsing': { recommendation: "Compliant Workaround (Indirect OF Tracking).", details: "Use Zapier/n8n.io to parse OF email notifications for alerts/logging.", tools: "Zapier (Email Parser), n8n.io (IMAP node).", policy: "Indirect method, generally compliant. Mind data privacy." },
+            'res_of_native_scheduler': { recommendation: "Fully Compliant & Essential.", details: "Use OnlyFans' built-in post scheduler for your feed content.", tools: "OnlyFans Native Scheduler.", policy: "Official OnlyFans feature, 100% compliant." },
+            'res_of_welcome_dm': { recommendation: "Fully Compliant.", details: "Configure OnlyFans' automatic welcome message for new subscribers.", tools: "OnlyFans Native Welcome DM.", policy: "Official OnlyFans feature." },
+            'res_of_mass_dm': { recommendation: "Compliant for Creator Broadcasts.", details: "Use OnlyFans' mass messaging for PPV offers or announcements.", tools: "OnlyFans Native Mass DM.", policy: "Official OnlyFans feature. Not fully 'automated' by external triggers." },
+            'res_on_platform_dm_auto': { recommendation: "HIGH RISK & LIKELY VIOLATION.", warning: "OnlyFans has a strict 'no-chatbot' policy. Fully automating DM replies is against ToS.", details: "AI can ASSIST DRAFTING, but a human MUST manually send messages on OF.", tools: "Unofficial bots (NOT RECOMMENDED).", policy: "Direct violation of 'no-chatbot' policy." },
+            'res_on_platform_scraping_bots': { recommendation: "EXTREMELY HIGH RISK & CLEAR VIOLATION.", warning: "Using bots for scraping or unauthorized automated actions on OF is a severe ToS violation.", details: "Can lead to immediate ban, IP block, loss of earnings.", tools: "Custom scripts, unofficial scrapers (NOT RECOMMENDED).", policy: "Clear violation of ToS." },
+            'res_ai_promo_ideas': { recommendation: "Highly Recommended & Compliant (External).", details: "Use AI (ChatGPT, Jasper) for SFW promotional content ideas, captions for external platforms.", tools: "ChatGPT, Jasper, Copy.ai.", policy: "Compliant for external promo. Adhere to external platform ToS." },
+            'res_ai_creator_likeness': { recommendation: "Permitted with Strict Conditions.", details: "AI images/avatars on OF: MUST visibly resemble YOU (verified creator) AND be disclosed as AI-generated. No impersonation/non-consensual deepfakes.", tools: "AI image generators (Midjourney, etc.).", policy: "Adherence to OF AI policy is critical: resemblance & disclosure." },
+            'res_ai_dm_assist': { recommendation: "Compliant for DRAFTING (Manual Send Required).", details: "AI tools can help DRAFT DM replies/PPV text. YOU or a human MUST manually review & SEND on OF.", tools: "ChatGPT, AI writing assistants.", policy: "'Human-in-the-loop' is compliant with 'no-chatbot' policy." }
+        };
+
+        let currentQuestionIndex_path = 0; let userPath_path = []; let currentResultData_path = null;
+        const questionTitleElem_path = document.getElementById('path_questionTitle');
+        const optionsAreaElem_path = document.getElementById('path_optionsArea');
+        const resultAreaElem_path = document.getElementById('path_resultArea');
+        const resultContentElem_path = document.getElementById('path_resultContent');
+        const questionAreaElem_path = document.getElementById('path_questionArea');
+        const navigationAreaElem_path = document.getElementById('path_navigationArea');
+        const prevButton_path = document.getElementById('path_prevButton');
+        const nextButton_path = document.getElementById('path_nextButton');
+        const restartButton_path = document.getElementById('path_restartButton');
+        const stepIndicatorElem_path = document.getElementById('path_stepIndicator');
+        const aiElaborateButton_path = document.getElementById('path_aiElaborateButton');
+        const aiElaborationContainer_path = document.getElementById('path_aiElaborationContainer');
+        const aiElaborationTextElem_path = document.getElementById('path_aiElaborationText');
+
+
+        function displayQuestion_path(index) { /* ... same ... */
+            const question = questions[index];
+            questionTitleElem_path.textContent = question.title;
+            optionsAreaElem_path.innerHTML = '';
+            nextButton_path.disabled = true;
+            question.options.forEach(option => {
+                const optionId = `path_opt_${question.id}_${option.next || option.text.replace(/\s+/g, '_')}`;
+                const input = document.createElement('input');
+                input.type = 'radio'; input.id = optionId; input.name = `path_${question.id}`; input.value = option.next;
+                input.addEventListener('change', () => { nextButton_path.disabled = false; });
+                const label = document.createElement('label');
+                label.htmlFor = optionId; label.textContent = option.text; label.classList.add('option-label');
+                optionsAreaElem_path.appendChild(input); optionsAreaElem_path.appendChild(label);
+            });
+            prevButton_path.disabled = userPath_path.length === 0;
+            stepIndicatorElem_path.textContent = `Step ${userPath_path.length + 1}`;
+            aiElaborateButton_path.classList.add('hidden');
+            aiElaborationContainer_path.classList.add('hidden');
+        }
+
+        function showResult_path(resultId) { /* ... same, plus ai button logic ... */
+            questionAreaElem_path.classList.add('hidden');
+            navigationAreaElem_path.classList.add('hidden');
+            resultAreaElem_path.classList.remove('hidden');
+            currentResultData_path = results[resultId]; // Store current result data
+            if (currentResultData_path) {
+                resultContentElem_path.innerHTML = `
+                    <p class="text-md recommendation">${currentResultData_path.recommendation}</p>
+                    ${currentResultData_path.warning ? `<p class="text-sm warning mt-1.5">${currentResultData_path.warning}</p>` : ''}
+                    <p class="text-xs text-[#E0E1DD] mt-2">${currentResultData_path.details}</p>
+                    ${currentResultData_path.tools ? `<p class="text-xs mt-1.5"><strong class="text-[#A2D2FF]">Tools:</strong> ${currentResultData_path.tools}</p>` : ''}
+                    <p class="policy-note mt-2"><strong class="text-[#A2D2FF]">Policy Note:</strong> ${currentResultData_path.policy}</p>`;
+                aiElaborateButton_path.classList.remove('hidden');
+                aiElaborationContainer_path.classList.add('hidden'); // Hide previous
+            } else {
+                resultContentElem_path.innerHTML = `<p class="warning">Path information not found. Please restart.</p>`;
+                aiElaborateButton_path.classList.add('hidden');
+            }
+        }
+        
+        aiElaborateButton_path.addEventListener('click', async function() {
+            if (!currentResultData_path) return;
+            aiElaborationTextElem_path.textContent = '✨ Thinking...';
+            aiElaborationContainer_path.classList.remove('hidden');
+            this.disabled = true;
+
+            const prompt = `I'm using an OnlyFans Automation Pathfinder. I've reached a result for an automation task.
+            The result title is: "${currentResultData_path.recommendation}"
+            Details provided: "${currentResultData_path.details}"
+            Suggested tools: "${currentResultData_path.tools || 'None specified'}"
+            Policy note: "${currentResultData_path.policy}"
+            ${currentResultData_path.warning ? `Specific Warning: "${currentResultData_path.warning}"` : ""}
+            Please elaborate on this specific automation path in 2-3 sentences. If it's recommended, offer a pro-tip or an example of effective use. If it's risky, explain the risk in more detail or offer a safer alternative if appropriate.`;
+            
+            const elaboration = await callGeminiAPI(prompt);
+            aiElaborationTextElem_path.textContent = elaboration;
+            this.disabled = false;
+        });
+
+        nextButton_path.addEventListener('click', () => { /* ... same ... */
+            const currentQuestion = questions[currentQuestionIndex_path];
+            const selectedOptionInput = document.querySelector(`input[name="path_${currentQuestion.id}"]:checked`);
+            if (selectedOptionInput) {
+                const nextTarget = selectedOptionInput.value;
+                userPath_path.push({ questionIndex: currentQuestionIndex_path, selectedValue: nextTarget });
+                if (nextTarget.startsWith('res_')) {
+                    showResult_path(nextTarget);
+                } else {
+                    const nextQuestionObj = questions.find(q => q.id === nextTarget);
+                    if (nextQuestionObj) {
+                        currentQuestionIndex_path = questions.indexOf(nextQuestionObj);
+                        displayQuestion_path(currentQuestionIndex_path);
+                    } else { showResult_path(null); }
                 }
+            }
+        });
+        prevButton_path.addEventListener('click', () => { /* ... same ... */
+             if (userPath_path.length > 0) {
+                const lastStep = userPath_path.pop();
+                currentQuestionIndex_path = lastStep.questionIndex;
+                displayQuestion_path(currentQuestionIndex_path);
+                resultAreaElem_path.classList.add('hidden'); // Hide result area when going back
+                questionAreaElem_path.classList.remove('hidden');
+                navigationAreaElem_path.classList.remove('hidden');
+            }
+        });
+        restartButton_path.addEventListener('click', () => { /* ... same ... */
+            currentQuestionIndex_path = 0; userPath_path = []; currentResultData_path = null;
+            questionAreaElem_path.classList.remove('hidden');
+            navigationAreaElem_path.classList.remove('hidden');
+            resultAreaElem_path.classList.add('hidden');
+            aiElaborateButton_path.classList.add('hidden');
+            aiElaborationContainer_path.classList.add('hidden');
+            displayQuestion_path(currentQuestionIndex_path);
+        });
+        displayQuestion_path(currentQuestionIndex_path); // Initial call
+    }
+
+    // --- Tool 3: Earnings Forecaster JS ---
+    function initEarningsForecaster() {
+        // ... (Forecaster JS logic from previous version, adapted with unique IDs for elements if needed) ...
+        const forecastButton_fc = document.getElementById('fc_forecastButton');
+        const resultsDisplayContainer_fc = document.getElementById('fc_resultsDisplayContainer');
+        const getAiTipsButton_fc = document.getElementById('fc_getAiTipsButton');
+        const aiTipsContainer_fc = document.getElementById('fc_aiTipsContainer');
+        const aiTipsListElem_fc = document.getElementById('fc_aiTipsList');
+        let comparisonChartInstance_fc = null;
+        const platformBenchmarks_fc = { medianGross: 225, top10PercentGrossEst: 2500, top1PercentGrossEst: 12000 };
+        const toolTipConfig_fc = { callbacks: { title: function(tooltipItems) { const item = tooltipItems[0]; let label = item.chart.data.labels[item.dataIndex]; if (Array.isArray(label)) { return label.join(' '); } return label; } } };
+        let currentForecastData_fc = {};
+
+
+        forecastButton_fc.addEventListener('click', function() {
+            currentForecastData_fc.subscribers = parseFloat(document.getElementById('fc_subscribers').value) || 0;
+            currentForecastData_fc.subPrice = parseFloat(document.getElementById('fc_subPrice').value) || 0;
+            currentForecastData_fc.ppvOffers = parseFloat(document.getElementById('fc_ppvOffers').value) || 0;
+            currentForecastData_fc.ppvPrice = parseFloat(document.getElementById('fc_ppvPrice').value) || 0;
+            currentForecastData_fc.ppvConversionRate = (parseFloat(document.getElementById('fc_ppvConversionRate').value) || 0) / 100;
+            currentForecastData_fc.avgTipPerSub = parseFloat(document.getElementById('fc_avgTipPerSub').value) || 0;
+
+            const subRevenue = currentForecastData_fc.subscribers * currentForecastData_fc.subPrice;
+            const ppvBuyers = currentForecastData_fc.subscribers * currentForecastData_fc.ppvConversionRate;
+            const ppvRevenue = ppvBuyers * currentForecastData_fc.ppvOffers * currentForecastData_fc.ppvPrice;
+            const tipRevenue = currentForecastData_fc.subscribers * currentForecastData_fc.avgTipPerSub;
+            const totalGrossEarnings = subRevenue + ppvRevenue + tipRevenue;
+            const totalNetEarnings = totalGrossEarnings * 0.80;
+
+            currentForecastData_fc.calculatedSubRevenue = subRevenue;
+            currentForecastData_fc.calculatedPpvRevenue = ppvRevenue;
+            currentForecastData_fc.calculatedTipRevenue = tipRevenue;
+            currentForecastData_fc.calculatedTotalGross = totalGrossEarnings;
+            currentForecastData_fc.calculatedTotalNet = totalNetEarnings;
+
+
+            document.getElementById('fc_subRevenueText').textContent = `$${subRevenue.toFixed(2)}`;
+            document.getElementById('fc_ppvRevenueText').textContent = `$${ppvRevenue.toFixed(2)}`;
+            document.getElementById('fc_tipRevenueText').textContent = `$${tipRevenue.toFixed(2)}`;
+            document.getElementById('fc_totalGrossEarningsText').textContent = `$${totalGrossEarnings.toFixed(2)}`;
+            document.getElementById('fc_totalNetEarningsText').textContent = `$${totalNetEarnings.toFixed(2)}`;
+            resultsDisplayContainer_fc.classList.remove('hidden');
+            getAiTipsButton_fc.classList.remove('hidden');
+            aiTipsContainer_fc.classList.add('hidden');
+
+
+            const chartData = { /* ... same chart data ... */ 
+                labels: ['Your Est. Gross', 'Platform Median (Gross)', 'Est. Top 10% Avg (Gross)', 'Est. Top 1% Avg (Gross)'],
+                datasets: [{
+                    label: 'Estimated Monthly Gross Earnings ($)',
+                    data: [totalGrossEarnings, platformBenchmarks_fc.medianGross, platformBenchmarks_fc.top10PercentGrossEst, platformBenchmarks_fc.top1PercentGrossEst],
+                    backgroundColor: ['#6ee7b7', '#A2D2FF', '#3E6990', '#1E407C'],
+                    borderColor: ['#5ce1a7', '#8cbbed', '#305d82', '#15325D'],
+                    borderWidth: 1, borderRadius: 4
+                }]
             };
             
-            const incomeGapCtx = document.getElementById('incomeGapChart').getContext('2d');
-            new Chart(incomeGapCtx, {
-                type: 'bar',
-                data: {
-                    labels: [wrapLabel('Median Monthly Earnings', 16), wrapLabel('Top 0.1% Avg Monthly Earnings', 16)],
-                    datasets: [{
-                        label: 'Monthly Earnings (USD)',
-                        data: [150, 146881],
-                        backgroundColor: ['#A5D7E8', '#0B2447'],
-                        borderRadius: 4,
-                    }]
-                },
-                options: { ...defaultChartOptions,
-                    indexAxis: 'y',
+            const comparisonContextTextElem_fc = document.getElementById('fc_comparisonContextText');
+            let contextText_fc = `Your estimated net monthly earnings of $${totalNetEarnings.toFixed(2)} `;
+            if (totalNetEarnings > platformBenchmarks_fc.top1PercentGrossEst * 0.8) contextText_fc += "place you in the potential top 1% tier. Exceptional!";
+            else if (totalNetEarnings > platformBenchmarks_fc.top10PercentGrossEst * 0.8) contextText_fc += "place you in the potential top 10% tier. Strong performance!";
+            else if (totalNetEarnings > platformBenchmarks_fc.medianGross * 0.8) contextText_fc += "are above the platform median. Good job!";
+            else contextText_fc += "are around/below platform median. Focus on growth strategies.";
+            comparisonContextTextElem_fc.textContent = contextText_fc;
+            currentForecastData_fc.comparisonContext = contextText_fc;
+
+
+            const chartConfig = { /* ... same chart config ... */ 
+                type: 'bar', data: chartData,
+                options: {
+                    responsive: true, maintainAspectRatio: false, indexAxis: 'y',
                     scales: {
-                        x: {
-                            type: 'logarithmic',
-                            ticks: {
-                                color: '#19376D',
-                                callback: (val) => '$' + val.toLocaleString()
-                            },
-                            grid: { color: '#E0E7FF' }
-                        },
-                        y: {
-                            ticks: { color: '#19376D', font: { family: "'Inter', sans-serif" } },
-                            grid: { display: false }
-                        }
-                    }
+                        x: { beginAtZero: true, title: { display: true, text: 'Est. Gross Monthly Earnings ($)', color: '#A2D2FF', font: {size: 10, family: "'Inter', sans-serif"} }, ticks: { color: '#A2D2FF', font: {size: 9, family: "'Inter', sans-serif"} }, grid: { color: 'rgba(62, 105, 144, 0.3)' } },
+                        y: { ticks: { color: '#E0E1DD', font: {size: 9, family: "'Inter', sans-serif"} }, grid: { display: false } }
+                    },
+                    plugins: { legend: { display: false }, tooltip: toolTipConfig_fc }
                 }
-            });
-
-            const revenueSourceCtx = document.getElementById('revenueSourceChart').getContext('2d');
-            new Chart(revenueSourceCtx, {
-                type: 'doughnut',
-                data: {
-                    labels: ['Messages (PPV)', 'Tips', 'Subscriptions'],
-                    datasets: [{
-                        data: [69.74, 21.65, 4.11],
-                        backgroundColor: ['#19376D', '#576CBC', '#A5D7E8'],
-                        borderColor: '#FFFFFF',
-                        borderWidth: 5,
-                        hoverOffset: 10
-                    }]
-                },
-                options: { ...defaultChartOptions,
-                    cutout: '65%',
-                    plugins: {
-                        ...defaultChartOptions.plugins,
-                        legend: {
-                            display: true,
-                            position: 'bottom',
-                            labels: {
-                                color: '#0B2447',
-                                font: { size: 14, family: "'Inter', sans-serif" },
-                                padding: 20
-                            }
-                        },
-                        tooltip: {
-                            ...defaultChartOptions.plugins.tooltip,
-                            displayColors: true,
-                             callbacks: {
-                                title: tooltipTitleCallback,
-                                label: function(context) {
-                                    return ` ${context.dataset.label || ''}: ${context.parsed}%`;
-                                }
-                            }
-                        }
-                    }
-                }
-            });
-
-            const sections = document.querySelectorAll('section');
-            const navLinks = document.querySelectorAll('header nav a');
-            window.onscroll = () => {
-                let current = '';
-                sections.forEach(section => {
-                    const sectionTop = section.offsetTop;
-                    if (pageYOffset >= sectionTop - 120) {
-                        current = section.getAttribute('id');
-                    }
-                });
-                navLinks.forEach(link => {
-                    link.classList.remove('active', 'text-blue-light', 'border-blue-light');
-                    link.classList.add('text-white', 'border-transparent');
-                    if (link.getAttribute('href').includes(current)) {
-                        link.classList.remove('text-white', 'border-transparent');
-                        link.classList.add('active', 'text-blue-light', 'border-blue-light');
-                    }
-                });
             };
+            if (comparisonChartInstance_fc) comparisonChartInstance_fc.destroy();
+            comparisonChartInstance_fc = new Chart(document.getElementById('fc_comparisonChart'), chartConfig);
         });
-    </script>
+
+        getAiTipsButton_fc.addEventListener('click', async function() {
+            aiTipsListElem_fc.innerHTML = '<li class="gemini-loading">✨ Generating growth tips...</li>';
+            aiTipsContainer_fc.classList.remove('hidden');
+            this.disabled = true;
+
+            const prompt = `I'm an OnlyFans creator using an earnings forecaster. My inputs were:
+            - Target Subscribers: ${currentForecastData_fc.subscribers}
+            - Avg. Sub Price: $${currentForecastData_fc.subPrice.toFixed(2)}
+            - PPV Offers/Month: ${currentForecastData_fc.ppvOffers}
+            - Avg. Price/PPV: $${currentForecastData_fc.ppvPrice.toFixed(2)}
+            - PPV Purchase Rate: ${ (currentForecastData_fc.ppvConversionRate * 100).toFixed(0) }%
+            - Avg. Monthly Tip/Sub: $${currentForecastData_fc.avgTipPerSub.toFixed(2)}
+            The forecast is:
+            - Est. Gross Earnings: $${currentForecastData_fc.calculatedTotalGross.toFixed(2)}
+            - Est. Net Earnings: $${currentForecastData_fc.calculatedTotalNet.toFixed(2)}
+            - Comparison Context: "${currentForecastData_fc.comparisonContext}"
+            Please provide 2-3 specific, actionable growth tips tailored to this scenario. Focus on areas that could be improved based on the inputs (e.g., if PPV revenue is low, suggest PPV strategies). Format as a bulleted list (using '*' for bullets).`;
+
+            const tips = await callGeminiAPI(prompt);
+            const tipsArray = tips.split('*').map(tip => tip.trim()).filter(tip => tip.length > 0);
+            
+            aiTipsListElem_fc.innerHTML = '';
+            if (tipsArray.length > 0) {
+                tipsArray.forEach(tipText => {
+                    const li = document.createElement('li');
+                    li.textContent = tipText;
+                    aiTipsListElem_fc.appendChild(li);
+                });
+            } else {
+                aiTipsListElem_fc.innerHTML = '<li>Could not generate specific tips at this time.</li>';
+            }
+            this.disabled = false;
+        });
+    }
+
+    // --- Tool 4: AI Policy Navigator JS ---
+    function initAiPolicyNavigator() {
+        // ... (AI Policy Navigator JS logic from previous version, adapted with unique IDs for elements if needed) ...
+        const scenarios_nav = [ /* same scenarios */ 
+            { id: 's1', title: 'AI-Generated Profile Picture', description: 'You want to use an AI-generated image as your main OF profile pic. It\'s stylized but clearly looks like you.', options: [ { text: 'Use it, no disclosure needed.', correct: false, feedback: 'Incorrect. OF policy generally requires disclosure if content is AI-generated or significantly altered to maintain transparency.', policy: "AI content must visibly resemble verified creator AND its AI nature should be evident or disclosed." }, { text: 'Use it, and mention in bio "Profile pic is AI-assisted art of me!"', correct: true, feedback: 'Correct! This aligns with policy by ensuring resemblance and clear disclosure.', policy: "AI content resembling creator is allowed if AI nature is disclosed." }, { text: 'Use a fictional AI anime character not resembling you.', correct: false, feedback: 'Incorrect for main profile. Main profile pic should generally represent the verified creator.', policy: "Profile identity typically must resemble verified creator." } ] },
+            { id: 's2', title: 'Automated DM Replies', description: 'DMs are overwhelming. You consider a third-party AI chatbot for autonomous 24/7 fan message handling.', options: [ { text: 'Implement the fully autonomous AI chatbot.', correct: false, feedback: 'Incorrect & High Risk. OF has a strict "no-chatbot" policy for DMs. Violates ToS.', policy: "Strict 'no-chatbot' policy for DMs. Human must send messages." }, { text: 'Use AI to DRAFT replies, but you/human assistant review & manually send each.', correct: true, feedback: 'Correct! "Human-in-the-loop" is compliant. AI assists drafting, human sends.', policy: "AI can assist drafting, manual send required." }, { text: 'Use chatbot only for generic "thank you" messages.', correct: false, feedback: 'Incorrect. Fully autonomous likely violates "no-chatbot" policy. Use native welcome DM.', policy: "No fully autonomous chatbots for DMs." } ] },
+            { id: 's3', title: 'AI Deepfake of Yourself', description: 'You want to create a "deepfake" video of your AI-likeness performing an activity you didn\'t film.', options: [ { text: 'Post it without disclosure, as it looks like you.', correct: false, feedback: 'Incorrect. Posting realistic AI-generated video of yourself performing actions you didn\'t do, without clear disclosure, is deceptive.', policy: "AI-generated content must be disclosed, especially if depicting actions not actually performed." }, { text: 'Post it, clearly labeled in caption/title as "AI-Generated Fantasy Scenario".', correct: true, feedback: 'Correct! Clear and prominent disclosure is crucial for compliance and fan trust.', policy: "Disclosure of AI generation mandatory. Must resemble verified creator." }, { text: 'Create a deepfake of another celebrity and post it.', correct: false, feedback: 'Incorrect & Severe Violation. Non-consensual deepfakes are major ethical/policy violations.', policy: "Non-consensual deepfakes strictly prohibited." } ] },
+            { id: 's4', title: 'AI for External Promo Captions', description: 'You use ChatGPT for catchy, SFW captions for Twitter/Instagram posts linking to your OF.', options: [ { text: 'This is fine, as it\'s for external platforms and SFW.', correct: true, feedback: 'Correct! Using AI for SFW external promo content is generally acceptable and efficient.', policy: "AI for external SFW promotion generally compliant." }, { text: 'Risky; AI text might be flagged by OF.', correct: false, feedback: 'Incorrect. OF policies primarily govern on-platform activity. AI for external SFW marketing is standard.', policy: "OF policies focus on on-platform content." }, { text: 'Must disclose on Twitter/IG that captions are AI-generated.', correct: false, feedback: 'Generally Not Required by OF (but good practice for some brands). Not an OF compliance issue for external SFW captions.', policy: "Disclosure of AI for external promo captions not an OF mandate." } ] }
+        ];
+        let currentScenarioIndex_nav = 0; let score_nav = 0; let answered_nav = false; let currentScenarioData_nav = null;
+        const scenarioTitleElem_nav = document.getElementById('nav_scenarioTitle');
+        const scenarioDescriptionElem_nav = document.getElementById('nav_scenarioDescription');
+        const optionsContainerElem_nav = document.getElementById('nav_optionsContainer');
+        const feedbackDisplayContainer_nav = document.getElementById('nav_feedbackDisplayContainer');
+        const feedbackTitleElem_nav = document.getElementById('nav_feedbackTitle');
+        const feedbackTextElem_nav = document.getElementById('nav_feedbackText');
+        const feedbackPolicyElem_nav = document.getElementById('nav_feedbackPolicy');
+        const nextScenarioButton_nav = document.getElementById('nav_nextScenarioButton');
+        const restartNavigatorButton_nav = document.getElementById('nav_restartNavigatorButton');
+        const scoreDisplayElem_nav = document.getElementById('nav_scoreDisplay');
+        const scoreValueElem_nav = document.getElementById('nav_scoreValue');
+        const totalScenariosValueElem_nav = document.getElementById('nav_totalScenariosValue');
+        const finalMessageElem_nav = document.getElementById('nav_finalMessage');
+        const scenarioDisplay_nav = document.getElementById('nav_scenarioDisplay');
+        const aiExplainPolicyButton_nav = document.getElementById('nav_aiExplainPolicyButton');
+        const aiPolicyElaborationContainer_nav = document.getElementById('nav_aiPolicyElaborationContainer');
+        const aiPolicyElaborationTextElem_nav = document.getElementById('nav_aiPolicyElaborationText');
+
+        function displayScenario_nav(index) { /* ... same, hide AI button ... */
+            answered_nav = false; currentScenarioData_nav = scenarios_nav[index];
+            scenarioTitleElem_nav.textContent = `Scenario ${index + 1}: ${currentScenarioData_nav.title}`;
+            scenarioDescriptionElem_nav.textContent = currentScenarioData_nav.description;
+            optionsContainerElem_nav.innerHTML = '';
+            feedbackDisplayContainer_nav.classList.add('hidden');
+            aiExplainPolicyButton_nav.classList.add('hidden');
+            aiPolicyElaborationContainer_nav.classList.add('hidden');
+            nextScenarioButton_nav.textContent = 'Submit Answer'; nextScenarioButton_nav.disabled = true;
+            currentScenarioData_nav.options.forEach((option, i) => {
+                const optionId = `nav_s${index}_opt${i}`;
+                const input = document.createElement('input'); input.type = 'radio'; input.id = optionId; input.name = `nav_scenario_${currentScenarioData_nav.id}`; input.value = i;
+                input.addEventListener('change', () => { nextScenarioButton_nav.disabled = false; });
+                const label = document.createElement('label'); label.htmlFor = optionId; label.textContent = option.text; label.classList.add('option-label');
+                optionsContainerElem_nav.appendChild(input); optionsContainerElem_nav.appendChild(label);
+            });
+            totalScenariosValueElem_nav.textContent = scenarios_nav.length;
+        }
+
+        function showFeedback_nav() { /* ... same, show AI button ... */
+            const scenario = currentScenarioData_nav; // Use stored current scenario
+            const selectedOptionIndex = parseInt(document.querySelector(`input[name="nav_scenario_${scenario.id}"]:checked`).value);
+            const selectedOptionData = scenario.options[selectedOptionIndex];
+            currentScenarioData_nav.selectedOptionForAI = selectedOptionData; // Store for AI button
+
+            feedbackTitleElem_nav.textContent = selectedOptionData.correct ? 'Correct Assessment!' : (selectedOptionData.feedback.toLowerCase().includes("caution") ? 'Caution Advised!' : 'Incorrect Assessment');
+            feedbackTextElem_nav.textContent = selectedOptionData.feedback;
+            feedbackPolicyElem_nav.textContent = `Relevant Policy Point: ${selectedOptionData.policy}`;
+            feedbackDisplayContainer_nav.classList.remove('hidden', 'feedback-correct', 'feedback-caution', 'feedback-incorrect');
+            if (selectedOptionData.correct) { feedbackDisplayContainer_nav.classList.add('feedback-correct'); score_nav++; }
+            else if (selectedOptionData.feedback.toLowerCase().includes("caution")) { feedbackDisplayContainer_nav.classList.add('feedback-caution'); }
+            else { feedbackDisplayContainer_nav.classList.add('feedback-incorrect'); }
+            const labels = optionsContainerElem_nav.querySelectorAll('label.option-label');
+            labels.forEach((label, index) => {
+                label.style.pointerEvents = 'none';
+                if (index === selectedOptionIndex) {
+                    label.classList.remove('hover:bg-slate-700'); 
+                    if (selectedOptionData.correct) label.className = 'option-label bg-green-600 border-green-500 text-white font-semibold';
+                    else if (selectedOptionData.feedback.toLowerCase().includes("caution")) label.className = 'option-label bg-yellow-600 border-yellow-500 text-white font-semibold';
+                    else label.className = 'option-label bg-red-600 border-red-500 text-white font-semibold';
+                } else label.classList.add('opacity-50');
+            });
+            answered_nav = true;
+            nextScenarioButton_nav.textContent = (currentScenarioIndex_nav < scenarios_nav.length - 1) ? 'Next Scenario' : 'Show Final Score';
+            nextScenarioButton_nav.disabled = false; 
+            scoreValueElem_nav.textContent = score_nav;
+            aiExplainPolicyButton_nav.classList.remove('hidden');
+            aiPolicyElaborationContainer_nav.classList.add('hidden'); // Hide previous
+        }
+        
+        aiExplainPolicyButton_nav.addEventListener('click', async function() {
+            if (!currentScenarioData_nav || !currentScenarioData_nav.selectedOptionForAI) return;
+            aiPolicyElaborationTextElem_nav.textContent = '✨ Thinking...';
+            aiPolicyElaborationContainer_nav.classList.remove('hidden');
+            this.disabled = true;
+
+            const scenario = currentScenarioData_nav;
+            const option = currentScenarioData_nav.selectedOptionForAI;
+
+            const prompt = `I'm using an OnlyFans AI Policy Navigator.
+            The scenario was: "${scenario.title} - ${scenario.description}"
+            My chosen response was: "${option.text}"
+            The feedback I received: "${option.feedback}"
+            The relevant policy point mentioned: "${option.policy}"
+            Please elaborate on this specific policy point in 2-3 sentences. Explain why my chosen response was correct or incorrect in light of this policy, or provide a more nuanced understanding of the policy itself.`;
+
+            const elaboration = await callGeminiAPI(prompt);
+            aiPolicyElaborationTextElem_nav.textContent = elaboration;
+            this.disabled = false;
+        });
+        
+        function showFinalScore_nav() { /* ... same ... */
+            scenarioDisplay_nav.classList.add('hidden');
+            feedbackDisplayContainer_nav.classList.add('hidden');
+            nextScenarioButton_nav.classList.add('hidden');
+            restartNavigatorButton_nav.classList.remove('hidden');
+            scoreDisplayElem_nav.classList.remove('hidden');
+            scoreValueElem_nav.textContent = score_nav; totalScenariosValueElem_nav.textContent = scenarios_nav.length;
+            let message = ""; const percentage = (score_nav / scenarios_nav.length) * 100;
+            if (percentage >= 80) message = "Excellent! Strong understanding of OF AI policies.";
+            else if (percentage >= 50) message = "Good job! Review feedback to solidify knowledge.";
+            else message = "Complex area. Review feedback carefully to understand policies.";
+            finalMessageElem_nav.textContent = message;
+        }
+
+        nextScenarioButton_nav.addEventListener('click', () => { /* ... same ... */
+            if (!answered_nav) {
+                const selectedOption = document.querySelector(`input[name="nav_scenario_${scenarios_nav[currentScenarioIndex_nav].id}"]:checked`);
+                if (selectedOption) showFeedback_nav();
+            } else {
+                currentScenarioIndex_nav++;
+                if (currentScenarioIndex_nav < scenarios_nav.length) displayScenario_nav(currentScenarioIndex_nav);
+                else showFinalScore_nav();
+            }
+        });
+        restartNavigatorButton_nav.addEventListener('click', () => { /* ... same ... */
+            currentScenarioIndex_nav = 0; score_nav = 0; answered_nav = false; currentScenarioData_nav = null;
+            scenarioDisplay_nav.classList.remove('hidden');
+            feedbackDisplayContainer_nav.classList.add('hidden'); scoreDisplayElem_nav.classList.add('hidden');
+            nextScenarioButton_nav.classList.remove('hidden'); restartNavigatorButton_nav.classList.add('hidden');
+            aiExplainPolicyButton_nav.classList.add('hidden');
+            aiPolicyElaborationContainer_nav.classList.add('hidden');
+            displayScenario_nav(currentScenarioIndex_nav);
+        });
+        displayScenario_nav(currentScenarioIndex_nav); // Initial call
+    }
+
+    // --- Tool 5: Lean Workflow Optimizer JS ---
+    function initLeanOptimizer() {
+        // ... (Optimizer JS logic from previous version, adapted with unique IDs for elements if needed) ...
+        const practices_opt = { /* same practices */ 
+            content: [ { id: 'c1', text: 'Regularly batch content creation (e.g., weekly shoots).', weight: 15, advice: 'Implement content batching: Dedicate blocks of time for advance content creation.' }, { id: 'c2', text: 'Repurpose core content for different formats/platforms.', weight: 10, advice: 'Maximize content value via repurposing: Edit videos into teasers, use photos for various posts.' }, { id: 'c3', text: 'Use OnlyFans\' native post scheduler extensively.', weight: 10, advice: 'Utilize native OF scheduler: Queue batched content to maintain an active profile.' }, { id: 'c4', text: 'Maintain a content calendar for planning.', weight: 5, advice: 'Develop a content calendar: Plan themes, post types, and promotions in advance.' } ],
+            promotion: [ { id: 'p1', text: 'Use external scheduling tools (Buffer, etc.) for SFW promo.', weight: 10, advice: 'Automate external promo scheduling: Use tools like Buffer for optimal timing of SFW teasers.' }, { id: 'p2', text: 'Automate cross-posting of SFW content (Zapier/n8n.io).', weight: 10, advice: 'Set up cross-posting automation: Use Zapier/n8n.io to share SFW content externally.' }, { id: 'p3', text: 'Use AI to assist drafting SFW promo captions/ideas.', weight: 5, advice: 'Leverage AI for promo content ideas: Use AI for catchy captions and themes for external promo.' }, { id: 'p4', text: 'Regularly analyze external promo channel effectiveness.', weight: 5, advice: 'Track promo effectiveness: Monitor which external platforms drive most traffic/engagement.' } ],
+            engagement: [ { id: 'e1', text: 'Utilize OF\'s native automatic welcome DM.', weight: 5, advice: 'Activate native welcome DM: Set up an automatic welcome message on OF.' }, { id: 'e2', text: 'Use AI to DRAFT DM replies/PPV text (manual send on OF).', weight: 10, advice: 'Use AI for DM drafting assistance: Employ AI for DM/PPV messages, but always review & manually send on OF.' }, { id: 'e3', text: 'Use OF\'s mass messaging for PPV/announcements.', weight: 10, advice: 'Leverage mass DMs for PPV: Use OF mass messaging for PPV offers and announcements.' }, { id: 'e4', text: 'Have pre-written templates/shortcuts for common replies.', weight: 5, advice: 'Prepare message templates: Create templates/shortcuts for frequent questions to speed up responses.' } ]
+        };
+        const contentPracticesContainer_opt = document.getElementById('opt_contentPractices');
+        const promotionPracticesContainer_opt = document.getElementById('opt_promotionPractices');
+        const engagementPracticesContainer_opt = document.getElementById('opt_engagementPractices');
+        const calculateScoreButton_opt = document.getElementById('opt_calculateScoreButton');
+        const resultsDisplayContainer_opt = document.getElementById('opt_resultsDisplayContainer');
+        const optimizerApp_opt = document.getElementById('opt_optimizerApp');
+        const leanScoreValueElem_opt = document.getElementById('opt_leanScoreValue');
+        const leanScoreTierElem_opt = document.getElementById('opt_leanScoreTier');
+        const scoreBarFillElem_opt = document.getElementById('opt_scoreBarFill');
+        const recommendationListElem_opt = document.getElementById('opt_recommendationList');
+        const reassessButton_opt = document.getElementById('opt_reassessButton');
+        const getAiActionPlanButton_opt = document.getElementById('opt_getAiActionPlanButton');
+        const aiActionPlanContainer_opt = document.getElementById('opt_aiActionPlanContainer');
+        const aiActionPlanTextElem_opt = document.getElementById('opt_aiActionPlanText');
+        let currentUnselectedPractices_opt = [];
+
+
+        function populatePractices_opt() { /* ... same ... */ 
+            function createPracticeCheckbox(practice) {
+                const div = document.createElement('div');
+                const input = document.createElement('input'); input.type = 'checkbox'; input.id = `opt_${practice.id}`; input.value = practice.weight; input.dataset.advice = practice.advice; input.classList.add('form-checkbox');
+                const label = document.createElement('label'); label.htmlFor = `opt_${practice.id}`; label.textContent = practice.text; label.classList.add('practice-label', 'ml-2');
+                div.appendChild(input); div.appendChild(label); return div;
+            }
+            contentPracticesContainer_opt.innerHTML = ''; // Clear before populating
+            promotionPracticesContainer_opt.innerHTML = '';
+            engagementPracticesContainer_opt.innerHTML = '';
+            practices_opt.content.forEach(p => contentPracticesContainer_opt.appendChild(createPracticeCheckbox(p)));
+            practices_opt.promotion.forEach(p => promotionPracticesContainer_opt.appendChild(createPracticeCheckbox(p)));
+            practices_opt.engagement.forEach(p => engagementPracticesContainer_opt.appendChild(createPracticeCheckbox(p)));
+        }
+
+        calculateScoreButton_opt.addEventListener('click', function() { /* ... same, store unselected ... */ 
+            let currentScore = 0; let maxScore = 0; currentUnselectedPractices_opt = [];
+            optimizerApp_opt.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+                const practiceId = checkbox.id.substring(4); 
+                const practiceData = findPracticeById_opt(practiceId);
+                if (practiceData) {
+                    maxScore += practiceData.weight;
+                    if (checkbox.checked) currentScore += practiceData.weight;
+                    else currentUnselectedPractices_opt.push(practiceData.advice); // Store advice for unselected
+                }
+            });
+            const finalScore = maxScore > 0 ? Math.round((currentScore / maxScore) * 100) : 0;
+            leanScoreValueElem_opt.textContent = finalScore;
+            scoreBarFillElem_opt.style.width = `${finalScore}%`; scoreBarFillElem_opt.textContent = `${finalScore}%`;
+            if (finalScore >= 85) leanScoreTierElem_opt.textContent = "Lean Machine! Highly optimized.";
+            else if (finalScore >= 60) leanScoreTierElem_opt.textContent = "Well Optimized! Great job, room for refinement.";
+            else leanScoreTierElem_opt.textContent = "Getting Started. Opportunities to boost efficiency!";
+            scoreBarFillElem_opt.style.backgroundColor = '#6ee7b7'; scoreBarFillElem_opt.style.color = '#0D1B2A';
+            recommendationListElem_opt.innerHTML = '';
+            if (currentUnselectedPractices_opt.length > 0) {
+                currentUnselectedPractices_opt.forEach(advice => { const li = document.createElement('li'); li.textContent = advice; recommendationListElem_opt.appendChild(li); });
+                getAiActionPlanButton_opt.classList.remove('hidden');
+            } else { 
+                const li = document.createElement('li'); li.textContent = "All listed lean practices implemented! Keep it up."; recommendationListElem_opt.appendChild(li); 
+                getAiActionPlanButton_opt.classList.add('hidden');
+            }
+            aiActionPlanContainer_opt.classList.add('hidden'); // Hide previous AI plan
+            optimizerApp_opt.classList.add('hidden'); resultsDisplayContainer_opt.classList.remove('hidden');
+        });
+
+        getAiActionPlanButton_opt.addEventListener('click', async function() {
+            aiActionPlanTextElem_opt.textContent = '✨ Generating your action plan...';
+            aiActionPlanContainer_opt.classList.remove('hidden');
+            this.disabled = true;
+
+            const leanScore = leanScoreValueElem_opt.textContent;
+            const scoreTier = leanScoreTierElem_opt.textContent;
+            const recommendationsText = currentUnselectedPractices_opt.map(r => `- ${r}`).join('\n');
+
+            const prompt = `I'm using a Lean Workflow Optimizer for my OnlyFans business.
+            My Lean Score is: ${leanScore}/100 (${scoreTier})
+            The key areas identified for improvement (practices I'm not currently doing) are:
+            ${recommendationsText}
+            Based on this, please generate a short, encouraging, and personalized action plan. Prioritize 2-3 of these unselected practices that would likely offer the biggest initial impact on my workflow efficiency or consistency. Explain why these are important first steps. Keep it concise (2-4 sentences).`;
+
+            const actionPlan = await callGeminiAPI(prompt);
+            aiActionPlanTextElem_opt.textContent = actionPlan;
+            this.disabled = false;
+        });
+
+        reassessButton_opt.addEventListener('click', function() { /* ... same ... */ 
+            resultsDisplayContainer_opt.classList.add('hidden'); 
+            optimizerApp_opt.classList.remove('hidden'); 
+            getAiActionPlanButton_opt.classList.add('hidden');
+            aiActionPlanContainer_opt.classList.add('hidden');
+        });
+        function findPracticeById_opt(id) { /* ... same ... */ 
+            for (const category in practices_opt) { const found = practices_opt[category].find(p => p.id === id); if (found) return found; } return null;
+        }
+        populatePractices_opt(); // Initial call
+    }
+
+</script>
 </body>
 </html>
