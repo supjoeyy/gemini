@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI-Powered Promo Content Idea Engine</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        .container {
+            max-width: 800px;
+            margin: auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        header h1 {
+            color: #333;
+            text-align: center;
+        }
+        header p {
+            text-align: center;
+            font-size: 0.9em;
+            color: #666;
+        }
+        .input-section, .results-section {
+            margin-bottom: 20px;
+        }
+        .input-group {
+            margin-bottom: 15px;
+        }
+        .input-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        .input-group input[type="text"],
+        .input-group select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        button {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            background-color: #5cb85c;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1.1em;
+            margin-top: 20px;
+        }
+        button:hover {
+            background-color: #4cae4c;
+        }
+        .results-container {
+            margin-top: 30px;
+            border-top: 2px solid #eee;
+            padding-top: 20px;
+        }
+        .idea-card {
+            background-color: #f9f9f9;
+            border: 1px solid #eee;
+            border-left: 5px solid #5cb85c;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 4px;
+        }
+        .idea-card h4 {
+            margin-top: 0;
+            color: #333;
+        }
+        .idea-card p {
+            margin-bottom: 8px;
+            font-size: 0.95em;
+        }
+        .idea-card .ai-tip {
+            font-style: italic;
+            font-size: 0.85em;
+            color: #007bff;
+        }
+        .idea-card .compliance-note {
+            font-size: 0.85em;
+            color: #d9534f;
+            font-weight: bold;
+        }
+        .hashtags-list {
+            background-color: #e9ecef;
+            padding: 10px;
+            border-radius: 4px;
+            margin-bottom: 15px;
+        }
+        .hashtags-list strong {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .strategic-reminder, .disclaimers {
+            background-color: #fffbe6;
+            border: 1px solid #ffe58f;
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 15px;
+            font-size: 0.9em;
+        }
+        .disclaimers strong {
+            color: #d9534f;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🚀 AI-Powered Promo Content Idea Engine</h1>
+            <p>Generate compliant and effective promotional content ideas for your <em>external</em> social media platforms, inspired by AI best practices from our research.</p>
+        </header>
+
+        <main>
+            <section class="input-section">
+                <h2>1. Define Your Creator Profile:</h2>
+                <div class="input-group">
+                    <label for="nichePersona">Your Niche/Persona:</label>
+                    <input type="text" id="nichePersona" placeholder="e.g., 'Playful Gamer Girl,' 'Mysterious Alt Model,' 'Fitness Coach'">
+                </div>
+                <div class="input-group">
+                    <label for="contentStyle">Primary Content Style on OF:</label>
+                    <select id="contentStyle">
+                        <option value="artistic">Artistic & Sensual</option>
+                        <option value="explicit">Explicit & Direct</option>
+                        <option value="humorous">Humorous & Engaging</option>
+                        <option value="informative">Informative & Educational</option>
+                        <option value="lifestyle">Lifestyle & Behind-the-Scenes</option>
+                    </select>
+                </div>
+
+                <h2>2. Select Your Target External Platform:</h2>
+                <div class="input-group">
+                    <label for="platform">Platform:</label>
+                    <select id="platform">
+                        <option value="twitter">Twitter (X)</option>
+                        <option value="instagram">Instagram (SFW Teaser/Reel)</option>
+                        <option value="reddit">Reddit (Compliant Teaser)</option>
+                        <option value="tiktok">TikTok (SFW Trend/Teaser)</option>
+                    </select>
+                </div>
+
+                <h2>3. Choose Your Promotional Angle:</h2>
+                <div class="input-group">
+                    <label for="promoAngle">Desired Angle/Goal for this Promo:</label>
+                    <select id="promoAngle">
+                        <option value="curiosity">Spark Curiosity (Hint at new content)</option>
+                        <option value="bts">Behind-the-Scenes Glimpse</option>
+                        <option value="engage">Engage/Interact (Polls, Questions)</option>
+                        <option value="cta">Direct CTA (to Linktree/Bio)</option>
+                        <option value="persona">Showcase Persona/Brand</option>
+                    </select>
+                </div>
+
+                <button id="generateButton">✨ Generate Promo Ideas ✨</button>
+            </section>
+
+            <section class="results-section" id="resultsContainer" style="display: none;">
+                <h2>Your AI-Inspired Promo Ideas:</h2>
+                <!-- Ideas will be injected here by JavaScript -->
+            </section>
+        </main>
+    </div>
+
+    <script>
+        const generateButton = document.getElementById('generateButton');
+        const resultsContainer = document.getElementById('resultsContainer');
+        const nichePersonaInput = document.getElementById('nichePersona');
+        const contentStyleSelect = document.getElementById('contentStyle');
+        const platformSelect = document.getElementById('platform');
+        const promoAngleSelect = document.getElementById('promoAngle');
+
+        // SIMULATED AI - Predefined ideas
+        const sampleIdeasDatabase = [
+            {
+                id: 1,
+                platforms: ["twitter", "instagram"],
+                angles: ["curiosity", "cta"],
+                title: "Text Tweet with Image/GIF (Twitter) or SFW Post (Instagram)",
+                textPrompt: (niche) => `Just dropped something 🔥 that you DON'T want to miss on my special page. ${niche || 'My fans'} are already loving it! 😉 You know where the link is! [Linktree URL]`,
+                visualSuggestion: "A SFW, intriguing, slightly cropped image or a relevant GIF that hints at your OF content without showing anything explicit. Could be a close-up of an outfit detail, a stylized shot, or a mood image.",
+                aiTip: "Use ChatGPT to brainstorm witty variations. For visuals, try Canva for quick graphics or Midjourney if you're aiming for unique AI-generated art (ensure it's SFW for these platforms).",
+                complianceNote: "Ensure image/GIF is SFW. On Twitter, tag sensitive if needed. On Instagram, avoid direct OF mentions in captions; guide to bio link."
+            },
+            {
+                id: 2,
+                platforms: ["instagram", "tiktok"],
+                angles: ["bts", "persona"],
+                title: "Short Instagram Reel or TikTok Video",
+                textPrompt: (niche) => `A little peek at the chaos/fun behind creating content for you all! 🎬 This ${niche || 'creator'} life is wild. Want to see the final results? 😉 Link in bio!`,
+                visualSuggestion: "Quick montage: setting up lights, choosing outfits (SFW), a playful outtake. Use trending audio. Keep it upbeat and engaging.",
+                aiTip: "Use Promeo or CapCut for easy video editing with trending sounds. ChatGPT can help draft engaging captions or script ideas.",
+                complianceNote: "Absolutely no nudity or explicit content. Focus on lifestyle/brand. TikTok is very strict; keep it SFW and engaging to funnel to IG/Linktree."
+            },
+            {
+                id: 3,
+                platforms: ["reddit"],
+                angles: ["persona", "curiosity"],
+                title: "Image Post to Relevant Subreddit",
+                textPrompt: (niche) => `Feeling my ${niche || 'current'} vibe today. What do you think? [F] (More on my profile if you're curious!)`,
+                visualSuggestion: "A high-quality, SFW or subreddit-compliant photo showcasing your style/persona. Ensure good lighting and clear image.",
+                aiTip: "Use AI photo enhancers (e.g., in Lightroom, Photoshop, or dedicated apps) for top quality. Research subreddit-specific title conventions.",
+                complianceNote: "CRITICAL: Check specific subreddit rules for self-promotion, image content, and linking BEFORE posting. Build karma first. Some subs allow profile links, others don't."
+            },
+            {
+                id: 4,
+                platforms: ["twitter"],
+                angles: ["engage", "cta"],
+                title: "Interactive Twitter Poll",
+                textPrompt: (niche) => `What kind of exclusive content are you craving most from your favorite ${niche || 'creator'} this week? 🤔 A) Spicy Photoset B) Behind-the-Scenes Video C) Live Q&A D) Surprise! (Vote below & check my Linktree for current goodies!)`,
+                visualSuggestion: "Optional: A SFW image related to your brand to accompany the poll tweet.",
+                aiTip: "ChatGPT can help formulate engaging poll questions and options.",
+                complianceNote: "Keep poll options SFW. Funnel to Linktree for actual content."
+            },
+             {
+                id: 5,
+                platforms: ["tiktok", "instagram"],
+                angles: ["persona", "bts"],
+                title: "GRWM (Get Ready With Me) - SFW",
+                textPrompt: (niche) => `GRWM for a special shoot! 💄✨ Can you guess the theme? The full reveal will be on my exclusive page later! (Link in bio, as always!) #GRWM #${nichePersonaInput.value.replace(/\s+/g, '').toLowerCase() || 'creatorlife'} #tease`,
+                visualSuggestion: "Show SFW makeup application, hair styling, choosing a (SFW part of an) outfit. Keep it fast-paced with trending audio.",
+                aiTip: "Use TikTok's or Instagram Reel's built-in editing tools. Research trending GRWM audio.",
+                complianceNote: "Strictly SFW. Focus on the 'getting ready' process, not the final explicit look. Goal is to build persona and funnel curious viewers."
+            }
+        ];
+
+        function generatePromoIdeas() {
+            const niche = nichePersonaInput.value.trim();
+            const platform = platformSelect.value;
+            const angle = promoAngleSelect.value;
+
+            resultsContainer.innerHTML = '<h2>Your AI-Inspired Promo Ideas:</h2>'; // Clear previous results and add title
+
+            let ideasGenerated = 0;
+            sampleIdeasDatabase.forEach(idea => {
+                if (idea.platforms.includes(platform) && idea.angles.includes(angle) && ideasGenerated < 3) {
+                    const card = document.createElement('div');
+                    card.classList.add('idea-card');
+                    card.innerHTML = `
+                        <h4>${idea.title}</h4>
+                        <p><strong>Platform:</strong> ${platform.charAt(0).toUpperCase() + platform.slice(1)}</p>
+                        <p><strong>Angle:</strong> ${angle.charAt(0).toUpperCase() + angle.slice(1)}</p>
+                        <p><strong>Suggested Content Type:</strong> ${idea.title}</p>
+                        <p><strong>AI-Generated Text Prompt:</strong><br>${idea.textPrompt(niche)}</p>
+                        <p><strong>Visual Suggestion:</strong><br>${idea.visualSuggestion}</p>
+                        <p class="ai-tip"><strong>AI Tool Tip:</strong> ${idea.aiTip}</p>
+                        <p class="compliance-note"><strong>Compliance Note:</strong> ${idea.complianceNote}</p>
+                    `;
+                    resultsContainer.appendChild(card);
+                    ideasGenerated++;
+                }
+            });
+
+            if (ideasGenerated === 0) {
+                 resultsContainer.innerHTML += '<p>No specific ideas match your exact criteria in our current examples. Try a different combination or use the general tips below!</p>';
+            }
+
+            // Add Hashtags
+            const hashtagsDiv = document.createElement('div');
+            hashtagsDiv.classList.add('hashtags-list');
+            let nicheHashtags = niche ? `#${niche.replace(/\s+/g, '').toLowerCase()} ` : '';
+            hashtagsDiv.innerHTML = `
+                <strong>Suggested Hashtags (Tailor to Niche & Platform):</strong>
+                <p>${nicheHashtags}#${platform}Teaser #ContentCreator #[YourUniqueBrand] #LinkInBio (Avoid banned terms like #onlyfans directly on some platforms)</p>
+                <p><em>Tip: Research trending niche-relevant hashtags on the chosen platform.</em></p>
+            `;
+            resultsContainer.appendChild(hashtagsDiv);
+
+            // Add Strategic Reminder
+            const reminderDiv = document.createElement('div');
+            reminderDiv.classList.add('strategic-reminder');
+            reminderDiv.innerHTML = `
+                <h4>Strategic Reminder (from Research):</h4>
+                <p>Remember the recommended content mix for overall strategy:
+                    <ul>
+                        <li><strong>~30% Teasers</strong> (like these generated ideas!)</li>
+                        <li><strong>~40% Exclusive Content</strong> (on your OnlyFans page)</li>
+                        <li><strong>~30% Direct Calls-to-Action</strong> (funneling to your Linktree/OF page)</li>
+                    </ul>
+                </p>
+            `;
+            resultsContainer.appendChild(reminderDiv);
+
+            // Add Disclaimers
+            const disclaimersDiv = document.createElement('div');
+            disclaimersDiv.classList.add('disclaimers');
+            disclaimersDiv.innerHTML = `
+                <h4>Important Disclaimers:</h4>
+                <p>⚠️ <strong>Always review and adapt!</strong> These are AI-inspired suggestions. Tailor them to your unique voice, brand, and ensure <strong>full compliance</strong> with each platform's Terms of Service and Community Guidelines.</p>
+                <p>💡 <strong>External Promotion Focus:</strong> This tool is designed for generating ideas for your <em>external</em> social media. For on-platform OnlyFans content and its specific AI usage rules, please refer to our "OnlyFans Authenticity & AI Compliance Assistant" (Recommendation 5).</p>
+                <p>🤖 AI tools like ChatGPT (text), Midjourney (visuals), Canva (graphics), or Promeo (video) can assist in creating the actual assets based on these ideas, as outlined in the research.</p>
+            `;
+            resultsContainer.appendChild(disclaimersDiv);
+
+            resultsContainer.style.display = 'block';
+        }
+
+        generateButton.addEventListener('click', generatePromoIdeas);
+    </script>
+</body>
+</html>
