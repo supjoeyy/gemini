@@ -12,44 +12,46 @@
     <style>
         body { font-family: 'Inter', sans-serif; background-color: #0D1B2A; color: #E0E1DD; }
         .tool-container { background-color: #1B263B; border: 1px solid #3E6990; border-radius: 16px; box-shadow: 0 10px 20px rgba(0,0,0,0.2), 0 6px 6px rgba(0,0,0,0.15); }
-        .tab-button { padding: 0.6rem 0.8rem; margin: 0 0.15rem; border-radius: 8px 8px 0 0; font-weight: 600; color: #A2D2FF; background-color: #1E407C; border: 1px solid #3E6990; border-bottom: none; transition: background-color 0.3s ease, color 0.3s ease; cursor: pointer; font-size: 0.75rem; white-space: nowrap;}
+        .tab-button { padding: 0.6rem 0.8rem; margin: 0 0.1rem; border-radius: 8px 8px 0 0; font-weight: 600; color: #A2D2FF; background-color: #1E407C; border: 1px solid #3E6990; border-bottom: none; transition: background-color 0.3s ease, color 0.3s ease; cursor: pointer; font-size: 0.7rem; white-space: nowrap;} /* Adjusted font size and margin */
         .tab-button:hover { background-color: #3E6990; }
         .tab-button.active { background-color: #1B263B; color: #6ee7b7; border-color: #3E6990; }
         .tool-content { display: none; }
         .tool-content.active { display: block; }
 
         /* Common AI display styles */
-        .ai-output-container { margin-top: 1rem; padding: 0.75rem; background-color: rgba(30, 64, 124, 0.35); border-radius: 8px; border: 1px solid #3E6990; font-size: 0.8rem; }
+        .ai-output-container { margin-top: 1rem; padding: 0.75rem; background-color: rgba(30, 64, 124, 0.35); border-radius: 8px; border: 1px solid #3E6990; font-size: 0.8rem; position: relative; }
         .ai-output-container h4, .ai-output-container h5 { font-semibold: 600; color: #6ee7b7; margin-bottom: 0.25rem; }
         .ai-output-container p, .ai-output-container ul { margin-bottom: 0.5rem; }
         .ai-output-container ul { list-style-position: inside; padding-left: 0.5rem; }
         .gemini-loading { font-style: italic; color: #A2D2FF; opacity: 0.8; }
         button.ai-trigger-button { background-color: #2563eb; color: white; font-size: 0.8rem; padding: 0.4rem 0.8rem; margin-top: 0.75rem; border-radius: 6px; }
-        button.ai-trigger-button:hover { background-color: #1d4ed8; }
+        button.ai-trigger-button:hover:not(:disabled) { background-color: #1d4ed8; }
         button:disabled { opacity: 0.6; cursor: not-allowed; }
 
         /* Tool-specific styles (inherited and some overrides) */
-        input, select, textarea { background-color: #102A43; border-color: #3E6990; color: #E0E1DD; border-radius: 8px; padding: 0.5rem; font-size: 0.875rem; border-width: 1px; }
+        input, select, textarea { background-color: #102A43; border-color: #3E6990; color: #E0E1DD; border-radius: 8px; padding: 0.5rem; font-size: 0.875rem; border-width: 1px; width: 100%;}
         label { color: #A2D2FF; font-weight: 600; font-size: 0.875rem; margin-bottom: 0.25rem; display: block; }
         button.tool-action-button { background-color: #6ee7b7; color: #0D1B2A; font-weight: 700; border-radius: 8px; transition: background-color 0.3s ease; padding: 0.6rem 1.2rem; }
-        button.tool-action-button:hover { background-color: #5ce1a7; }
+        button.tool-action-button:hover:not(:disabled) { background-color: #5ce1a7; }
         
-        #strategySimulator .chart-container { max-width: 450px; height: 330px; max-height: 360px; margin-top: 0.5rem; }
-        #automationPathfinder .option-label { display: block; padding: 0.6rem 0.8rem; border: 1px solid #3E6990; border-radius: 8px; cursor: pointer; color: #A2D2FF; font-size: 0.875rem;}
-        #automationPathfinder input[type="radio"]:checked + label.option-label { background-color: #6ee7b7; border-color: #6ee7b7; color: #0D1B2A; }
-        #automationPathfinder input[type="radio"] { display: none; }
-        #automationPathfinder button.nav-button { font-size: 0.8rem; padding: 0.4rem 0.8rem; }
-        #earningsForecaster .chart-container { max-width: 580px; height: 280px; max-height: 330px; }
-        #aiPolicyNavigator .option-label { display: block; padding: 0.6rem 0.8rem; border: 1px solid #3E6990; border-radius: 8px; cursor: pointer; color: #A2D2FF; font-size: 0.875rem;}
-        #aiPolicyNavigator input[type="radio"] { display: none; }
-        #aiPolicyNavigator button.nav-button { font-size: 0.8rem; padding: 0.4rem 0.8rem; }
-        #aiPolicyNavigator .feedback-correct { background-color: #166534; border-left: 4px solid #6ee7b7; color: #d1fae5; padding: 0.75rem; }
-        #aiPolicyNavigator .feedback-caution { background-color: #78350F; border-left: 4px solid #facc15; color: #fef3c7; padding: 0.75rem; }
-        #aiPolicyNavigator .feedback-incorrect { background-color: #7F1D1D; border-left: 4px solid #ff7b7b; color: #fee2e2; padding: 0.75rem; }
-        #leanOptimizer .practice-category h3 { color: #A2D2FF; font-weight: 700; border-bottom: 1px solid #3E6990; padding-bottom: 0.5rem; margin-bottom: 0.75rem; font-size: 1.1rem; }
-        #leanOptimizer label.practice-label { font-size: 0.875rem; }
-        #leanOptimizer .score-bar-container { height: 1.75rem; }
-        #leanOptimizer .score-bar-fill { font-size: 0.8rem; }
+        /* Info Tooltip Styles */
+        .info-icon { display: inline-block; margin-left: 0.25rem; color: #A2D2FF; cursor: help; font-size: 0.8rem; border: 1px solid #3E6990; border-radius: 50%; width: 16px; height: 16px; text-align: center; line-height: 14px; position: relative; }
+        .tooltip-text { visibility: hidden; width: 220px; background-color: #1E407C; color: #E0E1DD; text-align: left; border-radius: 6px; padding: 8px; position: absolute; z-index: 10; bottom: 125%; left: 50%; margin-left: -110px; opacity: 0; transition: opacity 0.3s; font-size: 0.75rem; line-height: 1.4; border: 1px solid #3E6990; box-shadow: 0 2px 5px rgba(0,0,0,0.3); }
+        .info-icon:hover .tooltip-text { visibility: visible; opacity: 1; }
+        .validation-message { font-size: 0.75rem; color: #ff7b7b; margin-top: 0.125rem; }
+
+        /* Modal Styles */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.7); display: flex; justify-content: center; align-items: center; z-index: 1000; opacity: 0; visibility: hidden; transition: opacity 0.3s ease, visibility 0.3s ease;}
+        .modal-overlay.active { opacity: 1; visibility: visible; }
+        .modal-content { background-color: #1B263B; padding: 2rem; border-radius: 16px; max-width: 500px; width: 90%; text-align: center; border: 1px solid #3E6990; box-shadow: 0 10px 30px rgba(0,0,0,0.4);}
+        .modal-content h2 { color: #A2D2FF; margin-bottom: 1rem; font-size: 1.5rem;}
+        .modal-content p { margin-bottom: 0.75rem; font-size: 0.9rem; color: #E0E1DD;}
+        .modal-content ul { list-style-position: inside; text-align: left; margin-bottom: 1.5rem; font-size: 0.9rem;}
+        .modal-content button { background-color: #6ee7b7; color: #0D1B2A; padding: 0.5rem 1rem; border-radius: 8px; font-weight: 600;}
+
+        .copy-button, .download-button { background-color: #3E6990; color: #E0E1DD; font-size: 0.7rem; padding: 0.15rem 0.3rem; border-radius: 4px; margin-left: 0.5rem; cursor: pointer; border: none; position: absolute; top: 0.5rem; right: 0.5rem;}
+        .copy-button:hover, .download-button:hover { background-color: #A2D2FF; color: #0D1B2A; }
+
 
         h1, h2, h3, h4 { font-weight: 800; letter-spacing: -0.025em; }
         h1 { color: #A2D2FF; } 
@@ -58,6 +60,19 @@
     </style>
 </head>
 <body class="antialiased min-h-screen flex flex-col">
+    <div id="onboardingModal" class="modal-overlay">
+        <div class="modal-content">
+            <h2>Welcome to the Advanced Creator Toolkit!</h2>
+            <p>This suite of AI-powered tools is designed to help you strategize, optimize, and grow your OnlyFans presence effectively and compliantly.</p>
+            <ul>
+                <li>🧭 Use the tabs above to navigate between 11 powerful tools.</li>
+                <li>✨ Look for the sparkle icon for AI-driven insights and personalized advice.</li>
+                <li>❓ Hover over info icons for quick tips on using specific features.</li>
+            </ul>
+            <button id="closeOnboardingModal">Let's Get Started!</button>
+        </div>
+    </div>
+
     <header class="text-center py-6 md:py-8">
         <h1 class="text-3xl sm:text-4xl md:text-4xl">Advanced OnlyFans Creator Toolkit</h1>
         <p class="text-md sm:text-lg text-[#A2D2FF]/80 max-w-3xl mx-auto mt-1.5">Personalized strategies, compliance guidance, and workflow optimization powered by AI.</p>
@@ -74,6 +89,7 @@
         <button class="tab-button" data-tool="analyticsInterpreter">Analytics AI</button>
         <button class="tab-button" data-tool="complianceShield">Compliance AI</button>
         <button class="tab-button" data-tool="nicheExplorer">Niche Explorer AI</button>
+        <button class="tab-button" data-tool="aiStudio">AI Studio</button>
     </nav>
 
     <main class="flex-grow container mx-auto p-4 md:p-6">
@@ -86,15 +102,15 @@
                 <div class="p-4 space-y-4 rounded-lg border border-[#3E6990]">
                     <h3 class="text-lg font-semibold text-center mb-2">Define Your Strategy</h3>
                     <div>
-                        <label for="sim_adv_targetAudienceAge">Target Audience Age:</label>
+                        <label for="sim_adv_targetAudienceAge">Target Audience Age: <span class="info-icon">? <span class="tooltip-text">Select the primary age range of your target fans.</span></span></label>
                         <select id="sim_adv_targetAudienceAge" class="w-full"><option value="18-24">18-24</option><option value="25-34" selected>25-34</option><option value="35-44">35-44</option><option value="45+">45+</option></select>
                     </div>
                     <div>
-                        <label for="sim_adv_targetAudienceInterests">Primary Audience Interests (comma-separated):</label>
+                        <label for="sim_adv_targetAudienceInterests">Primary Audience Interests (comma-separated): <span class="info-icon">? <span class="tooltip-text">E.g., 'Fitness, Vegan Cooking, Indie Music'. Helps AI generate a Fan Persona.</span></span></label>
                         <input type="text" id="sim_adv_targetAudienceInterests" class="w-full" value="Gaming, Cosplay">
                     </div>
                      <div>
-                        <label for="sim_adv_contentPillar1">Content Pillar 1:</label>
+                        <label for="sim_adv_contentPillar1">Content Pillar 1: <span class="info-icon">? <span class="tooltip-text">Your main type of content.</span></span></label>
                         <select id="sim_adv_contentPillar1" class="w-full"><option value="Live Streams">Interactive Live Streams</option><option value="Photo Sets">Artistic Photo Sets</option><option value="Videos">Personalized Videos</option><option value="Vlogs">BTS Vlogs</option></select>
                     </div>
                     <div>
@@ -102,32 +118,28 @@
                         <select id="sim_adv_contentPillar2" class="w-full"><option value="">None</option><option value="Live Streams">Interactive Live Streams</option><option value="Photo Sets" selected>Artistic Photo Sets</option><option value="Videos">Personalized Videos</option><option value="Vlogs">BTS Vlogs</option></select>
                     </div>
                      <div>
-                        <label for="sim_adv_promoPlatform1Intensity">Promotion: Twitter Intensity</label>
+                        <label for="sim_adv_promoPlatform1Intensity">Promotion: Twitter Intensity <span class="info-icon">? <span class="tooltip-text">How actively will you promote on Twitter?</span></span></label>
                         <select id="sim_adv_promoPlatform1Intensity" class="w-full"><option value="low">Low</option><option value="medium">Medium</option><option value="high" selected>High</option></select>
                     </div>
                     <div>
                         <label for="sim_adv_promoPlatform2Intensity">Promotion: Instagram Intensity</label>
                         <select id="sim_adv_promoPlatform2Intensity" class="w-full"><option value="low">Low</option><option value="medium" selected>Medium</option><option value="high">High</option></select>
                     </div>
-                    <input type="hidden" id="sim_contentStrategy" value="pro_high_value"> <input type="hidden" id="sim_promotionEffort" value="high">
-                    <input type="hidden" id="sim_automationLevel" value="advanced">
-                    <input type="hidden" id="sim_complianceStance" value="strict">
-
                     <button id="sim_adv_simulateButton" class="w-full py-2.5 tool-action-button">Simulate Advanced Strategy</button>
                 </div>
                 <div id="sim_adv_resultsPanel" class="p-4 space-y-3 rounded-lg border border-[#3E6990] hidden">
                     <h3 class="text-lg font-bold text-center text-[#E0E1DD]">Advanced Simulation Results</h3>
                     <div id="sim_adv_aiPersonaContainer" class="ai-output-container">
-                        <h4 class="text-sm">✨ Projected Fan Persona:</h4>
+                        <h4 class="text-sm">✨ Projected Fan Persona: <button onclick="copyToClipboard('sim_adv_aiPersonaText')" class="copy-button">📋</button></h4>
                         <p id="sim_adv_aiPersonaText" class="text-xs gemini-loading">Generating persona...</p>
                     </div>
                     <div class="chart-container !h-64 !max-h-72"> <canvas id="sim_adv_resultsChart"></canvas> </div>
                     <div class="text-center p-1.5 bg-[#102A43]/70 rounded-md text-xs"><h4 class="font-semibold text-[#A2D2FF]">Earnings Tier:</h4><p id="sim_adv_earningsText">-</p></div>
                     <div class="text-center p-1.5 bg-[#102A43]/70 rounded-md text-xs"><h4 class="font-semibold text-[#A2D2FF]">Efficiency:</h4><p id="sim_adv_efficiencyText">-</p></div>
                     <div class="text-center p-1.5 bg-[#102A43]/70 rounded-md text-xs"><h4 class="font-semibold text-[#A2D2FF]">Risk Level:</h4><p id="sim_adv_complianceText">-</p></div>
-                    <button id="sim_adv_getAiAdviceButton" class="w-full py-2 tool-action-button text-sm ai-trigger-button">✨ Get AI Persona-Tailored Advice</button>
+                    <button id="sim_adv_getAiAdviceButton" class="w-full py-2 tool-action-button text-sm ai-trigger-button hidden">✨ Get AI Persona-Tailored Advice <span class="info-icon">? <span class="tooltip-text">Sends your strategy & persona to AI for tailored advice.</span></span></button>
                     <div id="sim_adv_aiAdviceContainer" class="ai-output-container hidden">
-                        <h4 class="text-sm">✨ AI Strategic Advice:</h4>
+                        <h4 class="text-sm">✨ AI Strategic Advice: <button onclick="copyToClipboard('sim_adv_aiAdviceText')" class="copy-button">📋</button></h4>
                         <p id="sim_adv_aiAdviceText" class="text-xs"></p>
                     </div>
                 </div>
@@ -141,9 +153,9 @@
                 <div id="path_navigationArea" class="flex justify-between items-center"><button id="path_prevButton" class="nav-button text-xs py-1.5 px-2.5" disabled>Previous</button><span id="path_stepIndicator" class="text-xs text-[#A2D2FF]/70">Step 1</span><button id="path_nextButton" class="nav-button text-xs py-1.5 px-2.5" disabled>Next</button></div>
                 <div id="path_resultArea" class="result-card p-4 hidden">
                     <h3 class="text-md font-bold mb-2 text-center">Pathfinder Results:</h3><div id="path_resultContent" class="space-y-2 text-sm"></div>
-                    <button id="path_aiCostBenefitButton" class="nav-button mt-2.5 w-full text-xs py-1.5 ai-trigger-button hidden">✨ AI: Analyze Cost/Benefit/Risk</button>
+                    <button id="path_aiCostBenefitButton" class="nav-button mt-2.5 w-full text-xs py-1.5 ai-trigger-button hidden">✨ AI: Analyze Cost/Benefit/Risk <span class="info-icon">? <span class="tooltip-text">Sends this path to AI for deeper analysis.</span></span></button>
                     <div id="path_aiCostBenefitContainer" class="ai-output-container hidden !text-xs">
-                        <h4 class="!text-xs">✨ AI Cost/Benefit/Risk Analysis:</h4><p id="path_aiCostBenefitText"></p>
+                        <h4 class="!text-xs">✨ AI Cost/Benefit/Risk Analysis: <button onclick="copyToClipboard('path_aiCostBenefitText')" class="copy-button">📋</button></h4><p id="path_aiCostBenefitText"></p>
                     </div>
                     <button id="path_restartButton" class="nav-button mt-4 w-full text-xs py-1.5">Start Over</button>
                 </div>
@@ -153,18 +165,18 @@
         <div id="earningsForecaster" class="tool-content tool-container p-5 md:p-6">
             <header class="text-center mb-4"><h2 class="text-xl md:text-2xl font-bold">Earnings Forecaster (AI Goal Seek)</h2><p class="text-xs text-[#A2D2FF]/70">Estimate earnings & get AI-driven scenarios for your income goals.</p></header>
             <div class="forecaster-inputs grid grid-cols-1 md:grid-cols-2 gap-x-5 gap-y-3">
-                <div><label for="fc_targetIncome" class="!text-sm">Target Monthly Net Income ($):</label><input type="number" id="fc_targetIncome" value="3000" class="w-full !p-1.5 !text-sm"></div>
+                <div><label for="fc_targetIncome" class="!text-sm">Target Monthly Net Income ($): <span class="info-icon">? <span class="tooltip-text">What's your income goal? AI will suggest ways to reach it.</span></span></label><input type="number" id="fc_targetIncome" value="3000" class="w-full !p-1.5 !text-sm"></div>
                 <div><label for="fc_currentSubPrice" class="!text-sm">Your Current/Planned Sub Price ($):</label><input type="number" id="fc_currentSubPrice" value="12.99" step="0.01" class="w-full !p-1.5 !text-sm"></div>
                 <div class="md:col-span-2"><button id="fc_goalSeekButton" class="w-full py-2 tool-action-button text-sm ai-trigger-button">✨ AI: Suggest Scenarios for Target</button></div>
             </div>
             <div id="fc_aiScenariosContainer" class="ai-output-container hidden !text-xs mt-3">
-                <h4 class="!text-xs">✨ AI-Suggested Scenarios to Reach Target:</h4><div id="fc_aiScenariosText"></div>
+                <h4 class="!text-xs">✨ AI-Suggested Scenarios to Reach Target: <button onclick="copyToClipboard('fc_aiScenariosText')" class="copy-button">📋</button></h4><div id="fc_aiScenariosText"></div>
             </div>
             <hr class="border-[#3E6990] my-4">
             <h3 class="text-center text-md font-semibold mb-2">Or, Input Your Own Scenario:</h3>
             <div class="forecaster-inputs grid grid-cols-1 md:grid-cols-2 gap-x-5 gap-y-3">
-                <div><label for="fc_subscribers" class="!text-sm">Target Subscribers:</label><input type="number" id="fc_subscribers" value="200" class="w-full !p-1.5 !text-sm"></div>
-                <div><label for="fc_subPrice" class="!text-sm">Avg. Sub Price ($):</label><input type="number" id="fc_subPrice" value="15.00" step="0.01" class="w-full !p-1.5 !text-sm"></div>
+                <div><label for="fc_subscribers" class="!text-sm">Target Subscribers:</label><input type="number" id="fc_subscribers" value="200" class="w-full !p-1.5 !text-sm"><p class="validation-message hidden" id="fc_subscribers_val">Must be 0 or more.</p></div>
+                <div><label for="fc_subPrice" class="!text-sm">Avg. Sub Price ($):</label><input type="number" id="fc_subPrice" value="15.00" step="0.01" class="w-full !p-1.5 !text-sm"><p class="validation-message hidden" id="fc_subPrice_val">Must be 0 or more.</p></div>
                 <div><label for="fc_ppvOffers" class="!text-sm">PPV Offers/Month:</label><input type="number" id="fc_ppvOffers" value="4" class="w-full !p-1.5 !text-sm"></div>
                 <div><label for="fc_ppvPrice" class="!text-sm">Avg. Price/PPV ($):</label><input type="number" id="fc_ppvPrice" value="30" class="w-full !p-1.5 !text-sm"></div>
                 <div><label for="fc_ppvConversionRate" class="!text-sm">PPV Purchase Rate (%):</label><input type="number" id="fc_ppvConversionRate" value="30" min="0" max="100" class="w-full !p-1.5 !text-sm"></div>
@@ -176,9 +188,9 @@
                 <div class="earnings-breakdown text-center text-sm"><p>Sub Revenue: <strong id="fc_subRevenueText">$0</strong></p><p>PPV Revenue: <strong id="fc_ppvRevenueText">$0</strong></p><p>Tip Revenue: <strong id="fc_tipRevenueText">$0</strong></p><hr class="border-[#3E6990] my-1"><p>Total Gross: <strong id="fc_totalGrossEarningsText" class="text-[#6ee7b7] text-md">$0</strong></p><p class="text-xs">(Before 20% Fee)</p><p>Est. Net: <strong id="fc_totalNetEarningsText" class="text-[#6ee7b7] text-md">$0</strong></p></div>
                 <div class="chart-container !h-56 sm:!h-64"><canvas id="fc_comparisonChart"></canvas></div>
                 <p id="fc_comparisonContextText" class="comparison-text text-center text-xs"></p>
-                <button id="fc_getAiFeasibilityButton" class="w-full py-1.5 tool-action-button text-xs ai-trigger-button hidden">✨ AI: Analyze Scenario Feasibility</button>
+                <button id="fc_getAiFeasibilityButton" class="w-full py-1.5 tool-action-button text-xs ai-trigger-button hidden">✨ AI: Analyze Scenario Feasibility <span class="info-icon">? <span class="tooltip-text">Sends your custom scenario to AI for a feasibility check.</span></span></button>
                 <div id="fc_aiFeasibilityContainer" class="ai-output-container hidden !text-xs">
-                    <h4 class="!text-xs">✨ AI Feasibility & Trade-off Analysis:</h4><p id="fc_aiFeasibilityText"></p>
+                    <h4 class="!text-xs">✨ AI Feasibility & Trade-off Analysis: <button onclick="copyToClipboard('fc_aiFeasibilityText')" class="copy-button">📋</button></h4><p id="fc_aiFeasibilityText"></p>
                 </div>
             </div>
         </div>
@@ -186,20 +198,22 @@
         <div id="aiPolicyNavigator" class="tool-content tool-container p-5 md:p-6">
             <header class="text-center mb-4"><h2 class="text-xl md:text-2xl font-bold">AI Policy Navigator (Custom Scenarios)</h2><p class="text-xs text-[#A2D2FF]/70">Test pre-set scenarios or get AI analysis on your custom AI use idea.</p></header>
             <div class="mb-4 p-4 rounded-lg border border-[#3E6990] bg-[#1E407C]/50">
-                <label for="nav_customScenarioText" class="!text-sm">Describe your custom AI activity/content idea:</label>
+                <label for="nav_customScenarioText" class="!text-sm">Describe your custom AI activity/content idea: <span class="info-icon">? <span class="tooltip-text">Be specific about what AI you want to use and for what purpose on OnlyFans.</span></span></label>
                 <textarea id="nav_customScenarioText" rows="3" class="w-full !p-1.5 !text-sm" placeholder="e.g., Use AI to generate SFW animated teasers from my photos with my AI voice for TikTok..."></textarea>
+                <p id="nav_customScenario_val" class="validation-message hidden">Please describe your scenario.</p>
                 <button id="nav_analyzeCustomScenarioButton" class="w-full py-1.5 tool-action-button text-xs mt-2 ai-trigger-button">✨ AI: Analyze My Custom Scenario</button>
                 <div id="nav_customAiAnalysisContainer" class="ai-output-container hidden !text-xs">
-                    <h4 class="!text-xs">✨ AI Risk Assessment for Custom Scenario:</h4><p id="nav_customAiAnalysisText"></p>
-                    <button id="nav_getAiMitigationButton" class="w-full py-1 tool-action-button text-xs mt-1.5 ai-trigger-button hidden">✨ AI: Suggest Mitigation</button>
-                    <div id="nav_aiMitigationContainer" class="ai-output-container hidden !text-xs"><h4 class="!text-xs">✨ AI Mitigation Ideas:</h4><p id="nav_aiMitigationText"></p></div>
+                    <h4 class="!text-xs">✨ AI Risk Assessment for Custom Scenario: <button onclick="copyToClipboard('nav_customAiAnalysisText')" class="copy-button">📋</button></h4><p id="nav_customAiAnalysisText"></p>
+                    <hr class="border-[#3E6990]/50 my-2">
+                    <button id="nav_getAiMitigationButton" class="w-full py-1 tool-action-button text-xs mt-1.5 ai-trigger-button hidden">✨ AI: Suggest Mitigation <span class="info-icon">? <span class="tooltip-text">If risks are identified, AI will suggest ways to make your idea safer/more compliant.</span></span></button>
+                    <div id="nav_aiMitigationContainer" class="ai-output-container hidden !text-xs !mt-1.5 !bg-transparent !border-none !p-0"><h4 class="!text-xs">✨ AI Mitigation Ideas: <button onclick="copyToClipboard('nav_aiMitigationText')" class="copy-button">📋</button></h4><p id="nav_aiMitigationText"></p></div>
                 </div>
             </div>
             <hr class="border-[#3E6990] my-4">
             <h3 class="text-center text-md font-semibold mb-2">Or, Navigate Pre-set Scenarios:</h3>
             <div id="nav_navigatorApp" class="space-y-4">
                 <div id="nav_scenarioDisplay" class="scenario-card p-4"><h3 id="nav_scenarioTitle" class="text-md font-bold mb-1">Scenario Title</h3><p id="nav_scenarioDescription" class="text-xs text-[#A2D2FF]/90 mb-2">Desc.</p><div id="nav_optionsContainer" class="space-y-2"></div></div>
-                <div id="nav_feedbackDisplayContainer" class="feedback-card-container p-2.5 hidden"><h4 id="nav_feedbackTitle" class="text-sm font-semibold mb-0.5">Feedback</h4><p id="nav_feedbackText" class="text-xs mb-0.5"></p><div class="flex items-center text-xs"><p id="nav_feedbackPolicy" class="policy-reference"></p><button id="nav_aiExplainPolicyButton" class="ai-policy-elaboration-button hidden !text-xs !py-0.5 !px-1">✨ AI Explain</button></div><div id="nav_aiPolicyElaborationContainer" class="ai-output-container hidden !text-xs"><h5 class="!text-xs">✨ AI Deeper Dive:</h5><p id="nav_aiPolicyElaborationText"></p></div></div>
+                <div id="nav_feedbackDisplayContainer" class="feedback-card-container p-2.5 hidden"><h4 id="nav_feedbackTitle" class="text-sm font-semibold mb-0.5">Feedback</h4><p id="nav_feedbackText" class="text-xs mb-0.5"></p><div class="flex items-center text-xs"><p id="nav_feedbackPolicy" class="policy-reference"></p><button id="nav_aiExplainPolicyButton" class="ai-policy-elaboration-button hidden !text-xs !py-0.5 !px-1">✨ AI Explain <span class="info-icon">? <span class="tooltip-text">Get a deeper AI explanation of this policy point.</span></span></button></div><div id="nav_aiPolicyElaborationContainer" class="ai-output-container hidden !text-xs"><h5 class="!text-xs">✨ AI Deeper Dive: <button onclick="copyToClipboard('nav_aiPolicyElaborationText')" class="copy-button">📋</button></h5><p id="nav_aiPolicyElaborationText"></p></div></div>
                 <div id="nav_scoreDisplay" class="text-center text-sm hidden"><p>Score: <span id="nav_scoreValue" class="font-bold">0</span>/<span id="nav_totalScenariosValue">0</span></p><p id="nav_finalMessage" class="mt-0.5 text-xs"></p></div>
                 <button id="nav_nextScenarioButton" class="nav-button w-full mt-2 text-xs py-1.5">Submit</button>
                 <button id="nav_restartNavigatorButton" class="nav-button w-full mt-1 hidden bg-red-700 hover:bg-red-800 !text-white text-xs py-1.5">Restart Quiz</button>
@@ -209,13 +223,15 @@
         <div id="leanOptimizer" class="tool-content tool-container p-5 md:p-6">
             <header class="text-center mb-4"><h2 class="text-xl md:text-2xl font-bold">Lean Workflow Optimizer (AI Enhanced)</h2><p class="text-xs text-[#A2D2FF]/70">Assess practices, get AI bottleneck analysis & custom process redesign ideas.</p></header>
             <div class="mb-4 p-4 rounded-lg border border-[#3E6990] bg-[#1E407C]/50">
-                <label for="opt_detailedWorkflowInput" class="!text-sm">Describe your typical weekly content workflow (tasks & hours):</label>
+                <label for="opt_detailedWorkflowInput" class="!text-sm">Describe your typical weekly content workflow (tasks & hours): <span class="info-icon">? <span class="tooltip-text">List tasks and approx. hours per week. E.g., "Mon: Plan (2h), Film (4h). Tue: Edit (6h)..."</span></span></label>
                 <textarea id="opt_detailedWorkflowInput" rows="4" class="w-full !p-1.5 !text-sm" placeholder="e.g., Mon: Plan (2h), Film (4h). Tue: Edit (6h)..."></textarea>
+                <p id="opt_detailedWorkflow_val" class="validation-message hidden">Please describe your workflow.</p>
                 <button id="opt_analyzeWorkflowAiButton" class="w-full py-1.5 tool-action-button text-xs mt-2 ai-trigger-button">✨ AI: Analyze My Workflow for Bottlenecks</button>
                 <div id="opt_aiBottleneckContainer" class="ai-output-container hidden !text-xs">
-                    <h4 class="!text-xs">✨ AI Bottleneck Analysis:</h4><p id="opt_aiBottleneckText"></p>
-                    <button id="opt_getAiWorkflowSuggestionButton" class="w-full py-1 tool-action-button text-xs mt-1.5 ai-trigger-button hidden">✨ AI: Suggest Optimized Workflow</button>
-                    <div id="opt_aiWorkflowSuggestionContainer" class="ai-output-container hidden !text-xs"><h4 class="!text-xs">✨ AI Optimized Workflow Idea:</h4><p id="opt_aiWorkflowSuggestionText"></p></div>
+                    <h4 class="!text-xs">✨ AI Bottleneck Analysis: <button onclick="copyToClipboard('opt_aiBottleneckText')" class="copy-button">📋</button></h4><p id="opt_aiBottleneckText"></p>
+                    <hr class="border-[#3E6990]/50 my-2">
+                    <button id="opt_getAiWorkflowSuggestionButton" class="w-full py-1 tool-action-button text-xs mt-1.5 ai-trigger-button hidden">✨ AI: Suggest Optimized Workflow <span class="info-icon">? <span class="tooltip-text">AI will suggest changes to your described workflow.</span></span></button>
+                    <div id="opt_aiWorkflowSuggestionContainer" class="ai-output-container hidden !text-xs !mt-1.5 !bg-transparent !border-none !p-0"><h4 class="!text-xs">✨ AI Optimized Workflow Idea: <button onclick="copyToClipboard('opt_aiWorkflowSuggestionText')" class="copy-button">📋</button></h4><p id="opt_aiWorkflowSuggestionText"></p></div>
                 </div>
             </div>
             <hr class="border-[#3E6990] my-4">
@@ -226,8 +242,8 @@
                 <div class="text-center text-sm"><p>Lean Score: <span id="opt_leanScoreValue" class="font-bold text-lg text-[#6ee7b7]">0</span>/100</p><p id="opt_leanScoreTier" class="text-xs text-[#A2D2FF]/80"></p></div>
                 <div class="score-bar-container !h-6"><div id="opt_scoreBarFill" class="score-bar-fill !text-xs" style="width:0%;">0%</div></div>
                 <div><h4 class="text-sm font-semibold mb-1 text-[#A2D2FF]">Recommendations:</h4><ul id="opt_recommendationList" class="recommendation-list list-none p-0 text-xs"></ul></div>
-                <button id="opt_getAiActionPlanButton" class="action-button w-full mt-2 !py-1.5 text-xs ai-trigger-button hidden">✨ AI: Generate Lean Action Plan</button>
-                <div id="opt_aiActionPlanContainer" class="ai-output-container hidden !text-xs"><h4 class="!text-xs">✨ AI Action Plan:</h4><p id="opt_aiActionPlanText"></p></div>
+                <button id="opt_getAiActionPlanButton" class="action-button w-full mt-2 !py-1.5 text-xs ai-trigger-button hidden">✨ AI: Generate Lean Action Plan <span class="info-icon">? <span class="tooltip-text">Sends your unselected practices to AI for a prioritized action plan.</span></span></button>
+                <div id="opt_aiActionPlanContainer" class="ai-output-container hidden !text-xs"><h4 class="!text-xs">✨ AI Action Plan: <button onclick="copyToClipboard('opt_aiActionPlanText')" class="copy-button">📋</button></h4><p id="opt_aiActionPlanText"></p></div>
                 <button id="opt_reassessButton" class="action-button w-full mt-2 !py-1.5 text-xs">Re-assess Checklist</button>
             </div>
         </div>
@@ -235,13 +251,14 @@
         <div id="contentCalendar" class="tool-content tool-container p-5 md:p-6">
             <header class="text-center mb-4"><h2 class="text-xl md:text-2xl font-bold">AI Content Calendar & Idea Expander</h2><p class="text-xs text-[#A2D2FF]/70">Get AI-generated content calendars and expanded ideas for your niche.</p></header>
             <div class="space-y-3">
-                <div><label for="cc_primaryNiche" class="!text-sm">Your Primary Niche(s) (e.g., Fitness, ASMR, Cosplay):</label><input type="text" id="cc_primaryNiche" class="w-full !p-1.5 !text-sm" value="ASMR Roleplay"></div>
+                <div><label for="cc_primaryNiche" class="!text-sm">Your Primary Niche(s): <span class="info-icon">? <span class="tooltip-text">E.g., Fitness, ASMR, Cosplay, Art. Be specific for better AI results.</span></span></label><input type="text" id="cc_primaryNiche" class="w-full !p-1.5 !text-sm" value="ASMR Roleplay"><p id="cc_primaryNiche_val" class="validation-message hidden">Niche is required.</p></div>
                 <div><label for="cc_userIdea" class="!text-sm">An Existing Idea/Theme to Expand (Optional):</label><input type="text" id="cc_userIdea" class="w-full !p-1.5 !text-sm" placeholder="e.g., Library-themed ASMR video"></div>
                 <button id="cc_generateButton" class="w-full py-2 tool-action-button text-sm ai-trigger-button">✨ AI: Generate Calendar & Expand Ideas</button>
             </div>
             <div id="cc_aiOutputContainer" class="ai-output-container hidden mt-3 !text-xs">
-                <h4 class="!text-xs">✨ AI-Powered Content Suggestions:</h4>
+                <h4 class="!text-xs">✨ AI-Powered Content Suggestions: <button onclick="copyToClipboard('cc_aiOutputContainer')" class="copy-button">📋</button></h4>
                 <div id="cc_aiCalendarText" class="mb-2"></div>
+                <hr id="cc_hr_separator" class="border-[#3E6990]/50 my-2 hidden">
                 <div id="cc_aiIdeaExpansionText"></div>
             </div>
         </div>
@@ -249,12 +266,13 @@
         <div id="engagementPrompter" class="tool-content tool-container p-5 md:p-6">
             <header class="text-center mb-4"><h2 class="text-xl md:text-2xl font-bold">Personalized Fan Engagement Prompter (AI)</h2><p class="text-xs text-[#A2D2FF]/70">Get AI suggestions for engaging specific fan segments.</p></header>
             <div class="space-y-3">
-                <div><label for="ep_fanSegmentDescription" class="!text-sm">Describe Fan Segment (e.g., long-term sub, high tipper, loves BTS):</label><textarea id="ep_fanSegmentDescription" rows="3" class="w-full !p-1.5 !text-sm" placeholder="Long-term subscriber, high tipper, often comments on story posts, seems interested in behind-the-scenes content"></textarea></div>
+                <div><label for="ep_fanSegmentDescription" class="!text-sm">Describe Fan Segment: <span class="info-icon">? <span class="tooltip-text">E.g., 'New sub, only interacts with polls' or 'VIP fan, buys all PPV, loves personalized attention'.</span></span></label><textarea id="ep_fanSegmentDescription" rows="3" class="w-full !p-1.5 !text-sm" placeholder="Long-term subscriber, high tipper, often comments on story posts, seems interested in behind-the-scenes content"></textarea><p id="ep_fanSegmentDescription_val" class="validation-message hidden">Description is required.</p></div>
                 <button id="ep_generatePromptsButton" class="w-full py-2 tool-action-button text-sm ai-trigger-button">✨ AI: Get Engagement & PPV Ideas</button>
             </div>
             <div id="ep_aiOutputContainer" class="ai-output-container hidden mt-3 !text-xs">
-                <h4 class="!text-xs">✨ AI Engagement & PPV Suggestions:</h4>
+                <h4 class="!text-xs">✨ AI Engagement & PPV Suggestions: <button onclick="copyToClipboard('ep_aiOutputContainer')" class="copy-button">📋</button></h4>
                 <div id="ep_aiEngagementPromptsText" class="mb-2"></div>
+                <hr id="ep_hr_separator" class="border-[#3E6990]/50 my-2 hidden">
                 <div id="ep_aiPpvAngleText"></div>
             </div>
         </div>
@@ -265,12 +283,13 @@
                 <div><label for="an_subGrowthRate" class="!text-sm">Monthly Sub Growth Rate (%):</label><input type="number" id="an_subGrowthRate" class="w-full !p-1.5 !text-sm" value="5"></div>
                 <div><label for="an_churnRate" class="!text-sm">Monthly Churn Rate (%):</label><input type="number" id="an_churnRate" class="w-full !p-1.5 !text-sm" value="20"></div>
                 <div><label for="an_ppvConversionRate" class="!text-sm">Avg. PPV Purchase Rate (%):</label><input type="number" id="an_ppvConversionRate" class="w-full !p-1.5 !text-sm" value="10"></div>
-                <div><label for="an_topContentType" class="!text-sm">Your Top Performing Content Type:</label><input type="text" id="an_topContentType" class="w-full !p-1.5 !text-sm" value="Live Streams"></div>
+                <div><label for="an_topContentType" class="!text-sm">Your Top Performing Content Type: <span class="info-icon">? <span class="tooltip-text">E.g., Live Streams, Solo Videos, Photo Sets.</span></span></label><input type="text" id="an_topContentType" class="w-full !p-1.5 !text-sm" value="Live Streams"><p id="an_topContentType_val" class="validation-message hidden">Required.</p></div>
                 <div class="sm:col-span-2"><button id="an_analyzeMetricsButton" class="w-full py-2 tool-action-button text-sm mt-2 ai-trigger-button">✨ AI: Analyze My Metrics</button></div>
             </div>
             <div id="an_aiOutputContainer" class="ai-output-container hidden mt-3 !text-xs">
-                <h4 class="!text-xs">✨ AI Analytics Insights & Recommendations:</h4>
+                <h4 class="!text-xs">✨ AI Analytics Insights & Recommendations: <button onclick="copyToClipboard('an_aiOutputContainer')" class="copy-button">📋</button></h4>
                 <div id="an_aiInsightsText" class="mb-2"></div>
+                <hr id="an_hr_separator" class="border-[#3E6990]/50 my-2 hidden">
                 <div id="an_aiRecommendationsText"></div>
             </div>
         </div>
@@ -278,12 +297,13 @@
         <div id="complianceShield" class="tool-content tool-container p-5 md:p-6">
             <header class="text-center mb-4"><h2 class="text-xl md:text-2xl font-bold">"Compliance Shield" (AI-Assisted Review)</h2><p class="text-xs text-[#A2D2FF]/70">Paste draft text for AI to flag potential policy conflicts.</p></header>
             <div class="space-y-3">
-                <div><label for="cs_draftText" class="!text-sm">Paste your draft caption, DM, PPV offer, or content description:</label><textarea id="cs_draftText" rows="4" class="w-full !p-1.5 !text-sm" placeholder="e.g., My HOTTEST video yet! 🔥 DM me your number after purchase for a special surprise! 😉"></textarea></div>
+                <div><label for="cs_draftText" class="!text-sm">Paste your draft caption, DM, PPV offer, or content description: <span class="info-icon">? <span class="tooltip-text">AI will look for common red flags. Not legal advice.</span></span></label><textarea id="cs_draftText" rows="4" class="w-full !p-1.5 !text-sm" placeholder="e.g., My HOTTEST video yet! 🔥 DM me your number after purchase for a special surprise! 😉"></textarea><p id="cs_draftText_val" class="validation-message hidden">Draft text is required.</p></div>
                 <button id="cs_reviewTextButton" class="w-full py-2 tool-action-button text-sm ai-trigger-button">✨ AI: Review for Compliance Flags</button>
             </div>
             <div id="cs_aiOutputContainer" class="ai-output-container hidden mt-3 !text-xs">
-                <h4 class="!text-xs">✨ AI Compliance Review:</h4>
+                <h4 class="!text-xs">✨ AI Compliance Review: <button onclick="copyToClipboard('cs_aiOutputContainer')" class="copy-button">📋</button></h4>
                 <div id="cs_aiPolicyFlagsText" class="mb-2"></div>
+                <hr id="cs_hr_separator" class="border-[#3E6990]/50 my-2 hidden">
                 <div id="cs_aiRephrasingText"></div>
             </div>
         </div>
@@ -291,15 +311,39 @@
         <div id="nicheExplorer" class="tool-content tool-container p-5 md:p-6">
             <header class="text-center mb-4"><h2 class="text-xl md:text-2xl font-bold">Niche Deep Dive & Expansion (AI)</h2><p class="text-xs text-[#A2D2FF]/70">Get AI ideas for sub-niches and cross-niche synergies.</p></header>
             <div class="space-y-3">
-                <div><label for="ne_primaryNiche" class="!text-sm">Your Primary Niche (e.g., Fitness, ASMR, Cosplay, Art):</label><input type="text" id="ne_primaryNiche" class="w-full !p-1.5 !text-sm" value="Fitness"></div>
+                <div><label for="ne_primaryNiche" class="!text-sm">Your Primary Niche (e.g., Fitness, ASMR, Cosplay, Art): <span class="info-icon">? <span class="tooltip-text">Be specific for best AI suggestions.</span></span></label><input type="text" id="ne_primaryNiche" class="w-full !p-1.5 !text-sm" value="Fitness"><p id="ne_primaryNiche_val" class="validation-message hidden">Primary niche is required.</p></div>
                 <button id="ne_exploreNicheButton" class="w-full py-2 tool-action-button text-sm ai-trigger-button">✨ AI: Explore Niche Opportunities</button>
             </div>
             <div id="ne_aiOutputContainer" class="ai-output-container hidden mt-3 !text-xs">
-                <h4 class="!text-xs">✨ AI Niche Exploration:</h4>
+                <h4 class="!text-xs">✨ AI Niche Exploration: <button onclick="copyToClipboard('ne_aiOutputContainer')" class="copy-button">📋</button></h4>
                 <div id="ne_aiSubNichesText" class="mb-2"></div>
+                <hr id="ne_hr_separator" class="border-[#3E6990]/50 my-2 hidden">
                 <div id="ne_aiSynergyIdeasText"></div>
             </div>
         </div>
+
+        <div id="aiStudio" class="tool-content tool-container p-5 md:p-6">
+            <header class="text-center mb-4"><h2 class="text-xl md:text-2xl font-bold">AI Image & Diagram Studio (Conceptual)</h2><p class="text-xs text-[#A2D2FF]/70">Get AI descriptions for images or textual outlines for diagrams based on your prompts.</p></header>
+            <div class="space-y-3">
+                <div>
+                    <label for="ais_promptType" class="!text-sm">What do you want to generate?</label>
+                    <select id="ais_promptType" class="w-full !p-1.5 !text-sm">
+                        <option value="image_description">Detailed Image Description</option>
+                        <option value="diagram_outline">Textual Diagram Outline</option>
+                    </select>
+                </div>
+                <div><label for="ais_visualPrompt" class="!text-sm">Your Prompt for the Visual: <span class="info-icon">? <span class="tooltip-text">Describe the image or diagram you envision. E.g., "A futuristic creator workspace with neon lights" or "Flowchart of a 3-step content batching process".</span></span></label><textarea id="ais_visualPrompt" rows="3" class="w-full !p-1.5 !text-sm" placeholder="e.g., A vibrant infographic element showing market growth..."></textarea><p id="ais_visualPrompt_val" class="validation-message hidden">Prompt is required.</p></div>
+                <button id="ais_generateVisualButton" class="w-full py-2 tool-action-button text-sm ai-trigger-button">✨ AI: Generate Visual Concept</button>
+            </div>
+            <div id="ais_aiOutputContainer" class="ai-output-container hidden mt-3 !text-xs">
+                <h4 class="!text-xs">✨ AI Visual Concept: <button onclick="copyToClipboard('ais_aiOutputContainer')" class="copy-button">📋</button></h4>
+                <div id="ais_imagePlaceholderContainer" class="my-2 hidden text-center">
+                    <img id="ais_imagePlaceholder" src="" alt="AI Generated Image Concept" class="max-w-xs mx-auto rounded border border-[#3E6990]">
+                </div>
+                <div id="ais_aiVisualDescriptionText"></div>
+            </div>
+        </div>
+
     </main>
 
     <footer class="text-center py-6 mt-auto">
@@ -307,15 +351,45 @@
     </footer>
 
 <script>
-    // --- Gemini API Call Function ---
-    async function callGeminiAPI(prompt, loadingElementId = null, outputElementId = null, buttonElement = null) {
-        const aiOutputElem = outputElementId ? document.getElementById(outputElementId) : null;
-        const loadingElem = loadingElementId ? document.getElementById(loadingElementId) : (aiOutputElem || null);
+    // --- Global Helper Functions ---
+    function copyToClipboard(elementId) {
+        const textToCopy = document.getElementById(elementId)?.innerText;
+        if (!textToCopy) { console.error("Element not found for copy:", elementId); return; }
+        const textArea = document.createElement("textarea");
+        textArea.value = textToCopy;
+        document.body.appendChild(textArea);
+        textArea.select();
+        try {
+            document.execCommand('copy');
+            alert('Copied to clipboard!'); 
+        } catch (err) {
+            console.error('Failed to copy text: ', err);
+            alert('Failed to copy. Please try manually.');
+        }
+        document.body.removeChild(textArea);
+    }
 
-        if (loadingElem) {
-            if (aiOutputElem && loadingElementId !== outputElementId) aiOutputElem.textContent = ''; // Clear output if separate
-            loadingElem.classList.remove('hidden');
-            loadingElem.innerHTML = '<p class="gemini-loading">✨ Thinking...</p>'; // Use innerHTML for p tag
+    function downloadAsText(elementId, filename = 'toolkit_insights.txt') {
+        const textContent = document.getElementById(elementId)?.innerText;
+         if (!textContent) { console.error("Element not found for download:", elementId); return; }
+        const blob = new Blob([textContent], { type: 'text/plain;charset=utf-8' });
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = filename;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(link.href);
+    }
+
+    // --- Gemini API Call Function ---
+    async function callGeminiAPI(prompt, loadingElement = null, outputElement = null, buttonElement = null) {
+        if (loadingElement) {
+            loadingElement.classList.remove('hidden');
+            loadingElement.innerHTML = '<p class="gemini-loading">✨ Thinking...</p>';
+        }
+        if (outputElement && loadingElement !== outputElement) { // Clear output if it's a different element
+             outputElement.innerHTML = ''; // Clear previous output
         }
         if (buttonElement) buttonElement.disabled = true;
 
@@ -336,27 +410,69 @@
             }
             const result = await response.json();
             if (result.candidates && result.candidates[0]?.content?.parts[0]?.text) {
-                if (loadingElem && loadingElementId === outputElementId) loadingElem.classList.add('hidden'); // Hide loading if it's the output elem
-                else if (loadingElem) loadingElem.textContent = ''; // Clear loading text if separate
+                if (loadingElement && loadingElement === outputElement) { // If loading and output are same, replace loading with result
+                     // Handled by caller by setting textContent/innerHTML
+                } else if (loadingElement) {
+                    loadingElement.classList.add('hidden'); // Hide separate loading indicator
+                    loadingElement.innerHTML = ''; // Clear it
+                }
                 return result.candidates[0].content.parts[0].text;
             } else {
                 console.error("Unexpected Gemini API response structure:", result);
-                if (loadingElem) loadingElem.innerHTML = '<p class="text-red-400">Error: Unexpected AI response.</p>';
+                if (loadingElement) loadingElement.innerHTML = '<p class="text-red-400">Error: Unexpected AI response.</p>';
                 return "Could not retrieve advice from AI. (Unexpected response)";
             }
         } catch (error) {
             console.error("Error calling Gemini API:", error);
-            if (loadingElem) loadingElem.innerHTML = `<p class="text-red-400">Error: ${error.message}.</p>`;
+            if (loadingElement) loadingElement.innerHTML = `<p class="text-red-400">Error: ${error.message}.</p>`;
             return `Could not retrieve advice from AI: ${error.message}.`;
         } finally {
             if (buttonElement) buttonElement.disabled = false;
         }
     }
+    
+    // --- Input Validation Helper ---
+    function validateInput(elementId, messageElementId, conditionFn, errorMessage) {
+        const inputElement = document.getElementById(elementId);
+        const messageElement = document.getElementById(messageElementId);
+        if (!inputElement || !messageElement) return true; // Assume valid if elements don't exist
+
+        if (conditionFn(inputElement.value)) {
+            messageElement.classList.add('hidden');
+            messageElement.textContent = '';
+            inputElement.classList.remove('border-red-500');
+            return true;
+        } else {
+            messageElement.classList.remove('hidden');
+            messageElement.textContent = errorMessage;
+            inputElement.classList.add('border-red-500');
+            return false;
+        }
+    }
+
 
     // --- Main Navigation Logic ---
     document.addEventListener('DOMContentLoaded', function () {
         const tabs = document.querySelectorAll('.tab-button');
         const toolContents = document.querySelectorAll('.tool-content');
+        const onboardingModal = document.getElementById('onboardingModal');
+        const closeOnboardingModalButton = document.getElementById('closeOnboardingModal');
+
+        // Onboarding Modal Logic
+        if (!localStorage.getItem('toolkitVisitedBefore')) {
+            onboardingModal.classList.add('active');
+        }
+        closeOnboardingModalButton.addEventListener('click', () => {
+            onboardingModal.classList.remove('active');
+            localStorage.setItem('toolkitVisitedBefore', 'true');
+        });
+        onboardingModal.addEventListener('click', (e) => { // Close if overlay is clicked
+            if (e.target === onboardingModal) {
+                 onboardingModal.classList.remove('active');
+                 localStorage.setItem('toolkitVisitedBefore', 'true');
+            }
+        });
+
 
         function activateTool(toolId) {
             toolContents.forEach(content => content.classList.toggle('active', content.id === toolId));
@@ -367,7 +483,7 @@
         if (tabs.length > 0) activateTool(tabs[0].dataset.tool);
 
         initStrategySimulatorAdvanced();
-        initAutomationPathfinderAdvanced(); // This will call the corrected version
+        initAutomationPathfinderAdvanced();
         initEarningsForecasterAdvanced();
         initAiPolicyNavigatorAdvanced();
         initLeanOptimizerAdvanced();
@@ -376,10 +492,11 @@
         initAnalyticsInterpreterTool();
         initComplianceShieldTool();
         initNicheExplorerTool();
+        initAiStudioTool(); // Initialize the new tool
     });
 
     // --- Tool 1: Strategy Simulator (Advanced) JS ---
-    function initStrategySimulatorAdvanced() {
+    function initStrategySimulatorAdvanced() { /* ... (JS from previous version, ensure IDs match new HTML if changed) ... */ 
         const simulateButton = document.getElementById('sim_adv_simulateButton');
         const resultsPanel = document.getElementById('sim_adv_resultsPanel');
         const getAiAdviceButton = document.getElementById('sim_adv_getAiAdviceButton');
@@ -392,7 +509,7 @@
         const complianceTextElem = document.getElementById('sim_adv_complianceText');
         let resultsChartInstance = null;
         const strategyFactors = { 
-            content: { "Live Streams": 7, "Artistic Photo Sets": 6, "Personalized Videos": 8, "BTS Vlogs": 5, "": 0 }, // Added "" for None
+            content: { "Live Streams": 7, "Artistic Photo Sets": 6, "Personalized Videos": 8, "BTS Vlogs": 5, "": 0 },
             promotion: { low: 2, medium: 5, high: 8 },
         };
         const toolTipConfig = { callbacks: { title: function(tooltipItems) { const item = tooltipItems[0]; let label = item.chart.data.labels[item.dataIndex]; if (Array.isArray(label)) { return label.join(' '); } return label; } } };
@@ -400,10 +517,10 @@
 
         simulateButton.addEventListener('click', async function() {
             resultsPanel.classList.remove('hidden');
-            aiPersonaTextElem.innerHTML = '<p class="gemini-loading">✨ Generating projected fan persona...</p>'; // Use innerHTML
+            aiPersonaTextElem.innerHTML = '<p class="gemini-loading">✨ Generating projected fan persona...</p>';
             aiAdviceContainer.classList.add('hidden'); 
             getAiAdviceButton.classList.add('hidden'); 
-            this.disabled = true; // Disable simulate button during processing
+            this.textContent = '✨ Simulating...'; this.disabled = true;
 
             const targetAudienceAge = document.getElementById('sim_adv_targetAudienceAge').value;
             const targetAudienceInterests = document.getElementById('sim_adv_targetAudienceInterests').value;
@@ -414,11 +531,11 @@
             
             let earningsScore = (strategyFactors.content[contentPillar1] || 0) + (strategyFactors.content[contentPillar2] || 0) +
                                 strategyFactors.promotion[promoTwitter] + strategyFactors.promotion[promoInstagram] + 
-                                7 + 0; // 7 for advanced automation, 0 for strict compliance mod
+                                7 + 0; 
             let efficiencyScore = (strategyFactors.content[contentPillar1] ? 3 : 0) + (strategyFactors.content[contentPillar2] ? 3 : 0) +
                                   (promoTwitter === "high" ? 3 : (promoTwitter === "medium" ? 2:1)) +
                                   (promoInstagram === "high" ? 3 : (promoInstagram === "medium" ? 2:1)) + 7;
-            let complianceRiskScore = 1; // Strict compliance
+            let complianceRiskScore = 1; 
 
             let earningsTierText = earningsScore > 20 ? "Top Tier Potential" : (earningsScore > 15 ? "High Earner" : (earningsScore > 10 ? "Above Average" : "Median Earner"));
             let efficiencyText = efficiencyScore > 15 ? "High Efficiency" : (efficiencyScore > 10 ? "Moderate Efficiency" : "Low Efficiency");
@@ -430,11 +547,11 @@
 
             const personaPrompt = `Given an OnlyFans creator strategy targeting audience (Age: ${targetAudienceAge}, Interests: ${targetAudienceInterests}) with content pillars (${contentPillar1}${contentPillar2 ? ", " + contentPillar2 : ""}) and promotion intensity (Twitter: ${promoTwitter}, Instagram: ${promoInstagram}), describe the likely 'Projected Fan Persona' in 2-3 sentences, including their likely expectations and preferred engagement style.`;
             currentPersona = await callGeminiAPI(personaPrompt); 
-            aiPersonaTextElem.textContent = currentPersona; // Display result
+            aiPersonaTextElem.textContent = currentPersona; 
             if (!currentPersona.toLowerCase().includes("error")) {
                  getAiAdviceButton.classList.remove('hidden');
             }
-            this.disabled = false; // Re-enable simulate button
+            this.textContent = 'Simulate Advanced Strategy'; this.disabled = false; 
 
             const chartData = { labels: ['Earnings Potential', 'Efficiency', 'Safety (Low Risk)'], datasets: [{ label: 'Strategy Profile', data: [ Math.max(0, Math.min(10, earningsScore / 2.5)), Math.max(0, Math.min(10, efficiencyScore / 1.8)), Math.max(0, Math.min(10, 10 - complianceRiskScore)) ], fill: true, backgroundColor: 'rgba(162, 210, 255, 0.3)', borderColor: '#A2D2FF', pointBackgroundColor: '#A2D2FF', pointBorderColor: '#fff', pointHoverBackgroundColor: '#fff', pointHoverBorderColor: '#A2D2FF' }] };
             const chartConfig = { type: 'radar', data: chartData, options: { responsive: true, maintainAspectRatio: false, elements: { line: { borderWidth: 2 } }, scales: { r: { angleLines: { display: true, color: 'rgba(128, 128, 128, 0.3)' }, suggestedMin: 0, suggestedMax: 10, grid: { color: 'rgba(128, 128, 128, 0.3)' }, pointLabels: { font: { size: 9, family: "'Inter', sans-serif" }, color: '#E0E1DD' }, ticks: { backdropColor: 'rgba(0,0,0,0)', color: '#A2D2FF', stepSize: 2, font: { family: "'Inter', sans-serif", size: 8 } } } }, plugins: { legend: { display: false }, tooltip: toolTipConfig } } };
@@ -445,7 +562,7 @@
         getAiAdviceButton.addEventListener('click', async function() {
             aiAdviceTextElem.innerHTML = '<p class="gemini-loading">✨ Thinking...</p>';
             aiAdviceContainer.classList.remove('hidden');
-            this.disabled = true;
+            this.textContent = '✨ Generating...'; this.disabled = true;
             const contentPillar1 = document.getElementById('sim_adv_contentPillar1').value;
             const contentPillar2 = document.getElementById('sim_adv_contentPillar2').value;
             const promoTwitter = document.getElementById('sim_adv_promoPlatform1Intensity').value;
@@ -455,8 +572,9 @@
             const complianceOutcome = complianceTextElem.textContent;
 
             const advicePrompt = `For an OnlyFans strategy (Content: ${contentPillar1}${contentPillar2 ? " & " + contentPillar2 : ""}, Promotion: Twitter-${promoTwitter}, Instagram-${promoInstagram}, Automation: Advanced, Compliance: Strict) resulting in '${earningsOutcome}, ${efficiencyOutcome}, ${complianceOutcome},' and targeting the fan persona: "${currentPersona}", provide one key piece of advice (1-2 sentences) to further enhance engagement or optimize for this specific persona and strategy.`;
-            const advice = await callGeminiAPI(advicePrompt, null, null, this); // Pass button
+            const advice = await callGeminiAPI(advicePrompt);
             aiAdviceTextElem.textContent = advice;
+            this.textContent = '✨ Get AI Persona-Tailored Advice'; this.disabled = false;
         });
     }
 
@@ -543,7 +661,7 @@
             if (!currentResultData_path_adv) return;
             aiElaborationTextElem_path.innerHTML = '<p class="gemini-loading">✨ Analyzing path...</p>';
             aiElaborationContainer_path.classList.remove('hidden');
-            this.disabled = true;
+            this.textContent = '✨ Analyzing...'; this.disabled = true;
 
             const prompt = `For the OnlyFans automation path resulting in:
             - Recommendation: "${currentResultData_path_adv.recommendation}"
@@ -553,11 +671,12 @@
             ${currentResultData_path_adv.warning ? `- Warning: "${currentResultData_path_adv.warning}"` : ""}
             Provide a brief (1-2 sentences) analysis covering one key benefit, one potential cost or effort, and one minor risk or consideration for implementing this specific automation strategy. Format with clear labels like 'Benefit:', 'Cost/Effort:', 'Consideration:'.`;
             
-            const analysis = await callGeminiAPI(prompt, null, null, this);
+            const analysis = await callGeminiAPI(prompt);
             aiElaborationTextElem_path.innerHTML = analysis.replace(/Benefit:/g, "<strong>Benefit:</strong>")
                                                         .replace(/Cost\/Effort:/g, "<br><strong>Cost/Effort:</strong>")
                                                         .replace(/Consideration:/g, "<br><strong>Consideration:</strong>")
-                                                        .replace(/Risk:/g, "<br><strong>Risk:</strong>");
+                                                        .replace(/Risk:/g, "<br><strong>Risk:");
+            this.textContent = '✨ AI: Analyze Cost/Benefit/Risk'; this.disabled = false;
         });
 
         nextButton_path.addEventListener('click', () => {
@@ -596,7 +715,7 @@
             aiElaborationContainer_path.classList.add('hidden');
             displayQuestion_path_adv(currentQuestionIndex_path);
         });
-        displayQuestion_path_adv(currentQuestionIndex_path); // Initial call
+        displayQuestion_path_adv(currentQuestionIndex_path);
     }
 
 
@@ -619,21 +738,35 @@
             const targetIncome = parseFloat(document.getElementById('fc_targetIncome').value) || 3000;
             const currentSubPrice = parseFloat(document.getElementById('fc_currentSubPrice').value) || 12.99;
             
+            if(targetIncome <=0 || currentSubPrice <=0){
+                aiScenariosTextElem_fc.innerHTML = '<p class="text-red-400">Target income and sub price must be positive values.</p>';
+                aiScenariosContainer_fc.classList.remove('hidden');
+                return;
+            }
+
             aiScenariosTextElem_fc.innerHTML = '<p class="gemini-loading">✨ Generating scenarios to reach target...</p>';
             aiScenariosContainer_fc.classList.remove('hidden');
-            this.disabled = true;
+            this.textContent = '✨ Generating...'; this.disabled = true;
 
             const prompt = `An OnlyFans creator wants to achieve $${targetIncome.toFixed(0)} net monthly income. Their current/planned sub price is $${currentSubPrice.toFixed(2)}. Suggest two distinct, plausible scenarios involving subscriber count, number of PPV offers per month (assume average $25 price per PPV offer), and PPV purchase rate (as a percentage of subscribers) to reach this goal. Assume an 80% creator payout (20% platform fee). Present each scenario clearly with bullet points for Subscribers, PPV Offers/Month, and PPV Purchase Rate.`;
             
-            const scenarios = await callGeminiAPI(prompt, null, null, this); 
+            const scenarios = await callGeminiAPI(prompt); 
             aiScenariosTextElem_fc.innerHTML = scenarios.replace(/\* Scenario /g, "<br><strong>Scenario ")
                                                        .replace(/\* Subscribers:/g, "<li>Subscribers:")
                                                        .replace(/\* PPV Offers\/Month:/g, "<li>PPV Offers/Month:")
                                                        .replace(/\* PPV Purchase Rate:/g, "<li>PPV Purchase Rate:")
                                                        .split('<li>').map(s => s.length > 0 ? `<li>${s}</li>` : s).join('').replace("<li><br>", "<li>"); 
+            this.textContent = '✨ AI: Suggest Scenarios for Target'; this.disabled = false;
         });
 
         forecastButton_fc_orig.addEventListener('click', function() { 
+            let isValid = true;
+            isValid = validateInput('fc_subscribers', 'fc_subscribers_val', v => parseFloat(v) >= 0, 'Must be 0 or more.') && isValid;
+            isValid = validateInput('fc_subPrice', 'fc_subPrice_val', v => parseFloat(v) >= 0, 'Must be 0 or more.') && isValid;
+            // Add more validations for other fc_ inputs if needed
+
+            if (!isValid) return;
+
             currentForecastData_fc_adv.subscribers = parseFloat(document.getElementById('fc_subscribers').value) || 0;
             currentForecastData_fc_adv.subPrice = parseFloat(document.getElementById('fc_subPrice').value) || 0;
             currentForecastData_fc_adv.ppvOffers = parseFloat(document.getElementById('fc_ppvOffers').value) || 0;
@@ -706,7 +839,7 @@
         getAiFeasibilityButton_fc.addEventListener('click', async function() {
             aiFeasibilityTextElem_fc.innerHTML = '<p class="gemini-loading">✨ Analyzing scenario...</p>';
             aiFeasibilityContainer_fc.classList.remove('hidden');
-            this.disabled = true;
+            this.textContent = '✨ Analyzing...'; this.disabled = true;
 
             const prompt = `Analyze the feasibility of an OnlyFans creator scenario:
             - Subscribers: ${currentForecastData_fc_adv.subscribers}
@@ -718,8 +851,9 @@
             The forecasted gross monthly earnings are $${currentForecastData_fc_adv.calculatedTotalGross.toFixed(2)}.
             What is the primary challenge or effort required to make this specific scenario successful? Provide a concise (1-2 sentences) analysis highlighting key trade-offs or efforts.`;
 
-            const analysis = await callGeminiAPI(prompt, null, null, this);
+            const analysis = await callGeminiAPI(prompt);
             aiFeasibilityTextElem_fc.textContent = analysis;
+            this.textContent = '✨ AI: Analyze Scenario Feasibility'; this.disabled = false;
         });
     }
 
@@ -813,7 +947,7 @@
             if (!currentScenarioData_nav || !currentScenarioData_nav.selectedOptionForAI) return;
             aiPolicyElaborationTextElem_nav.innerHTML = '<p class="gemini-loading">✨ Thinking...</p>';
             aiPolicyElaborationContainer_nav.classList.remove('hidden');
-            this.disabled = true;
+            this.textContent = '✨ Explaining...'; this.disabled = true;
 
             const scenario = currentScenarioData_nav;
             const option = currentScenarioData_nav.selectedOptionForAI;
@@ -825,8 +959,9 @@
             The relevant policy point mentioned: "${option.policy}"
             Please elaborate on this specific policy point in 2-3 sentences. Explain why my chosen response was correct or incorrect in light of this policy, or provide a more nuanced understanding of the policy itself.`;
 
-            const elaboration = await callGeminiAPI(prompt, null, null, this);
+            const elaboration = await callGeminiAPI(prompt);
             aiPolicyElaborationTextElem_nav.textContent = elaboration;
+            this.textContent = '✨ AI Explain'; this.disabled = false;
         });
         
         function showFinalScore_nav() { 
@@ -865,27 +1000,26 @@
 
         analyzeCustomScenarioButton_nav.addEventListener('click', async function() {
             const userScenario = customScenarioText_nav.value.trim();
-            if (!userScenario) {
-                customAiAnalysisTextElem_nav.textContent = "Please describe your scenario first.";
-                customAiAnalysisContainer_nav.classList.remove('hidden');
-                return;
-            }
+            const isValid = validateInput('nav_customScenarioText', 'nav_customScenario_val', v => v.length > 10, 'Please describe your scenario in more detail (min 10 chars).');
+            if (!isValid) return;
+
             customAiAnalysisTextElem_nav.innerHTML = '<p class="gemini-loading">✨ Analyzing your scenario...</p>';
             customAiAnalysisContainer_nav.classList.remove('hidden');
             getAiMitigationButton_nav.classList.add('hidden');
             aiMitigationContainer_nav.classList.add('hidden');
-            this.disabled = true;
+            this.textContent = '✨ Analyzing...'; this.disabled = true;
 
             const prompt = `An OnlyFans creator is considering the following activity: "${userScenario}".
             Analyze this planned activity for compliance risks according to typical OnlyFans platform policies (focus on AI content, likeness, automation, disclosure, off-platform contact, etc.). Provide a risk level (Low, Medium, or High) and a brief justification (1-2 sentences).`;
             
-            const riskAssessment = await callGeminiAPI(prompt, null, null, this);
+            const riskAssessment = await callGeminiAPI(prompt);
             customAiAnalysisTextElem_nav.textContent = riskAssessment;
             currentCustomScenarioRisk_nav = riskAssessment.toLowerCase(); 
 
-            if (currentCustomScenarioRisk_nav.includes("medium") || currentCustomScenarioRisk_nav.includes("high")) {
+            if (!riskAssessment.toLowerCase().includes("error") && (currentCustomScenarioRisk_nav.includes("medium") || currentCustomScenarioRisk_nav.includes("high"))) {
                 getAiMitigationButton_nav.classList.remove('hidden');
             }
+            this.textContent = '✨ AI: Analyze My Custom Scenario'; this.disabled = false;
         });
 
         getAiMitigationButton_nav.addEventListener('click', async function() {
@@ -894,12 +1028,13 @@
 
             aiMitigationTextElem_nav.innerHTML = '<p class="gemini-loading">✨ Brainstorming mitigation...</p>';
             aiMitigationContainer_nav.classList.remove('hidden');
-            this.disabled = true;
+            this.textContent = '✨ Brainstorming...'; this.disabled = true;
 
             const prompt = `For the OnlyFans creator activity: "${userScenario}", which was assessed with the following risk: "${customAiAnalysisTextElem_nav.textContent}", suggest one or two key mitigation steps or modifications to make the activity more compliant or safer. Be specific and actionable.`;
 
-            const mitigationStrategies = await callGeminiAPI(prompt, null, null, this);
+            const mitigationStrategies = await callGeminiAPI(prompt);
             aiMitigationTextElem_nav.textContent = mitigationStrategies;
+            this.textContent = '✨ AI: Suggest Mitigation'; this.disabled = false;
         });
         displayScenario_nav(currentScenarioIndex_nav); 
     }
@@ -987,7 +1122,7 @@
         getAiActionPlanButton_opt.addEventListener('click', async function() {
             aiActionPlanTextElem_opt.innerHTML = '<p class="gemini-loading">✨ Generating your action plan...</p>';
             aiActionPlanContainer_opt.classList.remove('hidden');
-            this.disabled = true;
+            this.textContent = '✨ Generating...'; this.disabled = true;
 
             const leanScore = leanScoreValueElem_opt.textContent;
             const scoreTier = leanScoreTierElem_opt.textContent;
@@ -999,30 +1134,30 @@
             ${recommendationsText}
             Based on this, please generate a short, encouraging, and personalized action plan. Prioritize 2-3 of these unselected practices that would likely offer the biggest initial impact on my workflow efficiency or consistency. Explain why these are important first steps. Keep it concise (2-4 sentences).`;
 
-            const actionPlan = await callGeminiAPI(prompt, null, null, this);
+            const actionPlan = await callGeminiAPI(prompt);
             aiActionPlanTextElem_opt.textContent = actionPlan;
+            this.textContent = '✨ AI: Generate Lean Action Plan'; this.disabled = false;
         });
         
         analyzeWorkflowAiButton_opt.addEventListener('click', async function() {
             const userWorkflow = detailedWorkflowInput_opt.value.trim();
-            if (!userWorkflow) {
-                aiBottleneckTextElem_opt.textContent = "Please describe your weekly workflow first.";
-                aiBottleneckContainer_opt.classList.remove('hidden');
-                return;
-            }
+            const isValid = validateInput('opt_detailedWorkflowInput', 'opt_detailedWorkflow_val', v => v.length > 20, 'Please describe your workflow in more detail (min 20 chars).');
+            if (!isValid) return;
+            
             aiBottleneckTextElem_opt.innerHTML = '<p class="gemini-loading">✨ Analyzing your workflow for bottlenecks...</p>';
             aiBottleneckContainer_opt.classList.remove('hidden');
             getAiWorkflowSuggestionButton_opt.classList.add('hidden');
             aiWorkflowSuggestionContainer_opt.classList.add('hidden');
-            this.disabled = true;
+            this.textContent = '✨ Analyzing...'; this.disabled = true;
 
             const prompt = `Analyze this OnlyFans creator's weekly workflow for potential bottlenecks or inefficiencies based on lean principles: "${userWorkflow}". Identify one primary bottleneck and explain it briefly (1-2 sentences).`;
             
-            currentBottleneckAnalysis_opt = await callGeminiAPI(prompt, null, null, this);
+            currentBottleneckAnalysis_opt = await callGeminiAPI(prompt);
             aiBottleneckTextElem_opt.textContent = currentBottleneckAnalysis_opt;
             if (currentBottleneckAnalysis_opt && !currentBottleneckAnalysis_opt.toLowerCase().includes("error")) {
                 getAiWorkflowSuggestionButton_opt.classList.remove('hidden');
             }
+            this.textContent = '✨ AI: Analyze My Workflow for Bottlenecks'; this.disabled = false;
         });
 
         getAiWorkflowSuggestionButton_opt.addEventListener('click', async function() {
@@ -1031,7 +1166,7 @@
 
             aiWorkflowSuggestionTextElem_opt.innerHTML = '<p class="gemini-loading">✨ Generating optimized workflow ideas...</p>';
             aiWorkflowSuggestionContainer_opt.classList.remove('hidden');
-            this.disabled = true;
+            this.textContent = '✨ Generating...'; this.disabled = true;
             
             let unselectedPracticesContext = "The creator might not be fully utilizing all lean practices from a checklist they also filled out (if they used that part of the tool).";
 
@@ -1041,8 +1176,9 @@
             Context on other lean practices: "${unselectedPracticesContext}".
             Suggest a revised, more "lean" workflow structure or specific adjustments (1-2 key changes) to address the bottleneck and improve overall flow. Explain the benefit of these changes in 2-3 sentences.`;
 
-            const workflowSuggestion = await callGeminiAPI(prompt, null, null, this);
+            const workflowSuggestion = await callGeminiAPI(prompt);
             aiWorkflowSuggestionTextElem_opt.textContent = workflowSuggestion;
+            this.textContent = '✨ AI: Suggest Optimized Workflow'; this.disabled = false;
         });
 
 
@@ -1063,36 +1199,35 @@
         const aiOutputContainer = document.getElementById('cc_aiOutputContainer');
         const aiCalendarTextElem = document.getElementById('cc_aiCalendarText');
         const aiIdeaExpansionTextElem = document.getElementById('cc_aiIdeaExpansionText');
+        const hrSeparator = document.getElementById('cc_hr_separator');
 
         generateButton.addEventListener('click', async function() {
             const niche = nicheInput.value.trim();
+            const isValidNiche = validateInput('cc_primaryNiche', 'cc_primaryNiche_val', v => v.length > 2, 'Niche description is too short.');
+            if (!isValidNiche) return;
+            
             const userIdea = userIdeaInput.value.trim();
-            if (!niche) {
-                aiCalendarTextElem.textContent = "Please enter your primary niche.";
-                aiOutputContainer.classList.remove('hidden');
-                return;
-            }
+            
             aiCalendarTextElem.innerHTML = '<p class="gemini-loading">✨ Generating content calendar...</p>';
             aiIdeaExpansionTextElem.innerHTML = userIdea ? '<p class="gemini-loading">✨ Expanding your idea...</p>' : '';
+            hrSeparator.classList.add('hidden');
             aiOutputContainer.classList.remove('hidden');
-            this.disabled = true;
+            this.textContent = '✨ Generating...'; this.disabled = true;
 
             let calendarPrompt = `Generate a sample 1-week OnlyFans content calendar outline for a creator in the '${niche}' niche. Suggest daily post types (e.g., Photo Set, Short Video, Live Stream Teaser, Poll, PPV Announcement, BTS Clip). Format as a list for each day (e.g., Monday: [Suggestion]).`;
-            const calendarSuggestions = await callGeminiAPI(calendarPrompt, null, null, this); // Button passed to re-enable
-            aiCalendarTextElem.innerHTML = `<strong>Sample 1-Week Content Calendar for '${niche}':</strong><ul class="list-disc list-inside mt-1">${calendarSuggestions.replace(/(\b(?:Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday)\b:)/g, "</li><li><strong>$1</strong>").substring(5)}</ul>`;
+            const calendarSuggestions = await callGeminiAPI(calendarPrompt); 
+            aiCalendarTextElem.innerHTML = `<strong>Sample 1-Week Content Calendar for '${niche}':</strong><ul class="list-disc list-inside mt-1">${calendarSuggestions.replace(/- /g, "<li>").replace(/\n/g, "")}</ul>`;
 
 
             if (userIdea) {
+                hrSeparator.classList.remove('hidden');
                 let ideaPrompt = `An OnlyFans creator in the '${niche}' niche has an idea: '${userIdea}'. Expand this idea into 3-4 distinct content variations suitable for OnlyFans (could be feed posts, PPV, or live stream concepts). Be specific and creative. Format as a numbered list.`;
-                const expandedIdeas = await callGeminiAPI(ideaPrompt, null, null, this); // Button passed
+                const expandedIdeas = await callGeminiAPI(ideaPrompt); 
                 aiIdeaExpansionTextElem.innerHTML = `<br><strong>Expanding on your idea '${userIdea}':</strong><ol class="list-decimal list-inside mt-1">${expandedIdeas.replace(/\d\.\s/g, "<li>").replace(/\n/g, "")}</ol>`;
             } else {
                 aiIdeaExpansionTextElem.innerHTML = "";
             }
-             // Re-enable button if it wasn't passed to the last call or if only one call was made
-            if (!userIdea || (userIdea && this.disabled)) {
-                 this.disabled = false;
-            }
+            this.textContent = '✨ AI: Generate Calendar & Expand Ideas'; this.disabled = false;
         });
     }
 
@@ -1103,28 +1238,30 @@
         const aiOutputContainer = document.getElementById('ep_aiOutputContainer');
         const aiEngagementPromptsElem = document.getElementById('ep_aiEngagementPromptsText');
         const aiPpvAngleElem = document.getElementById('ep_aiPpvAngleText');
+        const hrSeparator = document.getElementById('ep_hr_separator');
+
 
         generateButton.addEventListener('click', async function() {
             const fanDescription = fanDescriptionInput.value.trim();
-            if (!fanDescription) {
-                aiEngagementPromptsElem.textContent = "Please describe the fan segment.";
-                aiOutputContainer.classList.remove('hidden');
-                return;
-            }
+            const isValid = validateInput('ep_fanSegmentDescription', 'ep_fanSegmentDescription_val', v => v.length > 10, 'Description is too short (min 10 chars).');
+            if (!isValid) return;
+            
             aiEngagementPromptsElem.innerHTML = '<p class="gemini-loading">✨ Generating engagement prompts...</p>';
             aiPpvAngleElem.innerHTML = '<p class="gemini-loading">✨ Brainstorming PPV angles...</p>';
+            hrSeparator.classList.add('hidden');
             aiOutputContainer.classList.remove('hidden');
-            this.disabled = true;
+            this.textContent = '✨ Generating...'; this.disabled = true;
 
             let promptsPrompt = `For an OnlyFans fan segment described as: '${fanDescription}', suggest 2-3 compliant message starters (max 2 sentences each) for a creator to manually send to re-engage them or offer value. Format as a numbered list.`;
             const engagementPrompts = await callGeminiAPI(promptsPrompt);
             aiEngagementPromptsElem.innerHTML = `<strong>Tailored Engagement Prompts:</strong><ol class="list-decimal list-inside mt-1">${engagementPrompts.replace(/\d\.\s/g, "<li>").replace(/\n/g, "")}</ol>`;
 
+            hrSeparator.classList.remove('hidden');
             let ppvPrompt = `For the OnlyFans fan segment: '${fanDescription}', suggest one tailored angle or theme for a personalized PPV offer (1-2 sentences).`;
-            const ppvAngle = await callGeminiAPI(ppvPrompt); // Second call, button will be re-enabled by this one
+            const ppvAngle = await callGeminiAPI(ppvPrompt); 
             aiPpvAngleElem.innerHTML = `<br><strong>Potential PPV Angle:</strong><p class="mt-1">${ppvAngle}</p>`;
             
-            this.disabled = false;
+            this.textContent = '✨ AI: Get Engagement & PPV Ideas'; this.disabled = false;
         });
     }
 
@@ -1134,6 +1271,7 @@
         const aiOutputContainer = document.getElementById('an_aiOutputContainer');
         const aiInsightsElem = document.getElementById('an_aiInsightsText');
         const aiRecommendationsElem = document.getElementById('an_aiRecommendationsText');
+        const hrSeparator = document.getElementById('an_hr_separator');
 
         analyzeButton.addEventListener('click', async function() {
             const subGrowth = document.getElementById('an_subGrowthRate').value;
@@ -1141,27 +1279,27 @@
             const ppvConversion = document.getElementById('an_ppvConversionRate').value;
             const topContent = document.getElementById('an_topContentType').value;
 
-            if (!subGrowth || !churnRate || !ppvConversion || !topContent) {
-                aiInsightsElem.textContent = "Please fill in all your key metrics.";
-                aiOutputContainer.classList.remove('hidden');
-                return;
-            }
+            const isValid = validateInput('an_topContentType', 'an_topContentType_val', v => v.trim().length > 0, 'Top content type is required.');
+            if (!isValid) return; // Basic validation for at least one text field
+            
             aiInsightsElem.innerHTML = '<p class="gemini-loading">✨ Analyzing your metrics...</p>';
             aiRecommendationsElem.textContent = '';
+            hrSeparator.classList.add('hidden');
             aiOutputContainer.classList.remove('hidden');
-            this.disabled = true;
+            this.textContent = '✨ Analyzing...'; this.disabled = true;
 
             let insightsPrompt = `Analyze these OnlyFans creator metrics: Monthly Subscriber Growth: ${subGrowth}%. Monthly Churn Rate: ${churnRate}%. Average PPV Purchase Rate: ${ppvConversion}%. Top Performing Content Type: '${topContent}'. Identify one key strength and one primary area of concern based on these numbers. Explain briefly (1 sentence each).`;
             const insights = await callGeminiAPI(insightsPrompt);
             aiInsightsElem.innerHTML = `<strong>AI Insights:</strong><p class="mt-1">${insights}</p>`;
 
             if (!insights.toLowerCase().includes("error")) {
+                hrSeparator.classList.remove('hidden');
                 aiRecommendationsElem.innerHTML = '<p class="gemini-loading">✨ Generating recommendations...</p>';
                 let recommendationsPrompt = `Given these OnlyFans creator metrics (Sub Growth: ${subGrowth}%, Churn: ${churnRate}%, PPV Conversion: ${ppvConversion}%, Top Content: '${topContent}') and the AI-generated insight: "${insights}", suggest 1-2 specific, actionable strategy adjustments related to content or engagement to address the primary concern or leverage the strength. Keep it concise (1-2 sentences per suggestion).`;
-                const recommendations = await callGeminiAPI(recommendationsPrompt); // Second call
+                const recommendations = await callGeminiAPI(recommendationsPrompt); 
                 aiRecommendationsElem.innerHTML = `<br><strong>AI Recommendations:</strong><p class="mt-1">${recommendations}</p>`;
             }
-            this.disabled = false;
+            this.textContent = '✨ AI: Analyze My Metrics'; this.disabled = false;
         });
     }
 
@@ -1172,30 +1310,31 @@
         const aiOutputContainer = document.getElementById('cs_aiOutputContainer');
         const aiPolicyFlagsElem = document.getElementById('cs_aiPolicyFlagsText');
         const aiRephrasingElem = document.getElementById('cs_aiRephrasingText');
+        const hrSeparator = document.getElementById('cs_hr_separator');
 
         reviewButton.addEventListener('click', async function() {
             const draftText = draftTextInput.value.trim();
-            if (!draftText) {
-                aiPolicyFlagsElem.textContent = "Please paste your draft text to review.";
-                aiOutputContainer.classList.remove('hidden');
-                return;
-            }
+            const isValid = validateInput('cs_draftText', 'cs_draftText_val', v => v.length > 10, 'Draft text is too short (min 10 chars).');
+            if (!isValid) return;
+
             aiPolicyFlagsElem.innerHTML = '<p class="gemini-loading">✨ Scanning for potential policy conflicts...</p>';
             aiRephrasingElem.textContent = '';
+            hrSeparator.classList.add('hidden');
             aiOutputContainer.classList.remove('hidden');
-            this.disabled = true;
+            this.textContent = '✨ Reviewing...'; this.disabled = true;
 
             let flagsPrompt = `Review this draft text intended for OnlyFans (could be a caption, DM, or PPV offer description) for potential policy conflicts based on typical platform guidelines (e.g., soliciting off-platform contact, risky promises, problematic terms): "${draftText}". Identify potential policy flags (1-2 key points). If no major flags, say so.`;
             const policyFlags = await callGeminiAPI(flagsPrompt);
             aiPolicyFlagsElem.innerHTML = `<strong>Potential Policy Flags:</strong><p class="mt-1">${policyFlags}</p>`;
 
             if (!policyFlags.toLowerCase().includes("error") && (policyFlags.toLowerCase().includes("flag") || policyFlags.toLowerCase().includes("issue") || policyFlags.toLowerCase().includes("violat") || policyFlags.toLowerCase().includes("concern"))) {
+                hrSeparator.classList.remove('hidden');
                 aiRephrasingElem.innerHTML = '<p class="gemini-loading">✨ Suggesting rephrasing...</p>';
                 let rephrasingPrompt = `The following OnlyFans draft text was flagged with potential policy issues: "${draftText}". The issues noted were: "${policyFlags}". Suggest a more compliant rephrasing or modification to address these concerns while trying to maintain the original intent if possible.`;
-                const rephrasingSuggestion = await callGeminiAPI(rephrasingPrompt); // Second call
+                const rephrasingSuggestion = await callGeminiAPI(rephrasingPrompt); 
                 aiRephrasingElem.innerHTML = `<br><strong>AI Rephrasing Suggestion:</strong><p class="mt-1">${rephrasingSuggestion}</p>`;
             }
-            this.disabled = false;
+            this.textContent = '✨ AI: Review for Compliance Flags'; this.disabled = false;
         });
     }
 
@@ -1206,28 +1345,72 @@
         const aiOutputContainer = document.getElementById('ne_aiOutputContainer');
         const aiSubNichesElem = document.getElementById('ne_aiSubNichesText');
         const aiSynergyIdeasElem = document.getElementById('ne_aiSynergyIdeasText');
+        const hrSeparator = document.getElementById('ne_hr_separator');
 
         exploreButton.addEventListener('click', async function() {
             const primaryNiche = nicheInput.value.trim();
-            if (!primaryNiche) {
-                aiSubNichesElem.textContent = "Please enter your primary niche.";
-                aiOutputContainer.classList.remove('hidden');
-                return;
-            }
+            const isValid = validateInput('ne_primaryNiche', 'ne_primaryNiche_val', v => v.length > 2, 'Primary niche is too short.');
+            if (!isValid) return;
+
             aiSubNichesElem.innerHTML = '<p class="gemini-loading">✨ Exploring sub-niches...</p>';
             aiSynergyIdeasElem.innerHTML = '<p class="gemini-loading">✨ Brainstorming cross-niche synergies...</p>';
+            hrSeparator.classList.add('hidden');
             aiOutputContainer.classList.remove('hidden');
-            this.disabled = true;
+            this.textContent = '✨ Exploring...'; this.disabled = true;
 
             let subNichePrompt = `For an OnlyFans creator in the '${primaryNiche}' niche, suggest 3-4 related sub-niches or emerging content trends they could explore to differentiate themselves or expand their offerings. Format as a bulleted list.`;
             const subNiches = await callGeminiAPI(subNichePrompt);
             aiSubNichesElem.innerHTML = `<strong>Potential Sub-Niches & Trends for '${primaryNiche}':</strong><ul class="list-disc list-inside mt-1">${subNiches.replace(/- /g, "<li>").replace(/\n/g, "")}</ul>`;
 
+            hrSeparator.classList.remove('hidden');
             let synergyPrompt = `Suggest 1-2 creative ways an OnlyFans creator in the '${primaryNiche}' niche could incorporate elements from a *different* potentially complementary niche to create unique appeal. Specify the complementary niche and the blended content idea.`;
-            const synergyIdeas = await callGeminiAPI(synergyPrompt); // Second call
+            const synergyIdeas = await callGeminiAPI(synergyPrompt); 
             aiSynergyIdeasElem.innerHTML = `<br><strong>Cross-Niche Synergy Ideas:</strong><p class="mt-1">${synergyIdeas}</p>`;
             
-            this.disabled = false;
+            this.textContent = '✨ AI: Explore Niche Opportunities'; this.disabled = false;
+        });
+    }
+
+    // --- Tool 11: AI Image & Diagram Studio (Conceptual) JS ---
+    function initAiStudioTool() {
+        const generateButton = document.getElementById('ais_generateVisualButton');
+        const promptTypeSelect = document.getElementById('ais_promptType');
+        const visualPromptInput = document.getElementById('ais_visualPrompt');
+        const aiOutputContainer = document.getElementById('ais_aiOutputContainer');
+        const imagePlaceholderContainer = document.getElementById('ais_imagePlaceholderContainer');
+        const imagePlaceholder = document.getElementById('ais_imagePlaceholder');
+        const aiVisualDescriptionTextElem = document.getElementById('ais_aiVisualDescriptionText');
+
+        generateButton.addEventListener('click', async function() {
+            const promptType = promptTypeSelect.value;
+            const visualPrompt = visualPromptInput.value.trim();
+            const isValid = validateInput('ais_visualPrompt', 'ais_visualPrompt_val', v => v.length > 5, 'Prompt is too short (min 5 chars).');
+            if (!isValid) return;
+
+            aiVisualDescriptionTextElem.innerHTML = '<p class="gemini-loading">✨ Generating visual concept...</p>';
+            imagePlaceholderContainer.classList.add('hidden');
+            aiOutputContainer.classList.remove('hidden');
+            this.textContent = '✨ Generating...'; this.disabled = true;
+
+            let finalPrompt = "";
+            if (promptType === "image_description") {
+                finalPrompt = `Describe in detail an image that could be generated based on the following prompt. Focus on visual elements, style, colors, and composition: "${visualPrompt}"`;
+            } else { // diagram_outline
+                finalPrompt = `Outline the structure and key textual content for a diagram based on the following concept. Describe the type of diagram (e.g., flowchart, mind map, comparison table) and list its main components and their relationships/text: "${visualPrompt}"`;
+            }
+
+            const aiResponse = await callGeminiAPI(prompt);
+            
+            if (promptType === "image_description") {
+                imagePlaceholder.src = `https://placehold.co/600x400/1B263B/A2D2FF?text=Visual+Concept+for&font=inter`; // Placeholder
+                imagePlaceholder.alt = `Placeholder for: ${visualPrompt}`;
+                imagePlaceholderContainer.classList.remove('hidden');
+                aiVisualDescriptionTextElem.innerHTML = `<strong>AI Image Description:</strong><p class="mt-1">${aiResponse}</p>`;
+            } else {
+                imagePlaceholderContainer.classList.add('hidden');
+                aiVisualDescriptionTextElem.innerHTML = `<strong>AI Diagram Outline:</strong><div class="mt-1 whitespace-pre-wrap">${aiResponse}</div>`; // whitespace-pre-wrap to respect formatting
+            }
+            this.textContent = '✨ AI: Generate Visual Concept'; this.disabled = false;
         });
     }
 
